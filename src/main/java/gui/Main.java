@@ -29,6 +29,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JTextArea;
+import javax.swing.JRadioButton;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class Main extends JFrame {
 
@@ -161,6 +165,7 @@ public class Main extends JFrame {
 	private JPanel panel_34;
 	private JLabel lblNewLabel_12;
 	private JTextField textField_9;
+	private JTable customerPanel_table;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -199,59 +204,70 @@ public class Main extends JFrame {
 		contentScrollPaneSideBar.setPreferredSize(new java.awt.Dimension(150, 46));
 
 		btnMedicineManagement = new JButton("Medicine Management");
+		btnMedicineManagement.setBounds(24, 90, 150, 40);
 		btnMedicineManagement.addActionListener(this::btnMedicineActionPerformed);
-
-		btnPharmacyCounter = new JButton("Pharmacy Counter");
-		btnPharmacyCounter.addActionListener(this::btnPharmacyCounterActionPerformed);
-		btnPharmacyCounter.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPharmacyCounter.setPreferredSize(new Dimension(150, 40));
-		contentScrollPaneSideBar.add(btnPharmacyCounter);
+		
+				btnPharmacyCounter = new JButton("Pharmacy Counter");
+				btnPharmacyCounter.setBounds(24, 5, 150, 80);
+				btnPharmacyCounter.addActionListener(this::btnPharmacyCounterActionPerformed);
+				contentScrollPaneSideBar.setLayout(null);
+				btnPharmacyCounter.setHorizontalAlignment(SwingConstants.LEFT);
+				btnPharmacyCounter.setPreferredSize(new Dimension(150, 40));
+				contentScrollPaneSideBar.add(btnPharmacyCounter);
+				btnPharmacyCounter.setPreferredSize(new java.awt.Dimension(150, 80));
 		btnMedicineManagement.setHorizontalAlignment(SwingConstants.LEFT);
 		btnMedicineManagement.setPreferredSize(new java.awt.Dimension(150, 40));
-		btnPharmacyCounter.setPreferredSize(new java.awt.Dimension(150, 80));
 
 		contentScrollPaneSideBar.add(btnMedicineManagement);
 
 		btnProvider = new JButton("Provider");
+		btnProvider.setBounds(24, 135, 150, 40);
 		btnProvider.addActionListener(this::btnProviderActionPerformed);
 		btnProvider.setHorizontalAlignment(SwingConstants.LEFT);
 		btnProvider.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnProvider);
 
 		btnInvoiceManagement = new JButton("Invoice Management");
+		btnInvoiceManagement.setBounds(24, 180, 150, 40);
 		btnInvoiceManagement.addActionListener(this::btnInvoiceManagementActionPerformed);
 		btnInvoiceManagement.setHorizontalAlignment(SwingConstants.LEFT);
 		btnInvoiceManagement.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnInvoiceManagement);
 
 		separator = new JSeparator();
+		separator.setBounds(24, 225, 150, 2);
 		separator.setPreferredSize(new Dimension(150, 2));
 
 		contentScrollPaneSideBar.add(separator);
 
 		btnCustomer = new JButton("Customer");
+		btnCustomer.setBounds(24, 232, 150, 40);
 		btnCustomer.addActionListener(this::btnCustomerActionPerformed);
 		btnCustomer.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCustomer.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnCustomer);
 
 		btnStatistics = new JButton("Statistics");
+		btnStatistics.setBounds(24, 277, 150, 40);
 		btnStatistics.addActionListener(this::btnStatisticsActionPerformed);
 		btnStatistics.setHorizontalAlignment(SwingConstants.LEFT);
 		btnStatistics.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnStatistics);
 
 		separator_1 = new JSeparator();
+		separator_1.setBounds(24, 322, 150, 2);
 		separator_1.setPreferredSize(new Dimension(150, 2));
 		contentScrollPaneSideBar.add(separator_1);
 
 		btnEmployee = new JButton("Employee Magament");
+		btnEmployee.setBounds(24, 329, 150, 40);
 		btnEmployee.addActionListener(this::btnEmployeeActionPerformed);
 		btnEmployee.setHorizontalAlignment(SwingConstants.LEFT);
 		btnEmployee.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnEmployee);
 
 		btnRoleControl = new JButton("Role Control");
+		btnRoleControl.setBounds(24, 374, 150, 40);
 		btnRoleControl.addActionListener(this::btnRoleControlActionPerformed);
 		btnRoleControl.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRoleControl.setPreferredSize(new Dimension(150, 40));
@@ -676,6 +692,52 @@ public class Main extends JFrame {
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));
 		contentContainer.add(customerPanel, "customerPanel");
+		customerPanel.setLayout(null);
+		
+		JPanel customerPanel_list = new JPanel();
+		customerPanel_list.setBounds(0, 92, 904, 660);
+		customerPanel.add(customerPanel_list);
+		customerPanel_list.setLayout(null);
+		
+		JRadioButton customerPanel_rdbtnEligibleCustomer = new JRadioButton("Eligible Customer");
+		customerPanel_rdbtnEligibleCustomer.setBounds(742, 15, 109, 23);
+		customerPanel_list.add(customerPanel_rdbtnEligibleCustomer);
+		
+		JScrollPane customerPanel_scrollPane = new JScrollPane();
+		customerPanel_scrollPane.setBounds(505, 15, 2, 2);
+		customerPanel_list.add(customerPanel_scrollPane);
+		
+		customerPanel_table = new JTable();
+		customerPanel_table.setBounds(512, 16, 0, 0);
+		customerPanel_list.add(customerPanel_table);
+		
+		JButton customerPanel_btnAdd = new JButton("Add Customer");
+		customerPanel_btnAdd.setBounds(0, 0, 155, 93);
+		customerPanel.add(customerPanel_btnAdd);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(612, 55, 292, 36);
+		customerPanel.add(textArea);
+		
+		JButton customerPanel_btnSearch = new JButton("Search");
+		customerPanel_btnSearch.setBounds(637, 21, 89, 23);
+		customerPanel.add(customerPanel_btnSearch);
+		
+		JButton customerPanel_btnEdit = new JButton("Edit Customer");
+		customerPanel_btnEdit.setBounds(153, 0, 155, 93);
+		customerPanel.add(customerPanel_btnEdit);
+		
+		JButton customerPanel_btnDelete = new JButton("Delete Customer");
+		customerPanel_btnDelete.setBounds(306, 0, 155, 93);
+		customerPanel.add(customerPanel_btnDelete);
+		
+		JButton customerPanel_btnUpdate = new JButton("Update Customer");
+		customerPanel_btnUpdate.setBounds(459, 0, 155, 93);
+		customerPanel.add(customerPanel_btnUpdate);
+		
+		JButton customerPanel_btnRefesh = new JButton("Refesh");
+		customerPanel_btnRefesh.setBounds(776, 21, 89, 23);
+		customerPanel.add(customerPanel_btnRefesh);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(new Color(0, 128, 255));

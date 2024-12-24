@@ -5,12 +5,11 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
@@ -24,7 +23,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 
@@ -36,8 +34,6 @@ public class Main extends JFrame {
 	private JPanel userInfoPanel;
 	private JButton userAvatar;
 	private JPanel info;
-	private JTextPane textPaneName;
-	private JTextPane textPaneId;
 	private JPanel sideBar;
 	private JPanel panelLogout;
 	private JScrollPane scrollPaneSideBar;
@@ -55,33 +51,7 @@ public class Main extends JFrame {
 	private JButton btnLogout;
 	private JPanel medicinePanel;
 	private JPanel medicineHeadPanel;
-	private JButton btnImport;
-	private JButton btnExport;
-	private JComboBox comboBox;
-	private JTextField textField;
-	private JButton btnSearch;
-	private JPanel searchPanel;
-	private JButton btnRefresh;
 	private JPanel medicineDetailPanel;
-	private JTextField txtListOfMedicine;
-	private JPanel filterPanel;
-	private JComboBox cbbCategory;
-	private JComboBox cbbOrigin;
-	private JComboBox cbbUnitMeasure;
-	private JTextField textField_1;
-	private JButton btnCheckDaysExpiration;
-	private JLabel lblCategory;
-	private JLabel lblOrigin;
-	private JLabel lblUnitMeasure;
-	private JLabel lblDaysExpiration;
-	private JPanel categoryPanel;
-	private JPanel originPanel;
-	private JPanel unitMeasurePanel;
-	private JPanel DaysExpirationPanel;
-	private JPanel panel_1;
-	private JPanel ListMedicinePanel;
-	private JScrollPane scrollPane;
-	private JTable tableListMedicine;
 	private JPanel contentContainer;
 	private JPanel providerPanel;
 	private JPanel purchaseOrderPanel;
@@ -90,8 +60,55 @@ public class Main extends JFrame {
 	private JPanel statisticsPanel;
 	private JPanel employeeManagementPanel;
 	private JPanel roleControlPanel;
-	private JLabel lblNewLabel;
 	private CardLayout cardLayout;
+	private JPanel headerSearchPanel;
+	private JPanel headerFilterPanel;
+	private JButton btnAddMedicine;
+	private JPanel panel;
+	private JButton btnRefresh;
+	private JPanel panel_1;
+	private JPanel panel_2;
+	private JPanel panel_3;
+	private JPanel panel_4;
+	private JLabel lblCategory;
+	private JComboBox comboBox;
+	private JLabel lblOrigin;
+	private JComboBox comboBox_1;
+	private JLabel lblUnitMeasure;
+	private JComboBox comboBox_2;
+	private JLabel lblDaysExpiration;
+	private JPanel panel_5;
+	private JTextField textField;
+	private JButton btnNewButton_2;
+	private JTextField textField_1;
+	private JButton btnSearchMedicine;
+	private JPanel panel_6;
+	private JPanel panel_7;
+	private JButton btnHeaderAddProvider;
+	private JPanel searchProviderPanel;
+	private JButton btnHeaderProviderRefresh;
+	private JLabel lblNewLabel;
+	private JScrollPane scrollPane_1;
+	private JTable table;
+	private JTextField textField_2;
+	private JButton btnHeaderProviderSearch;
+	private JLabel lblNewLabel_1;
+	private JScrollPane scrollPane;
+	private JTable table_1;
+	private JPanel panel_8;
+	private JPanel panel_9;
+	private JPanel panel_10;
+	private JPanel panel_11;
+	private JButton btnNewButton;
+	private JPanel panel_12;
+	private JTextField textField_3;
+	private JButton btnNewButton_1;
+	private JLabel lblNewLabel_2;
+	private JPanel panel_13;
+	private JPanel panel_14;
+	private JPanel panel_15;
+	private JPanel panel_16;
+	private JPanel panel_17;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -107,9 +124,6 @@ public class Main extends JFrame {
 		navigation = new JPanel();
 		navigation.setBackground(new Color(133, 250, 139));
 		contentPanel.add(navigation, BorderLayout.WEST);
-
-		contentContainer = new JPanel();
-		contentPanel.add(contentContainer, BorderLayout.CENTER);
 
 		userInfoPanel = new JPanel();
 
@@ -154,6 +168,7 @@ public class Main extends JFrame {
 		contentScrollPaneSideBar.add(btnProvider_1);
 
 		btnPurchaseOrder = new JButton("Purchase Order");
+		btnPurchaseOrder.addActionListener(this::btnPurchaseOrderActionPerformed);
 		btnPurchaseOrder.setHorizontalAlignment(SwingConstants.LEFT);
 		btnPurchaseOrder.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnPurchaseOrder);
@@ -164,16 +179,19 @@ public class Main extends JFrame {
 		contentScrollPaneSideBar.add(separator);
 
 		btnCustomer = new JButton("Customer");
+		btnCustomer.addActionListener(this::btnCustomerActionPerformed);
 		btnCustomer.setHorizontalAlignment(SwingConstants.LEFT);
 		btnCustomer.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnCustomer);
 
 		btnInvoice = new JButton("Invoice");
+		btnInvoice.addActionListener(this::btnInvoiceActionPerformed);
 		btnInvoice.setHorizontalAlignment(SwingConstants.LEFT);
 		btnInvoice.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnInvoice);
 
 		btnStatistics = new JButton("Statistics");
+		btnStatistics.addActionListener(this::btnStatisticsActionPerformed);
 		btnStatistics.setHorizontalAlignment(SwingConstants.LEFT);
 		btnStatistics.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnStatistics);
@@ -183,11 +201,13 @@ public class Main extends JFrame {
 		contentScrollPaneSideBar.add(separator_1);
 
 		btnEmployee = new JButton("Employee Magament");
+		btnEmployee.addActionListener(this::btnEmployeeActionPerformed);
 		btnEmployee.setHorizontalAlignment(SwingConstants.LEFT);
 		btnEmployee.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnEmployee);
 
 		btnRoleControl = new JButton("Role Control");
+		btnRoleControl.addActionListener(this::btnRoleControlActionPerformed);
 		btnRoleControl.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRoleControl.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnRoleControl);
@@ -206,25 +226,9 @@ public class Main extends JFrame {
 
 		info = new JPanel();
 		userInfoPanel.add(info, BorderLayout.CENTER);
-
-		textPaneName = new JTextPane();
-
-		textPaneId = new JTextPane();
 		var gl_info = new GroupLayout(info);
-		gl_info.setHorizontalGroup(gl_info.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_info.createSequentialGroup().addContainerGap()
-						.addGroup(gl_info.createParallelGroup(Alignment.LEADING)
-								.addComponent(textPaneName, GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-								.addComponent(textPaneId, GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
-						.addContainerGap()));
-		gl_info.setVerticalGroup(gl_info.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_info.createSequentialGroup().addContainerGap()
-						.addComponent(textPaneName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(textPaneId, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap()));
+		gl_info.setHorizontalGroup(gl_info.createParallelGroup(Alignment.LEADING).addGap(0, 160, Short.MAX_VALUE));
+		gl_info.setVerticalGroup(gl_info.createParallelGroup(Alignment.LEADING).addGap(0, 96, Short.MAX_VALUE));
 		info.setLayout(gl_info);
 		navigation.setLayout(gl_navigation);
 
@@ -236,138 +240,215 @@ public class Main extends JFrame {
 
 		medicineHeadPanel = new JPanel();
 		medicinePanel.add(medicineHeadPanel, BorderLayout.NORTH);
-		medicineHeadPanel.setLayout(new GridLayout(0, 5, 0, 0));
+		medicineHeadPanel.setLayout(new BorderLayout(0, 0));
 
-		btnImport = new JButton("Import");
-		medicineHeadPanel.add(btnImport);
+		headerSearchPanel = new JPanel();
+		medicineHeadPanel.add(headerSearchPanel, BorderLayout.NORTH);
+		headerSearchPanel.setLayout(new BoxLayout(headerSearchPanel, BoxLayout.X_AXIS));
 
-		btnExport = new JButton("Export");
-		medicineHeadPanel.add(btnExport);
+		btnAddMedicine = new JButton("Add medicine");
+		headerSearchPanel.add(btnAddMedicine);
 
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] { "All products", "Category", "Country" }));
-		comboBox.setSelectedIndex(0);
-		medicineHeadPanel.add(comboBox);
+		panel = new JPanel();
+		headerSearchPanel.add(panel);
+		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		searchPanel = new JPanel();
-		medicineHeadPanel.add(searchPanel);
+		textField_1 = new JTextField();
+		panel.add(textField_1);
+		textField_1.setColumns(10);
 
-		textField = new JTextField();
-		searchPanel.add(textField);
-		textField.setColumns(10);
-
-		btnSearch = new JButton("Search");
-		searchPanel.add(btnSearch);
+		btnSearchMedicine = new JButton("Search");
+		panel.add(btnSearchMedicine);
 
 		btnRefresh = new JButton("Refresh");
-		medicineHeadPanel.add(btnRefresh);
+		headerSearchPanel.add(btnRefresh);
+
+		headerFilterPanel = new JPanel();
+		medicineHeadPanel.add(headerFilterPanel, BorderLayout.CENTER);
+		headerFilterPanel.setLayout(new BoxLayout(headerFilterPanel, BoxLayout.X_AXIS));
+
+		panel_1 = new JPanel();
+		headerFilterPanel.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+
+		lblCategory = new JLabel("Category");
+		lblCategory.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(lblCategory, BorderLayout.NORTH);
+
+		comboBox = new JComboBox();
+		comboBox.setModel(
+				new DefaultComboBoxModel(new String[] { "All types", "Pain relief", "Antipyretic", "Vitamins" }));
+		panel_1.add(comboBox, BorderLayout.CENTER);
+
+		panel_2 = new JPanel();
+		headerFilterPanel.add(panel_2);
+		panel_2.setLayout(new BorderLayout(0, 0));
+
+		lblOrigin = new JLabel("Origin");
+		lblOrigin.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblOrigin, BorderLayout.NORTH);
+
+		comboBox_1 = new JComboBox();
+		panel_2.add(comboBox_1);
+
+		panel_3 = new JPanel();
+		headerFilterPanel.add(panel_3);
+		panel_3.setLayout(new BorderLayout(0, 0));
+
+		lblUnitMeasure = new JLabel("Unit of Measure");
+		lblUnitMeasure.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_3.add(lblUnitMeasure, BorderLayout.NORTH);
+
+		comboBox_2 = new JComboBox();
+		panel_3.add(comboBox_2, BorderLayout.SOUTH);
+
+		panel_4 = new JPanel();
+		headerFilterPanel.add(panel_4);
+		panel_4.setLayout(new BorderLayout(0, 0));
+
+		lblDaysExpiration = new JLabel("Days of Expiration");
+		lblDaysExpiration.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_4.add(lblDaysExpiration, BorderLayout.NORTH);
+
+		panel_5 = new JPanel();
+		panel_4.add(panel_5, BorderLayout.CENTER);
+		panel_5.setLayout(new BorderLayout(0, 0));
+
+		textField = new JTextField();
+		panel_5.add(textField, BorderLayout.CENTER);
+		textField.setColumns(10);
+
+		btnNewButton_2 = new JButton(">");
+		panel_5.add(btnNewButton_2, BorderLayout.EAST);
 
 		medicineDetailPanel = new JPanel();
 		medicinePanel.add(medicineDetailPanel, BorderLayout.CENTER);
 		medicineDetailPanel.setLayout(new BorderLayout(0, 0));
 
-		txtListOfMedicine = new JTextField();
-		txtListOfMedicine.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		txtListOfMedicine.setHorizontalAlignment(SwingConstants.CENTER);
-		txtListOfMedicine.setText("List of Medicine");
-		medicineDetailPanel.add(txtListOfMedicine, BorderLayout.NORTH);
-		txtListOfMedicine.setColumns(10);
-
-		filterPanel = new JPanel();
-		medicineDetailPanel.add(filterPanel, BorderLayout.WEST);
-
-		filterPanel.setPreferredSize(new Dimension(150, -1));
-		filterPanel.setLayout(new BoxLayout(filterPanel, BoxLayout.Y_AXIS)); // Arrange vertically
-		filterPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Add padding around the panel
-
-		// Category
-		categoryPanel = new JPanel(new BorderLayout());
-		lblCategory = new JLabel("Category");
-		cbbCategory = new JComboBox();
-		cbbCategory.setModel(
-				new DefaultComboBoxModel(new String[] { "All products", "Sore throat", "Fever", "Headache" }));
-		categoryPanel.add(lblCategory, BorderLayout.NORTH);
-		categoryPanel.add(cbbCategory, BorderLayout.CENTER);
-		filterPanel.add(categoryPanel);
-
-		filterPanel.add(Box.createVerticalStrut(15)); // Add vertical space
-
-		// Origin
-		originPanel = new JPanel(new BorderLayout());
-		lblOrigin = new JLabel("Origin");
-		cbbOrigin = new JComboBox();
-		cbbOrigin.setModel(new DefaultComboBoxModel(
-				new String[] { "All countries", "Vietnam", "USA", "France", "Japan", "China" }));
-		originPanel.add(lblOrigin, BorderLayout.NORTH);
-		originPanel.add(cbbOrigin, BorderLayout.CENTER);
-		filterPanel.add(originPanel);
-
-		filterPanel.add(Box.createVerticalStrut(15)); // Add vertical space
-
-		// Unit of Measure
-		unitMeasurePanel = new JPanel(new BorderLayout());
-		lblUnitMeasure = new JLabel("Unit of Measure");
-		cbbUnitMeasure = new JComboBox();
-		cbbUnitMeasure.setModel(new DefaultComboBoxModel(new String[] { "All types", "Bottle", "Pack", "Bag" }));
-		unitMeasurePanel.add(lblUnitMeasure, BorderLayout.NORTH);
-		unitMeasurePanel.add(cbbUnitMeasure, BorderLayout.CENTER);
-		filterPanel.add(unitMeasurePanel);
-
-		filterPanel.add(Box.createVerticalStrut(15)); // Add vertical space
-
-		// Days of Expiration
-		DaysExpirationPanel = new JPanel(new BorderLayout());
-		lblDaysExpiration = new JLabel("Days of Expiration");
-		textField_1 = new JTextField();
-		btnCheckDaysExpiration = new JButton(">");
-		textField_1.setPreferredSize(new Dimension(100, 30));
-
-		var expirationPanel = new JPanel(new BorderLayout());
-		expirationPanel.add(textField_1, BorderLayout.CENTER);
-		expirationPanel.add(btnCheckDaysExpiration, BorderLayout.EAST);
-
-		DaysExpirationPanel.add(lblDaysExpiration, BorderLayout.NORTH);
-		DaysExpirationPanel.add(expirationPanel, BorderLayout.CENTER);
-		filterPanel.add(DaysExpirationPanel);
-
-		panel_1 = new JPanel();
-		filterPanel.add(panel_1);
-		panel_1.setPreferredSize(new Dimension(150, 350));
-
-		ListMedicinePanel = new JPanel();
-		medicineDetailPanel.add(ListMedicinePanel, BorderLayout.CENTER);
-		ListMedicinePanel.setLayout(new BorderLayout(0, 0));
+		lblNewLabel_1 = new JLabel("List of Medicine");
+		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		medicineDetailPanel.add(lblNewLabel_1, BorderLayout.NORTH);
 
 		scrollPane = new JScrollPane();
-		ListMedicinePanel.add(scrollPane);
+		medicineDetailPanel.add(scrollPane, BorderLayout.CENTER);
 
-		tableListMedicine = new JTable();
-		scrollPane.setViewportView(tableListMedicine);
+		table_1 = new JTable();
+		scrollPane.setViewportView(table_1);
 
 		providerPanel = new JPanel();
+		providerPanel.setBackground(new Color(255, 128, 128));
 		contentContainer.add(providerPanel, "providerPanel");
 		providerPanel.setLayout(new BorderLayout(0, 0));
 
-		lblNewLabel = new JLabel("Provider Panel");
-		providerPanel.add(lblNewLabel, BorderLayout.CENTER);
+		panel_6 = new JPanel();
+		providerPanel.add(panel_6, BorderLayout.NORTH);
+		panel_6.setLayout(new BoxLayout(panel_6, BoxLayout.X_AXIS));
+
+		btnHeaderAddProvider = new JButton("Add provider");
+		panel_6.add(btnHeaderAddProvider);
+
+		searchProviderPanel = new JPanel();
+		panel_6.add(searchProviderPanel);
+		searchProviderPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		textField_2 = new JTextField();
+		searchProviderPanel.add(textField_2);
+		textField_2.setColumns(10);
+
+		btnHeaderProviderSearch = new JButton("Search");
+		searchProviderPanel.add(btnHeaderProviderSearch);
+
+		btnHeaderProviderRefresh = new JButton("Refresh");
+		panel_6.add(btnHeaderProviderRefresh);
+
+		panel_7 = new JPanel();
+		providerPanel.add(panel_7, BorderLayout.CENTER);
+		panel_7.setLayout(new BorderLayout(0, 0));
+
+		lblNewLabel = new JLabel("List of Provider");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_7.add(lblNewLabel, BorderLayout.NORTH);
+
+		scrollPane_1 = new JScrollPane();
+		panel_7.add(scrollPane_1, BorderLayout.CENTER);
+
+		table = new JTable();
+		scrollPane_1.setViewportView(table);
 
 		purchaseOrderPanel = new JPanel();
-		contentContainer.add(purchaseOrderPanel, "name_1055745951998899");
+		purchaseOrderPanel.setBackground(new Color(255, 255, 128));
+		contentContainer.add(purchaseOrderPanel, "purchaseOrderPanel");
+		purchaseOrderPanel.setLayout(new BorderLayout(0, 0));
+
+		panel_8 = new JPanel();
+		purchaseOrderPanel.add(panel_8, BorderLayout.NORTH);
+		panel_8.setLayout(new BorderLayout(0, 0));
+
+		panel_10 = new JPanel();
+		panel_8.add(panel_10, BorderLayout.NORTH);
+		panel_10.setLayout(new BoxLayout(panel_10, BoxLayout.X_AXIS));
+
+		btnNewButton = new JButton("Create New Order");
+		panel_10.add(btnNewButton);
+
+		panel_12 = new JPanel();
+		panel_10.add(panel_12);
+		panel_12.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		textField_3 = new JTextField();
+		panel_12.add(textField_3);
+		textField_3.setColumns(10);
+
+		btnNewButton_1 = new JButton("Search");
+		panel_12.add(btnNewButton_1);
+
+		panel_11 = new JPanel();
+		panel_8.add(panel_11, BorderLayout.CENTER);
+		panel_11.setLayout(new BorderLayout(0, 0));
+
+		lblNewLabel_2 = new JLabel("New label");
+		panel_11.add(lblNewLabel_2, BorderLayout.NORTH);
+
+		panel_13 = new JPanel();
+		panel_11.add(panel_13, BorderLayout.SOUTH);
+		panel_13.setLayout(new GridLayout(1, 0, 0, 0));
+
+		panel_14 = new JPanel();
+		panel_13.add(panel_14);
+
+		panel_15 = new JPanel();
+		panel_13.add(panel_15);
+
+		panel_16 = new JPanel();
+		panel_13.add(panel_16);
+
+		panel_17 = new JPanel();
+		panel_13.add(panel_17);
+
+		panel_9 = new JPanel();
+		purchaseOrderPanel.add(panel_9, BorderLayout.CENTER);
 
 		customerPanel = new JPanel();
-		contentContainer.add(customerPanel, "name_1055771184865400");
+		customerPanel.setBackground(new Color(128, 255, 128));
+		contentContainer.add(customerPanel, "customerPanel");
 
 		invoicePanel = new JPanel();
-		contentContainer.add(invoicePanel, "name_1055803510715800");
+		invoicePanel.setBackground(new Color(128, 255, 255));
+		contentContainer.add(invoicePanel, "invoicePanel");
 
 		statisticsPanel = new JPanel();
-		contentContainer.add(statisticsPanel, "name_1055821114849400");
+		statisticsPanel.setBackground(new Color(0, 128, 255));
+		contentContainer.add(statisticsPanel, "statisticsPanel");
 
 		employeeManagementPanel = new JPanel();
-		contentContainer.add(employeeManagementPanel, "name_1055854684173400");
+		employeeManagementPanel.setBackground(new Color(255, 128, 192));
+		contentContainer.add(employeeManagementPanel, "employeeManagementPanel");
 
 		roleControlPanel = new JPanel();
-		contentContainer.add(roleControlPanel, "name_1055893564180900");
+		roleControlPanel.setBackground(new Color(255, 0, 128));
+		contentContainer.add(roleControlPanel, "roleControlPanel");
 
 		// Hiển thị các thành phần tùy vào role
 		if ("1".equals(role) || "2".equals(role)) {
@@ -400,5 +481,29 @@ public class Main extends JFrame {
 
 	protected void btnProvider_1ActionPerformed(ActionEvent e) {
 		cardLayout.show(contentContainer, "providerPanel");
+	}
+
+	protected void btnPurchaseOrderActionPerformed(ActionEvent e) {
+		cardLayout.show(contentContainer, "purchaseOrderPanel");
+	}
+
+	protected void btnCustomerActionPerformed(ActionEvent e) {
+		cardLayout.show(contentContainer, "customerPanel");
+	}
+
+	protected void btnInvoiceActionPerformed(ActionEvent e) {
+		cardLayout.show(contentContainer, "invoicePanel");
+	}
+
+	protected void btnStatisticsActionPerformed(ActionEvent e) {
+		cardLayout.show(contentContainer, "statisticsPanel");
+	}
+
+	protected void btnEmployeeActionPerformed(ActionEvent e) {
+		cardLayout.show(contentContainer, "employeeManagementPanel");
+	}
+
+	protected void btnRoleControlActionPerformed(ActionEvent e) {
+		cardLayout.show(contentContainer, "roleControlPanel");
 	}
 }

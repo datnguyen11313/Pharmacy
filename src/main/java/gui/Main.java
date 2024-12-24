@@ -22,9 +22,11 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -676,6 +678,52 @@ public class Main extends JFrame {
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));
 		contentContainer.add(customerPanel, "customerPanel");
+		customerPanel.setLayout(null);
+
+		var customerPanel_list = new JPanel();
+		customerPanel_list.setBounds(0, 92, 904, 660);
+		customerPanel.add(customerPanel_list);
+		customerPanel_list.setLayout(null);
+
+		var customerPanel_rdbtnEligibleCustomer = new JRadioButton("Eligible Customer");
+		customerPanel_rdbtnEligibleCustomer.setBounds(742, 15, 109, 23);
+		customerPanel_list.add(customerPanel_rdbtnEligibleCustomer);
+
+		var customerPanel_scrollPane = new JScrollPane();
+		customerPanel_scrollPane.setBounds(505, 15, 2, 2);
+		customerPanel_list.add(customerPanel_scrollPane);
+
+		var customerPanel_table = new JTable();
+		customerPanel_table.setBounds(512, 16, 0, 0);
+		customerPanel_list.add(customerPanel_table);
+
+		var customerPanel_btnAdd = new JButton("Add Customer");
+		customerPanel_btnAdd.setBounds(0, 0, 155, 93);
+		customerPanel.add(customerPanel_btnAdd);
+
+		var textArea = new JTextArea();
+		textArea.setBounds(612, 55, 292, 36);
+		customerPanel.add(textArea);
+
+		var customerPanel_btnSearch = new JButton("Search");
+		customerPanel_btnSearch.setBounds(637, 21, 89, 23);
+		customerPanel.add(customerPanel_btnSearch);
+
+		var customerPanel_btnEdit = new JButton("Edit Customer");
+		customerPanel_btnEdit.setBounds(153, 0, 155, 93);
+		customerPanel.add(customerPanel_btnEdit);
+
+		var customerPanel_btnDelete = new JButton("Delete Customer");
+		customerPanel_btnDelete.setBounds(306, 0, 155, 93);
+		customerPanel.add(customerPanel_btnDelete);
+
+		var customerPanel_btnUpdate = new JButton("Update Customer");
+		customerPanel_btnUpdate.setBounds(459, 0, 155, 93);
+		customerPanel.add(customerPanel_btnUpdate);
+
+		var customerPanel_btnRefesh = new JButton("Refesh");
+		customerPanel_btnRefesh.setBounds(776, 21, 89, 23);
+		customerPanel.add(customerPanel_btnRefesh);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(new Color(0, 128, 255));

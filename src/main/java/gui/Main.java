@@ -29,8 +29,11 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
+
+import dao.MedicinesDao;
 
 public class Main extends JFrame {
 
@@ -95,7 +98,7 @@ public class Main extends JFrame {
 	private JButton btnHeaderProviderSearch;
 	private JLabel lblNewLabel_1;
 	private JScrollPane scrollPane;
-	private JTable table_1;
+	private JTable table_medicines;
 	private JPanel panel_8;
 	private JPanel panel_9;
 	private JPanel panel_10;
@@ -167,7 +170,7 @@ public class Main extends JFrame {
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
 		setTitle("Main Dashboard");
-		setBounds(100, 100, 1063, 791);
+		setBounds(200, 200, 1063, 791);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		contentPanel = new JPanel();
@@ -396,8 +399,8 @@ public class Main extends JFrame {
 		scrollPane = new JScrollPane();
 		medicineDetailPanel.add(scrollPane, BorderLayout.CENTER);
 
-		table_1 = new JTable();
-		scrollPane.setViewportView(table_1);
+		table_medicines = new JTable();
+		scrollPane.setViewportView(table_medicines);
 
 		providerPanel = new JPanel();
 		providerPanel.setBackground(new Color(255, 128, 128));
@@ -737,6 +740,8 @@ public class Main extends JFrame {
 		roleControlPanel.setBackground(new Color(128, 0, 64));
 		contentContainer.add(roleControlPanel, "roleControlPanel");
 
+		loadDataToTable();
+
 		// Hiển thị các thành phần tùy vào role
 		if ("1".equals(role) || "2".equals(role)) {
 			// Admin Dashboard
@@ -793,4 +798,28 @@ public class Main extends JFrame {
 	protected void btnRoleControlActionPerformed(ActionEvent e) {
 		cardLayout.show(contentContainer, "roleControlPanel");
 	}
+
+	private void loadDataToTable() {
+		// Tạo model cho bảng
+		var model = new DefaultTableModel();
+		model.addColumn("ID");
+		model.addColumn("Tên thuốc");
+		model.addColumn("Loại");
+		model.addColumn("Giá");
+		model.addColumn("Số lượng");
+		model.addColumn("Ngày sản xuất");
+		model.addColumn("Ngày hết hạn");
+
+		// Khởi tạo DAO và lấy dữ liệu
+		var dao = new MedicinesDao();
+		dao.select().forEach(medicine -> {
+			model.addRow(new Object[] { medicine.getId(), medicine.getMedicine_name(), medicine.getCategory_id(),
+					medicine.getPrice(), medicine.getStock(), medicine.getManufacturing_date(),
+					medicine.getExpiry_date() });
+		});
+
+		// Gắn model vào bảng
+		table_medicines.setModel(model);
+	}
+
 }

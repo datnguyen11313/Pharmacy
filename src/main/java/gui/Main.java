@@ -22,13 +22,18 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
+
+import dao.MedicinesDao;
 
 public class Main extends JFrame {
 
@@ -93,7 +98,7 @@ public class Main extends JFrame {
 	private JButton btnHeaderProviderSearch;
 	private JLabel lblNewLabel_1;
 	private JScrollPane scrollPane;
-	private JTable table_1;
+	private JTable table_medicines;
 	private JPanel panel_8;
 	private JPanel panel_9;
 	private JPanel panel_10;
@@ -175,7 +180,7 @@ public class Main extends JFrame {
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
 		setTitle("Main Dashboard");
-		setBounds(100, 100, 1063, 791);
+		setBounds(200, 200, 1063, 791);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		contentPanel = new JPanel();
@@ -404,8 +409,8 @@ public class Main extends JFrame {
 		scrollPane = new JScrollPane();
 		medicineDetailPanel.add(scrollPane, BorderLayout.CENTER);
 
-		table_1 = new JTable();
-		scrollPane.setViewportView(table_1);
+		table_medicines = new JTable();
+		scrollPane.setViewportView(table_medicines);
 
 		providerPanel = new JPanel();
 		providerPanel.setBackground(new Color(255, 128, 128));
@@ -721,6 +726,52 @@ public class Main extends JFrame {
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));
 		contentContainer.add(customerPanel, "customerPanel");
+		customerPanel.setLayout(null);
+
+		var customerPanel_list = new JPanel();
+		customerPanel_list.setBounds(0, 92, 904, 660);
+		customerPanel.add(customerPanel_list);
+		customerPanel_list.setLayout(null);
+
+		var customerPanel_rdbtnEligibleCustomer = new JRadioButton("Eligible Customer");
+		customerPanel_rdbtnEligibleCustomer.setBounds(742, 15, 109, 23);
+		customerPanel_list.add(customerPanel_rdbtnEligibleCustomer);
+
+		var customerPanel_scrollPane = new JScrollPane();
+		customerPanel_scrollPane.setBounds(505, 15, 2, 2);
+		customerPanel_list.add(customerPanel_scrollPane);
+
+		var customerPanel_table = new JTable();
+		customerPanel_table.setBounds(512, 16, 0, 0);
+		customerPanel_list.add(customerPanel_table);
+
+		var customerPanel_btnAdd = new JButton("Add Customer");
+		customerPanel_btnAdd.setBounds(0, 0, 155, 93);
+		customerPanel.add(customerPanel_btnAdd);
+
+		var textArea = new JTextArea();
+		textArea.setBounds(612, 55, 292, 36);
+		customerPanel.add(textArea);
+
+		var customerPanel_btnSearch = new JButton("Search");
+		customerPanel_btnSearch.setBounds(637, 21, 89, 23);
+		customerPanel.add(customerPanel_btnSearch);
+
+		var customerPanel_btnEdit = new JButton("Edit Customer");
+		customerPanel_btnEdit.setBounds(153, 0, 155, 93);
+		customerPanel.add(customerPanel_btnEdit);
+
+		var customerPanel_btnDelete = new JButton("Delete Customer");
+		customerPanel_btnDelete.setBounds(306, 0, 155, 93);
+		customerPanel.add(customerPanel_btnDelete);
+
+		var customerPanel_btnUpdate = new JButton("Update Customer");
+		customerPanel_btnUpdate.setBounds(459, 0, 155, 93);
+		customerPanel.add(customerPanel_btnUpdate);
+
+		var customerPanel_btnRefesh = new JButton("Refesh");
+		customerPanel_btnRefesh.setBounds(776, 21, 89, 23);
+		customerPanel.add(customerPanel_btnRefesh);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(new Color(0, 128, 255));
@@ -733,6 +784,8 @@ public class Main extends JFrame {
 		roleControlPanel = new JPanel();
 		roleControlPanel.setBackground(new Color(128, 0, 64));
 		contentContainer.add(roleControlPanel, "roleControlPanel");
+
+		loadDataToTable();
 
 		// Hiển thị các thành phần tùy vào role
 		if ("1".equals(role) || "2".equals(role)) {
@@ -790,4 +843,28 @@ public class Main extends JFrame {
 	protected void btnRoleControlActionPerformed(ActionEvent e) {
 		cardLayout.show(contentContainer, "roleControlPanel");
 	}
+
+	private void loadDataToTable() {
+		// Tạo model cho bảng
+		var model = new DefaultTableModel();
+		model.addColumn("ID");
+		model.addColumn("Tên thuốc");
+		model.addColumn("Loại");
+		model.addColumn("Giá");
+		model.addColumn("Số lượng");
+		model.addColumn("Ngày sản xuất");
+		model.addColumn("Ngày hết hạn");
+
+		// Khởi tạo DAO và lấy dữ liệu
+		var dao = new MedicinesDao();
+		dao.select().forEach(medicine -> {
+			model.addRow(new Object[] { medicine.getId(), medicine.getMedicine_name(), medicine.getCategory_id(),
+					medicine.getPrice(), medicine.getStock(), medicine.getManufacturing_date(),
+					medicine.getExpiry_date() });
+		});
+
+		// Gắn model vào bảng
+		table_medicines.setModel(model);
+	}
+
 }

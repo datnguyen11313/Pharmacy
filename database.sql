@@ -166,3 +166,34 @@ VALUES
     (1, 1, 2, 15000, 30000),
     (2, 2, 1, 12000, 12000);
 GO
+
+
+INSERT INTO categories (category_name)
+VALUES 
+    ('Antibiotics'), ('Antihistamines'), ('Supplements'), ('Analgesics'), ('Antacids');
+GO
+
+INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date)
+VALUES
+    ('Amoxicillin', 4, 50000, 60, '2023-02-01', '2025-02-01'),
+    ('Cetirizine', 5, 20000, 150, '2023-04-10', '2025-04-10'),
+    ('Calcium Tablets', 3, 25000, 80, '2023-01-20', '2025-01-20'),
+    ('Ibuprofen', 1, 18000, 90, '2023-03-25', '2025-03-25'),
+    ('Ranitidine', 5, 22000, 40, '2023-05-15', '2025-05-15');
+GO
+
+INSERT INTO orders (user_id, customer_name, total_price)
+VALUES
+    (2, 'Michael Brown', 70000),
+    (3, 'Emily Davis', 25000),
+    (2, 'Robert Johnson', 40000);
+GO
+
+
+INSERT INTO order_details (order_id, medicine_id, quantity, unit_price, total_price)
+VALUES
+    (1, 4, 2, 18000, 36000),
+    (1, 5, 1, 22000, 22000),
+    (2, 3, 1, 25000, 25000),
+    (3, 2, 2, 20000, 40000);
+GO

@@ -22,12 +22,11 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -166,11 +165,23 @@ public class Main extends JFrame {
 	private JPanel panel_34;
 	private JLabel lblNewLabel_12;
 	private JTextField textField_9;
+	private JPanel panel_35;
+	private JPanel panel_36;
+	private JButton btnNewButton_7;
+	private JButton btnNewButton_8;
+	private JButton btnNewButton_9;
+	private JButton btnNewButton_10;
+	private JScrollPane scrollPane_4;
+	private JTable table_1;
+	private JLabel lblNewLabel_13;
+	private JTextField textField_10;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
-		setTitle("Main Dashboard");
-		setBounds(200, 200, 1063, 791);
+		setTitle("PharmaCity");
+		// Mở ứng dụng ở chế độ full screen
+		setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximized toàn màn hình
+		setUndecorated(false); // Loại bỏ thanh tiêu đề (optional, tùy thuộc vào yêu cầu)
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		contentPanel = new JPanel();
@@ -681,52 +692,60 @@ public class Main extends JFrame {
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));
 		contentContainer.add(customerPanel, "customerPanel");
-		customerPanel.setLayout(null);
+		customerPanel.setLayout(new BorderLayout(0, 0));
 
-		var customerPanel_list = new JPanel();
-		customerPanel_list.setBounds(0, 92, 904, 660);
-		customerPanel.add(customerPanel_list);
-		customerPanel_list.setLayout(null);
+		panel_35 = new JPanel();
+		customerPanel.add(panel_35, BorderLayout.NORTH);
 
-		var customerPanel_rdbtnEligibleCustomer = new JRadioButton("Eligible Customer");
-		customerPanel_rdbtnEligibleCustomer.setBounds(742, 15, 109, 23);
-		customerPanel_list.add(customerPanel_rdbtnEligibleCustomer);
+		btnNewButton_7 = new JButton("New button");
 
-		var customerPanel_scrollPane = new JScrollPane();
-		customerPanel_scrollPane.setBounds(505, 15, 2, 2);
-		customerPanel_list.add(customerPanel_scrollPane);
+		btnNewButton_8 = new JButton("New button");
 
-		var customerPanel_table = new JTable();
-		customerPanel_table.setBounds(512, 16, 0, 0);
-		customerPanel_list.add(customerPanel_table);
+		btnNewButton_9 = new JButton("New button");
 
-		var customerPanel_btnAdd = new JButton("Add Customer");
-		customerPanel_btnAdd.setBounds(0, 0, 155, 93);
-		customerPanel.add(customerPanel_btnAdd);
+		btnNewButton_10 = new JButton("New button");
 
-		var textArea = new JTextArea();
-		textArea.setBounds(612, 55, 292, 36);
-		customerPanel.add(textArea);
+		lblNewLabel_13 = new JLabel("Search");
+		lblNewLabel_13.setHorizontalAlignment(SwingConstants.CENTER);
 
-		var customerPanel_btnSearch = new JButton("Search");
-		customerPanel_btnSearch.setBounds(637, 21, 89, 23);
-		customerPanel.add(customerPanel_btnSearch);
+		textField_10 = new JTextField();
+		textField_10.setColumns(10);
+		var gl_panel_35 = new GroupLayout(panel_35);
+		gl_panel_35.setHorizontalGroup(gl_panel_35.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_35.createSequentialGroup().addContainerGap().addComponent(btnNewButton_7).addGap(18)
+						.addComponent(btnNewButton_8).addGap(18).addComponent(btnNewButton_9).addGap(18)
+						.addComponent(btnNewButton_10).addPreferredGap(ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
+						.addGroup(gl_panel_35.createParallelGroup(Alignment.LEADING)
+								.addGroup(Alignment.TRAILING,
+										gl_panel_35.createSequentialGroup()
+												.addComponent(lblNewLabel_13, GroupLayout.PREFERRED_SIZE, 75,
+														GroupLayout.PREFERRED_SIZE)
+												.addGap(161))
+								.addGroup(Alignment.TRAILING,
+										gl_panel_35.createSequentialGroup()
+												.addComponent(textField_10, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addGap(150)))));
+		gl_panel_35.setVerticalGroup(gl_panel_35.createParallelGroup(Alignment.LEADING)
+				.addComponent(btnNewButton_7, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+				.addGroup(gl_panel_35.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnNewButton_8, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+						.addComponent(btnNewButton_9, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnNewButton_10, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
+				.addGroup(gl_panel_35.createSequentialGroup().addGap(19).addComponent(lblNewLabel_13)
+						.addPreferredGap(ComponentPlacement.RELATED).addComponent(textField_10,
+								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(39, Short.MAX_VALUE)));
+		panel_35.setLayout(gl_panel_35);
 
-		var customerPanel_btnEdit = new JButton("Edit Customer");
-		customerPanel_btnEdit.setBounds(153, 0, 155, 93);
-		customerPanel.add(customerPanel_btnEdit);
+		panel_36 = new JPanel();
+		customerPanel.add(panel_36, BorderLayout.CENTER);
 
-		var customerPanel_btnDelete = new JButton("Delete Customer");
-		customerPanel_btnDelete.setBounds(306, 0, 155, 93);
-		customerPanel.add(customerPanel_btnDelete);
+		table_1 = new JTable();
+		panel_36.add(table_1);
 
-		var customerPanel_btnUpdate = new JButton("Update Customer");
-		customerPanel_btnUpdate.setBounds(459, 0, 155, 93);
-		customerPanel.add(customerPanel_btnUpdate);
-
-		var customerPanel_btnRefesh = new JButton("Refesh");
-		customerPanel_btnRefesh.setBounds(776, 21, 89, 23);
-		customerPanel.add(customerPanel_btnRefesh);
+		scrollPane_4 = new JScrollPane();
+		panel_36.add(scrollPane_4);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(new Color(0, 128, 255));
@@ -821,5 +840,4 @@ public class Main extends JFrame {
 		// Gắn model vào bảng
 		table_medicines.setModel(model);
 	}
-
 }

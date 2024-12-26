@@ -26,7 +26,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -165,16 +164,52 @@ public class Main extends JFrame {
 	private JPanel panel_34;
 	private JLabel lblNewLabel_12;
 	private JTextField textField_9;
-	private JPanel panel_35;
-	private JPanel panel_36;
-	private JButton btnNewButton_7;
-	private JButton btnNewButton_8;
-	private JButton btnNewButton_9;
-	private JButton btnNewButton_10;
-	private JScrollPane scrollPane_4;
-	private JTable table_1;
 	private JLabel lblNewLabel_13;
 	private JTextField textField_10;
+	private JLabel lblNewLabel_14;
+	private JTextField textField_11;
+	private JLabel lblNewLabel_15;
+	private JTextField textField_12;
+	private JLabel lblNewLabel_16;
+	private JTextField textField_13;
+	private JButton btnNewButton_7;
+	private JButton btnNewButton_8;
+	private JPanel panel_35;
+	private JPanel panel_36;
+	private JButton btnNewButton_9;
+	private JPanel panel_37;
+	private JButton btnNewButton_10;
+	private JLabel lblNewLabel_17;
+	private JScrollPane scrollPane_4;
+	private JTable table_1;
+	private JTextField textField_14;
+	private JButton btnNewButton_11;
+	private JPanel panel_38;
+	private JPanel panel_39;
+	private JButton btnNewButton_12;
+	private JPanel panel_40;
+	private JButton btnNewButton_13;
+	private JTextField textField_15;
+	private JButton btnNewButton_14;
+	private JLabel lblNewLabel_18;
+	private JScrollPane scrollPane_6;
+	private JTable table_4;
+	private JLabel lblNewLabel_19;
+	private JButton btnNewButton_15;
+	private JScrollPane scrollPane_7;
+	private JTable table_6;
+	private JLabel lblNewLabel_20;
+	private JButton btnNewButton_16;
+	private JButton btnNewButton_17;
+	private JButton btnNewButton_18;
+	private JButton btnNewButton_19;
+	private JButton btnNewButton_20;
+	private JButton btnNewButton_21;
+	private JButton btnNewButton_22;
+	private JButton btnNewButton_23;
+	private JButton btnNewButton_24;
+	private JButton btnNewButton_25;
+	private JButton btnNewButton_26;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -326,6 +361,12 @@ public class Main extends JFrame {
 		btnAddMedicine = new JButton("Add medicine");
 		headerSearchPanel.add(btnAddMedicine);
 
+		btnNewButton_20 = new JButton("Update medicine");
+		headerSearchPanel.add(btnNewButton_20);
+
+		btnNewButton_21 = new JButton("Delete medicine");
+		headerSearchPanel.add(btnNewButton_21);
+
 		panel = new JPanel();
 		headerSearchPanel.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -425,6 +466,12 @@ public class Main extends JFrame {
 		btnHeaderAddProvider = new JButton("Add provider");
 		panel_6.add(btnHeaderAddProvider);
 
+		btnNewButton_22 = new JButton("Update provider");
+		panel_6.add(btnNewButton_22);
+
+		btnNewButton_23 = new JButton("Delete provider");
+		panel_6.add(btnNewButton_23);
+
 		searchProviderPanel = new JPanel();
 		panel_6.add(searchProviderPanel);
 		searchProviderPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -469,6 +516,12 @@ public class Main extends JFrame {
 
 		btnNewButton = new JButton("Create New Order");
 		panel_10.add(btnNewButton);
+
+		btnNewButton_24 = new JButton("Update order");
+		panel_10.add(btnNewButton_24);
+
+		btnNewButton_25 = new JButton("Delete order");
+		panel_10.add(btnNewButton_25);
 
 		panel_12 = new JPanel();
 		panel_10.add(panel_12);
@@ -580,8 +633,10 @@ public class Main extends JFrame {
 		panel_28.add(panel_30, BorderLayout.CENTER);
 
 		panel_31 = new JPanel();
+		panel_31.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_9 = new JLabel("Mã thuốc:");
+		lblNewLabel_9.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_31.add(lblNewLabel_9);
 
 		textField_6 = new JTextField();
@@ -589,8 +644,10 @@ public class Main extends JFrame {
 		textField_6.setColumns(10);
 
 		panel_32 = new JPanel();
+		panel_32.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_10 = new JLabel("Tên thuốc:");
+		lblNewLabel_10.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_32.add(lblNewLabel_10);
 
 		textField_7 = new JTextField();
@@ -598,6 +655,7 @@ public class Main extends JFrame {
 		textField_7.setColumns(10);
 
 		panel_33 = new JPanel();
+		panel_33.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_11 = new JLabel("Thành phần:");
 		panel_33.add(lblNewLabel_11);
@@ -607,6 +665,7 @@ public class Main extends JFrame {
 		textField_8.setColumns(10);
 
 		panel_34 = new JPanel();
+		panel_34.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_12 = new JLabel("Đơn giá:");
 		panel_34.add(lblNewLabel_12);
@@ -678,6 +737,9 @@ public class Main extends JFrame {
 		table_3 = new JTable();
 		scrollPane_3.setViewportView(table_3);
 
+		btnNewButton_26 = new JButton("Delete");
+		panel_22.add(btnNewButton_26, BorderLayout.SOUTH);
+
 		panel_23 = new JPanel();
 		panel_19.add(panel_23, BorderLayout.CENTER);
 		panel_23.setLayout(new BorderLayout(0, 0));
@@ -687,7 +749,42 @@ public class Main extends JFrame {
 		panel_23.add(lblNewLabel_8, BorderLayout.NORTH);
 
 		panel_25 = new JPanel();
+		panel_25.setLayout(new GridLayout(0, 2, 0, 0));
 		panel_23.add(panel_25, BorderLayout.CENTER);
+
+		lblNewLabel_13 = new JLabel("Mã hóa đơn");
+		panel_25.add(lblNewLabel_13);
+
+		textField_10 = new JTextField();
+		panel_25.add(textField_10);
+		textField_10.setColumns(10);
+
+		lblNewLabel_14 = new JLabel("Số điện thoại");
+		panel_25.add(lblNewLabel_14);
+
+		textField_11 = new JTextField();
+		panel_25.add(textField_11);
+		textField_11.setColumns(10);
+
+		lblNewLabel_15 = new JLabel("Tên khách hàng");
+		panel_25.add(lblNewLabel_15);
+
+		textField_12 = new JTextField();
+		panel_25.add(textField_12);
+		textField_12.setColumns(10);
+
+		lblNewLabel_16 = new JLabel("Tổng hóa đơn");
+		panel_25.add(lblNewLabel_16);
+
+		textField_13 = new JTextField();
+		panel_25.add(textField_13);
+		textField_13.setColumns(10);
+
+		btnNewButton_7 = new JButton("HỦY BỎ");
+		panel_25.add(btnNewButton_7);
+
+		btnNewButton_8 = new JButton("IN HÓA ĐƠN");
+		panel_25.add(btnNewButton_8);
 
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));
@@ -696,68 +793,118 @@ public class Main extends JFrame {
 
 		panel_35 = new JPanel();
 		customerPanel.add(panel_35, BorderLayout.NORTH);
+		panel_35.setLayout(new BoxLayout(panel_35, BoxLayout.X_AXIS));
 
-		btnNewButton_7 = new JButton("New button");
+		btnNewButton_9 = new JButton("Add new customer");
+		panel_35.add(btnNewButton_9);
 
-		btnNewButton_8 = new JButton("New button");
+		btnNewButton_16 = new JButton("Update customer");
+		panel_35.add(btnNewButton_16);
 
-		btnNewButton_9 = new JButton("New button");
+		btnNewButton_17 = new JButton("Delete customer");
+		panel_35.add(btnNewButton_17);
 
-		btnNewButton_10 = new JButton("New button");
+		panel_37 = new JPanel();
+		panel_35.add(panel_37);
 
-		lblNewLabel_13 = new JLabel("Search");
-		lblNewLabel_13.setHorizontalAlignment(SwingConstants.CENTER);
+		textField_14 = new JTextField();
+		panel_37.add(textField_14);
+		textField_14.setColumns(10);
 
-		textField_10 = new JTextField();
-		textField_10.setColumns(10);
-		var gl_panel_35 = new GroupLayout(panel_35);
-		gl_panel_35.setHorizontalGroup(gl_panel_35.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel_35.createSequentialGroup().addContainerGap().addComponent(btnNewButton_7).addGap(18)
-						.addComponent(btnNewButton_8).addGap(18).addComponent(btnNewButton_9).addGap(18)
-						.addComponent(btnNewButton_10).addPreferredGap(ComponentPlacement.RELATED, 295, Short.MAX_VALUE)
-						.addGroup(gl_panel_35.createParallelGroup(Alignment.LEADING)
-								.addGroup(Alignment.TRAILING,
-										gl_panel_35.createSequentialGroup()
-												.addComponent(lblNewLabel_13, GroupLayout.PREFERRED_SIZE, 75,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(161))
-								.addGroup(Alignment.TRAILING,
-										gl_panel_35.createSequentialGroup()
-												.addComponent(textField_10, GroupLayout.PREFERRED_SIZE,
-														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(150)))));
-		gl_panel_35.setVerticalGroup(gl_panel_35.createParallelGroup(Alignment.LEADING)
-				.addComponent(btnNewButton_7, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-				.addGroup(gl_panel_35.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnNewButton_8, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
-						.addComponent(btnNewButton_9, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnNewButton_10, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_panel_35.createSequentialGroup().addGap(19).addComponent(lblNewLabel_13)
-						.addPreferredGap(ComponentPlacement.RELATED).addComponent(textField_10,
-								GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(39, Short.MAX_VALUE)));
-		panel_35.setLayout(gl_panel_35);
+		btnNewButton_11 = new JButton("Search");
+		panel_37.add(btnNewButton_11);
+
+		btnNewButton_10 = new JButton("Refresh");
+		panel_35.add(btnNewButton_10);
 
 		panel_36 = new JPanel();
 		customerPanel.add(panel_36, BorderLayout.CENTER);
+		panel_36.setLayout(new BorderLayout(0, 0));
 
-		table_1 = new JTable();
-		panel_36.add(table_1);
+		lblNewLabel_17 = new JLabel("List of Customer");
+		lblNewLabel_17.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_17.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_36.add(lblNewLabel_17, BorderLayout.NORTH);
 
 		scrollPane_4 = new JScrollPane();
-		panel_36.add(scrollPane_4);
+		panel_36.add(scrollPane_4, BorderLayout.CENTER);
+
+		table_1 = new JTable();
+		scrollPane_4.setViewportView(table_1);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(new Color(0, 128, 255));
 		contentContainer.add(statisticsPanel, "statisticsPanel");
 
+		lblNewLabel_20 = new JLabel(
+				"Thiết kế sau\r\nDoanh thu\r\nThuốc bán chạy\r\nTồn kho\r\nThống kê khách hàng\r\nThống kê theo nhân viên\r\nHiển thị biểu đồ\r\n\r\n");
+		lblNewLabel_20.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		statisticsPanel.add(lblNewLabel_20);
+
 		employeeManagementPanel = new JPanel();
 		employeeManagementPanel.setBackground(new Color(255, 128, 192));
 		contentContainer.add(employeeManagementPanel, "employeeManagementPanel");
+		employeeManagementPanel.setLayout(new BorderLayout(0, 0));
+
+		panel_38 = new JPanel();
+		employeeManagementPanel.add(panel_38, BorderLayout.NORTH);
+		panel_38.setLayout(new BoxLayout(panel_38, BoxLayout.X_AXIS));
+
+		btnNewButton_12 = new JButton("Add new employee");
+		panel_38.add(btnNewButton_12);
+
+		btnNewButton_18 = new JButton("Update employee");
+		panel_38.add(btnNewButton_18);
+
+		btnNewButton_19 = new JButton("Delete employee");
+		panel_38.add(btnNewButton_19);
+
+		panel_40 = new JPanel();
+		panel_38.add(panel_40);
+
+		textField_15 = new JTextField();
+		panel_40.add(textField_15);
+		textField_15.setColumns(10);
+
+		btnNewButton_14 = new JButton("Search");
+		panel_40.add(btnNewButton_14);
+
+		btnNewButton_13 = new JButton("Refresh");
+		panel_38.add(btnNewButton_13);
+
+		panel_39 = new JPanel();
+		employeeManagementPanel.add(panel_39, BorderLayout.CENTER);
+		panel_39.setLayout(new BorderLayout(0, 0));
+
+		lblNewLabel_18 = new JLabel("List of Employee");
+		lblNewLabel_18.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_18.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_39.add(lblNewLabel_18, BorderLayout.NORTH);
+
+		scrollPane_6 = new JScrollPane();
+		panel_39.add(scrollPane_6, BorderLayout.CENTER);
+
+		table_4 = new JTable();
+		scrollPane_6.setViewportView(table_4);
 
 		roleControlPanel = new JPanel();
-		roleControlPanel.setBackground(new Color(128, 0, 64));
+		roleControlPanel.setBackground(new Color(255, 255, 255));
 		contentContainer.add(roleControlPanel, "roleControlPanel");
+		roleControlPanel.setLayout(new BorderLayout(0, 0));
+
+		lblNewLabel_19 = new JLabel("Role Management");
+		lblNewLabel_19.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_19.setHorizontalAlignment(SwingConstants.CENTER);
+		roleControlPanel.add(lblNewLabel_19, BorderLayout.NORTH);
+
+		btnNewButton_15 = new JButton("Update role");
+		roleControlPanel.add(btnNewButton_15, BorderLayout.WEST);
+
+		scrollPane_7 = new JScrollPane();
+		roleControlPanel.add(scrollPane_7, BorderLayout.CENTER);
+
+		table_6 = new JTable();
+		scrollPane_7.setViewportView(table_6);
 
 		loadDataToTable();
 
@@ -840,4 +987,5 @@ public class Main extends JFrame {
 		// Gắn model vào bảng
 		table_medicines.setModel(model);
 	}
+
 }

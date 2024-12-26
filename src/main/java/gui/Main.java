@@ -22,11 +22,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
@@ -176,6 +174,42 @@ public class Main extends JFrame {
 	private JTextField textField_13;
 	private JButton btnNewButton_7;
 	private JButton btnNewButton_8;
+	private JPanel panel_35;
+	private JPanel panel_36;
+	private JButton btnNewButton_9;
+	private JPanel panel_37;
+	private JButton btnNewButton_10;
+	private JLabel lblNewLabel_17;
+	private JScrollPane scrollPane_4;
+	private JTable table_1;
+	private JTextField textField_14;
+	private JButton btnNewButton_11;
+	private JPanel panel_38;
+	private JPanel panel_39;
+	private JButton btnNewButton_12;
+	private JPanel panel_40;
+	private JButton btnNewButton_13;
+	private JTextField textField_15;
+	private JButton btnNewButton_14;
+	private JLabel lblNewLabel_18;
+	private JScrollPane scrollPane_6;
+	private JTable table_4;
+	private JLabel lblNewLabel_19;
+	private JButton btnNewButton_15;
+	private JScrollPane scrollPane_7;
+	private JTable table_6;
+	private JLabel lblNewLabel_20;
+	private JButton btnNewButton_16;
+	private JButton btnNewButton_17;
+	private JButton btnNewButton_18;
+	private JButton btnNewButton_19;
+	private JButton btnNewButton_20;
+	private JButton btnNewButton_21;
+	private JButton btnNewButton_22;
+	private JButton btnNewButton_23;
+	private JButton btnNewButton_24;
+	private JButton btnNewButton_25;
+	private JButton btnNewButton_26;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -325,6 +359,12 @@ public class Main extends JFrame {
 		btnAddMedicine = new JButton("Add medicine");
 		headerSearchPanel.add(btnAddMedicine);
 
+		btnNewButton_20 = new JButton("Update medicine");
+		headerSearchPanel.add(btnNewButton_20);
+
+		btnNewButton_21 = new JButton("Delete medicine");
+		headerSearchPanel.add(btnNewButton_21);
+
 		panel = new JPanel();
 		headerSearchPanel.add(panel);
 		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -424,6 +464,12 @@ public class Main extends JFrame {
 		btnHeaderAddProvider = new JButton("Add provider");
 		panel_6.add(btnHeaderAddProvider);
 
+		btnNewButton_22 = new JButton("Update provider");
+		panel_6.add(btnNewButton_22);
+
+		btnNewButton_23 = new JButton("Delete provider");
+		panel_6.add(btnNewButton_23);
+
 		searchProviderPanel = new JPanel();
 		panel_6.add(searchProviderPanel);
 		searchProviderPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -468,6 +514,12 @@ public class Main extends JFrame {
 
 		btnNewButton = new JButton("Create New Order");
 		panel_10.add(btnNewButton);
+
+		btnNewButton_24 = new JButton("Update order");
+		panel_10.add(btnNewButton_24);
+
+		btnNewButton_25 = new JButton("Delete order");
+		panel_10.add(btnNewButton_25);
 
 		panel_12 = new JPanel();
 		panel_10.add(panel_12);
@@ -579,8 +631,10 @@ public class Main extends JFrame {
 		panel_28.add(panel_30, BorderLayout.CENTER);
 
 		panel_31 = new JPanel();
+		panel_31.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_9 = new JLabel("Mã thuốc:");
+		lblNewLabel_9.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_31.add(lblNewLabel_9);
 
 		textField_6 = new JTextField();
@@ -588,8 +642,10 @@ public class Main extends JFrame {
 		textField_6.setColumns(10);
 
 		panel_32 = new JPanel();
+		panel_32.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_10 = new JLabel("Tên thuốc:");
+		lblNewLabel_10.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_32.add(lblNewLabel_10);
 
 		textField_7 = new JTextField();
@@ -597,6 +653,7 @@ public class Main extends JFrame {
 		textField_7.setColumns(10);
 
 		panel_33 = new JPanel();
+		panel_33.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_11 = new JLabel("Thành phần:");
 		panel_33.add(lblNewLabel_11);
@@ -606,6 +663,7 @@ public class Main extends JFrame {
 		textField_8.setColumns(10);
 
 		panel_34 = new JPanel();
+		panel_34.setLayout(new GridLayout(0, 2, 0, 0));
 
 		lblNewLabel_12 = new JLabel("Đơn giá:");
 		panel_34.add(lblNewLabel_12);
@@ -677,6 +735,9 @@ public class Main extends JFrame {
 		table_3 = new JTable();
 		scrollPane_3.setViewportView(table_3);
 
+		btnNewButton_26 = new JButton("Delete");
+		panel_22.add(btnNewButton_26, BorderLayout.SOUTH);
+
 		panel_23 = new JPanel();
 		panel_19.add(panel_23, BorderLayout.CENTER);
 		panel_23.setLayout(new BorderLayout(0, 0));
@@ -726,64 +787,122 @@ public class Main extends JFrame {
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));
 		contentContainer.add(customerPanel, "customerPanel");
-		customerPanel.setLayout(null);
+		customerPanel.setLayout(new BorderLayout(0, 0));
 
-		var customerPanel_list = new JPanel();
-		customerPanel_list.setBounds(0, 92, 904, 660);
-		customerPanel.add(customerPanel_list);
-		customerPanel_list.setLayout(null);
+		panel_35 = new JPanel();
+		customerPanel.add(panel_35, BorderLayout.NORTH);
+		panel_35.setLayout(new BoxLayout(panel_35, BoxLayout.X_AXIS));
 
-		var customerPanel_rdbtnEligibleCustomer = new JRadioButton("Eligible Customer");
-		customerPanel_rdbtnEligibleCustomer.setBounds(742, 15, 109, 23);
-		customerPanel_list.add(customerPanel_rdbtnEligibleCustomer);
+		btnNewButton_9 = new JButton("Add new customer");
+		panel_35.add(btnNewButton_9);
 
-		var customerPanel_scrollPane = new JScrollPane();
-		customerPanel_scrollPane.setBounds(505, 15, 2, 2);
-		customerPanel_list.add(customerPanel_scrollPane);
+		btnNewButton_16 = new JButton("Update customer");
+		panel_35.add(btnNewButton_16);
 
-		var customerPanel_table = new JTable();
-		customerPanel_table.setBounds(512, 16, 0, 0);
-		customerPanel_list.add(customerPanel_table);
+		btnNewButton_17 = new JButton("Delete customer");
+		panel_35.add(btnNewButton_17);
 
-		var customerPanel_btnAdd = new JButton("Add Customer");
-		customerPanel_btnAdd.setBounds(0, 0, 155, 93);
-		customerPanel.add(customerPanel_btnAdd);
+		panel_37 = new JPanel();
+		panel_35.add(panel_37);
 
-		var textArea = new JTextArea();
-		textArea.setBounds(612, 55, 292, 36);
-		customerPanel.add(textArea);
+		textField_14 = new JTextField();
+		panel_37.add(textField_14);
+		textField_14.setColumns(10);
 
-		var customerPanel_btnSearch = new JButton("Search");
-		customerPanel_btnSearch.setBounds(637, 21, 89, 23);
-		customerPanel.add(customerPanel_btnSearch);
+		btnNewButton_11 = new JButton("Search");
+		panel_37.add(btnNewButton_11);
 
-		var customerPanel_btnEdit = new JButton("Edit Customer");
-		customerPanel_btnEdit.setBounds(153, 0, 155, 93);
-		customerPanel.add(customerPanel_btnEdit);
+		btnNewButton_10 = new JButton("Refresh");
+		panel_35.add(btnNewButton_10);
 
-		var customerPanel_btnDelete = new JButton("Delete Customer");
-		customerPanel_btnDelete.setBounds(306, 0, 155, 93);
-		customerPanel.add(customerPanel_btnDelete);
+		panel_36 = new JPanel();
+		customerPanel.add(panel_36, BorderLayout.CENTER);
+		panel_36.setLayout(new BorderLayout(0, 0));
 
-		var customerPanel_btnUpdate = new JButton("Update Customer");
-		customerPanel_btnUpdate.setBounds(459, 0, 155, 93);
-		customerPanel.add(customerPanel_btnUpdate);
+		lblNewLabel_17 = new JLabel("List of Customer");
+		lblNewLabel_17.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_17.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_36.add(lblNewLabel_17, BorderLayout.NORTH);
 
-		var customerPanel_btnRefesh = new JButton("Refesh");
-		customerPanel_btnRefesh.setBounds(776, 21, 89, 23);
-		customerPanel.add(customerPanel_btnRefesh);
+		scrollPane_4 = new JScrollPane();
+		panel_36.add(scrollPane_4, BorderLayout.CENTER);
+
+		table_1 = new JTable();
+		scrollPane_4.setViewportView(table_1);
 
 		statisticsPanel = new JPanel();
 		statisticsPanel.setBackground(new Color(0, 128, 255));
 		contentContainer.add(statisticsPanel, "statisticsPanel");
 
+		lblNewLabel_20 = new JLabel(
+				"Thiết kế sau\r\nDoanh thu\r\nThuốc bán chạy\r\nTồn kho\r\nThống kê khách hàng\r\nThống kê theo nhân viên\r\nHiển thị biểu đồ\r\n\r\n");
+		lblNewLabel_20.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		statisticsPanel.add(lblNewLabel_20);
+
 		employeeManagementPanel = new JPanel();
 		employeeManagementPanel.setBackground(new Color(255, 128, 192));
 		contentContainer.add(employeeManagementPanel, "employeeManagementPanel");
+		employeeManagementPanel.setLayout(new BorderLayout(0, 0));
+
+		panel_38 = new JPanel();
+		employeeManagementPanel.add(panel_38, BorderLayout.NORTH);
+		panel_38.setLayout(new BoxLayout(panel_38, BoxLayout.X_AXIS));
+
+		btnNewButton_12 = new JButton("Add new employee");
+		panel_38.add(btnNewButton_12);
+
+		btnNewButton_18 = new JButton("Update employee");
+		panel_38.add(btnNewButton_18);
+
+		btnNewButton_19 = new JButton("Delete employee");
+		panel_38.add(btnNewButton_19);
+
+		panel_40 = new JPanel();
+		panel_38.add(panel_40);
+
+		textField_15 = new JTextField();
+		panel_40.add(textField_15);
+		textField_15.setColumns(10);
+
+		btnNewButton_14 = new JButton("Search");
+		panel_40.add(btnNewButton_14);
+
+		btnNewButton_13 = new JButton("Refresh");
+		panel_38.add(btnNewButton_13);
+
+		panel_39 = new JPanel();
+		employeeManagementPanel.add(panel_39, BorderLayout.CENTER);
+		panel_39.setLayout(new BorderLayout(0, 0));
+
+		lblNewLabel_18 = new JLabel("List of Employee");
+		lblNewLabel_18.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_18.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_39.add(lblNewLabel_18, BorderLayout.NORTH);
+
+		scrollPane_6 = new JScrollPane();
+		panel_39.add(scrollPane_6, BorderLayout.CENTER);
+
+		table_4 = new JTable();
+		scrollPane_6.setViewportView(table_4);
 
 		roleControlPanel = new JPanel();
-		roleControlPanel.setBackground(new Color(128, 0, 64));
+		roleControlPanel.setBackground(new Color(255, 255, 255));
 		contentContainer.add(roleControlPanel, "roleControlPanel");
+		roleControlPanel.setLayout(new BorderLayout(0, 0));
+
+		lblNewLabel_19 = new JLabel("Role Management");
+		lblNewLabel_19.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel_19.setHorizontalAlignment(SwingConstants.CENTER);
+		roleControlPanel.add(lblNewLabel_19, BorderLayout.NORTH);
+
+		btnNewButton_15 = new JButton("Update role");
+		roleControlPanel.add(btnNewButton_15, BorderLayout.WEST);
+
+		scrollPane_7 = new JScrollPane();
+		roleControlPanel.add(scrollPane_7, BorderLayout.CENTER);
+
+		table_6 = new JTable();
+		scrollPane_7.setViewportView(table_6);
 
 		loadDataToTable();
 

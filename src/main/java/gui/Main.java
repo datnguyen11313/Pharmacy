@@ -161,6 +161,16 @@ public class Main extends JFrame {
 	private JPanel panel_34;
 	private JLabel lblNewLabel_12;
 	private JTextField textField_9;
+	private JLabel lblNewLabel_13;
+	private JTextField textField_10;
+	private JLabel lblNewLabel_14;
+	private JTextField textField_11;
+	private JLabel lblNewLabel_15;
+	private JTextField textField_12;
+	private JLabel lblNewLabel_16;
+	private JTextField textField_13;
+	private JButton btnNewButton_7;
+	private JButton btnNewButton_8;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -671,7 +681,42 @@ public class Main extends JFrame {
 		panel_23.add(lblNewLabel_8, BorderLayout.NORTH);
 
 		panel_25 = new JPanel();
+		panel_25.setLayout(new GridLayout(0, 2, 0, 0));
 		panel_23.add(panel_25, BorderLayout.CENTER);
+
+		lblNewLabel_13 = new JLabel("Mã hóa đơn");
+		panel_25.add(lblNewLabel_13);
+
+		textField_10 = new JTextField();
+		panel_25.add(textField_10);
+		textField_10.setColumns(10);
+
+		lblNewLabel_14 = new JLabel("Số điện thoại");
+		panel_25.add(lblNewLabel_14);
+
+		textField_11 = new JTextField();
+		panel_25.add(textField_11);
+		textField_11.setColumns(10);
+
+		lblNewLabel_15 = new JLabel("Tên khách hàng");
+		panel_25.add(lblNewLabel_15);
+
+		textField_12 = new JTextField();
+		panel_25.add(textField_12);
+		textField_12.setColumns(10);
+
+		lblNewLabel_16 = new JLabel("Tổng hóa đơn");
+		panel_25.add(lblNewLabel_16);
+
+		textField_13 = new JTextField();
+		panel_25.add(textField_13);
+		textField_13.setColumns(10);
+
+		btnNewButton_7 = new JButton("HỦY BỎ");
+		panel_25.add(btnNewButton_7);
+
+		btnNewButton_8 = new JButton("IN HÓA ĐƠN");
+		panel_25.add(btnNewButton_8);
 
 		customerPanel = new JPanel();
 		customerPanel.setBackground(new Color(128, 255, 255));

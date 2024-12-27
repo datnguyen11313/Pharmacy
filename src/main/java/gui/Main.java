@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
@@ -27,11 +28,13 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
 import dao.MedicinesDao;
+import utils.UIHelper;
 
 public class Main extends JFrame {
 
@@ -225,86 +228,76 @@ public class Main extends JFrame {
 		contentPanel.setLayout(new BorderLayout());
 
 		navigation = new JPanel();
-		navigation.setBackground(new Color(133, 250, 139));
+		navigation.setBackground(new Color(45, 45, 45));
 		contentPanel.add(navigation, BorderLayout.WEST);
 		navigation.setPreferredSize(new Dimension(200, navigation.getHeight()));
 
 		userInfoPanel = new JPanel();
+		userInfoPanel.setBackground(new Color(60, 60, 60));
+		userInfoPanel.setPreferredSize(new Dimension(200, 80));
+		navigation.add(userInfoPanel, BorderLayout.NORTH);
 
 		sideBar = new JPanel();
-		sideBar.setLayout(new BorderLayout(0, 0));
+		sideBar.setLayout(new BorderLayout());
+		sideBar.setBackground(new Color(45, 45, 45));
 
 		panelLogout = new JPanel();
+		panelLogout.setBackground(new Color(60, 60, 60));
 		sideBar.add(panelLogout, BorderLayout.SOUTH);
 
 		btnLogout = new JButton("Logout");
 		btnLogout.setHorizontalAlignment(SwingConstants.LEFT);
 		btnLogout.setPreferredSize(new Dimension(150, 40));
+		btnLogout.setBackground(new Color(255, 69, 58));
+		btnLogout.setForeground(Color.WHITE);
+		btnLogout.setFocusPainted(false);
+		btnLogout.setBorderPainted(false);
+		btnLogout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelLogout.add(btnLogout);
 
 		scrollPaneSideBar = new JScrollPane();
+		scrollPaneSideBar.setBorder(null);
+		scrollPaneSideBar.getViewport().setBackground(new Color(45, 45, 45));
 		sideBar.add(scrollPaneSideBar, BorderLayout.CENTER);
 
 		contentScrollPaneSideBar = new JPanel();
+		contentScrollPaneSideBar.setBackground(new Color(45, 45, 45));
 		scrollPaneSideBar.setViewportView(contentScrollPaneSideBar);
 		contentScrollPaneSideBar.setPreferredSize(new java.awt.Dimension(150, 46));
 
-		btnMedicineManagement = new JButton("Medicine Management");
-		btnMedicineManagement.addActionListener(this::btnMedicineActionPerformed);
-
-		btnPharmacyCounter = new JButton("Pharmacy Counter");
-		btnPharmacyCounter.addActionListener(this::btnPharmacyCounterActionPerformed);
-		btnPharmacyCounter.setHorizontalAlignment(SwingConstants.LEFT);
-		btnPharmacyCounter.setPreferredSize(new Dimension(150, 40));
+		// Tạo từng JButton một
+		btnPharmacyCounter = new JButton(
+				"<html><i class='fas fa-briefcase-medical' style='font-size:36px'></i> Pharmacy Counter</html>");
+		btnPharmacyCounter.setHorizontalTextPosition(SwingConstants.LEFT);
+		btnPharmacyCounter.setVerticalTextPosition(SwingConstants.CENTER);
+		btnPharmacyCounter.setPreferredSize(new Dimension(170, 100));
 		contentScrollPaneSideBar.add(btnPharmacyCounter);
-		btnMedicineManagement.setHorizontalAlignment(SwingConstants.LEFT);
-		btnMedicineManagement.setPreferredSize(new java.awt.Dimension(150, 40));
-		btnPharmacyCounter.setPreferredSize(new java.awt.Dimension(150, 80));
 
+		btnMedicineManagement = UIHelper.createStyledButton("Medicine Management");
+		btnMedicineManagement.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnMedicineManagement);
 
-		btnProvider = new JButton("Provider");
-		btnProvider.addActionListener(this::btnProviderActionPerformed);
-		btnProvider.setHorizontalAlignment(SwingConstants.LEFT);
+		btnProvider = UIHelper.createStyledButton("Provider");
 		btnProvider.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnProvider);
 
-		btnInvoiceManagement = new JButton("Invoice Management");
-		btnInvoiceManagement.addActionListener(this::btnInvoiceManagementActionPerformed);
-		btnInvoiceManagement.setHorizontalAlignment(SwingConstants.LEFT);
+		btnInvoiceManagement = UIHelper.createStyledButton("Invoice Management");
 		btnInvoiceManagement.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnInvoiceManagement);
 
-		separator = new JSeparator();
-		separator.setPreferredSize(new Dimension(150, 2));
-
-		contentScrollPaneSideBar.add(separator);
-
-		btnCustomer = new JButton("Customer");
-		btnCustomer.addActionListener(this::btnCustomerActionPerformed);
-		btnCustomer.setHorizontalAlignment(SwingConstants.LEFT);
+		btnCustomer = UIHelper.createStyledButton("Customer");
 		btnCustomer.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnCustomer);
 
-		btnStatistics = new JButton("Statistics");
-		btnStatistics.addActionListener(this::btnStatisticsActionPerformed);
-		btnStatistics.setHorizontalAlignment(SwingConstants.LEFT);
+		btnStatistics = UIHelper.createStyledButton("Statistics");
 		btnStatistics.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnStatistics);
 
-		separator_1 = new JSeparator();
-		separator_1.setPreferredSize(new Dimension(150, 2));
-		contentScrollPaneSideBar.add(separator_1);
-
-		btnEmployee = new JButton("Employee Magament");
-		btnEmployee.addActionListener(this::btnEmployeeActionPerformed);
-		btnEmployee.setHorizontalAlignment(SwingConstants.LEFT);
+		btnEmployee = UIHelper.createStyledButton("Employee Management");
 		btnEmployee.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnEmployee);
 
-		btnRoleControl = new JButton("Role Control");
-		btnRoleControl.addActionListener(this::btnRoleControlActionPerformed);
-		btnRoleControl.setHorizontalAlignment(SwingConstants.LEFT);
+		btnRoleControl = UIHelper.createStyledButton("Role Control");
 		btnRoleControl.setPreferredSize(new Dimension(150, 40));
 		contentScrollPaneSideBar.add(btnRoleControl);
 
@@ -926,6 +919,20 @@ public class Main extends JFrame {
 	}
 
 	public static void main(String[] args) {
+
+		String[] lookAndFeels = { "javax.swing.plaf.nimbus.NimbusLookAndFeel", "com.formdev.flatlaf.FlatLightLaf",
+				"com.sun.java.swing.plaf.windows.WindowsLookAndFeel", "com.sun.java.swing.plaf.motif.MotifLookAndFeel",
+				UIManager.getSystemLookAndFeelClassName() };
+
+		for (String lookAndFeel : lookAndFeels) {
+			try {
+				UIManager.setLookAndFeel(lookAndFeel);
+				break; // Chọn Look and Feel đầu tiên hợp lệ
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		// Dùng một ví dụ để khởi chạy giao diện Main với role là Admin
 		EventQueue.invokeLater(() -> {
 			try {

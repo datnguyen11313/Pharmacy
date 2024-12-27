@@ -1,462 +1,461 @@
-﻿-- Kiểm tra nếu database đã tồn tại, nếu không thì tạo mới
-IF EXISTS (SELECT * FROM sys.databases WHERE name = 'PharmaCity')
-BEGIN
-    DROP DATABASE PharmaCity;
-END;
-
+﻿USE [PharmaCity]
 GO
-
-CREATE DATABASE PharmaCity;
+/****** Object:  Table [dbo].[audit_logs]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-USE PharmaCity;
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Xóa bảng nếu đã tồn tại
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'roles')
-BEGIN
-    DROP TABLE roles;
-END;
-
+CREATE TABLE [dbo].[audit_logs](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NOT NULL,
+	[action_type] [varchar](50) NOT NULL,
+	[action_details] [varchar](500) NOT NULL,
+	[action_time] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-CREATE TABLE roles (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    role_name VARCHAR(50) UNIQUE NOT NULL,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE()
-);
+/****** Object:  Table [dbo].[categories]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Chèn dữ liệu mẫu vào bảng roles
-INSERT INTO roles (role_name) VALUES ('admin'), ('employee');
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Xóa bảng nếu đã tồn tại
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'users')
-BEGIN
-    DROP TABLE users;
-END;
-
+CREATE TABLE [dbo].[categories](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[category_name] [varchar](100) NOT NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[category_name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-CREATE TABLE users (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role_id INT NOT NULL,
-    full_name VARCHAR(255) NOT NULL,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+/****** Object:  Table [dbo].[customers]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Chèn dữ liệu mẫu vào bảng users
-INSERT INTO users (username, password, role_id, full_name)
-VALUES 
-    ('admin', '123456', 1, 'System Administrator'),
-    ('employee1', '123456', 2, 'Pharmacist 1'),
-    ('employee2', '123456', 2, 'Pharmacist 2');
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Xóa bảng nếu đã tồn tại
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'categories')
-BEGIN
-    DROP TABLE categories;
-END;
-
+CREATE TABLE [dbo].[customers](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[full_name] [varchar](255) NOT NULL,
+	[phone_number] [varchar](15) NULL,
+	[email] [varchar](100) NULL,
+	[address] [varchar](500) NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-CREATE TABLE categories (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    category_name VARCHAR(100) NOT NULL UNIQUE,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE()
-);
+/****** Object:  Table [dbo].[invoices]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Chèn dữ liệu mẫu vào bảng categories
-INSERT INTO categories (category_name)
-VALUES ('Pain relief'), ('Antipyretic'), ('Vitamins');
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Xóa bảng nếu đã tồn tại
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'medicines')
-BEGIN
-    DROP TABLE medicines;
-END;
-
+CREATE TABLE [dbo].[invoices](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[order_id] [int] NOT NULL,
+	[invoice_date] [datetime] NULL,
+	[total_amount] [decimal](10, 2) NOT NULL,
+	[amount_paid] [decimal](10, 2) NOT NULL,
+	[payment_status] [varchar](50) NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-CREATE TABLE medicines (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    medicine_name VARCHAR(255) NOT NULL,
-    category_id INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    stock INT NOT NULL,
-    manufacturing_date DATETIME NOT NULL,
-    [expiry_date] DATETIME NOT NULL,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+/****** Object:  Table [dbo].[medicines]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-alter table medicines
-add
-isDelete bit default 0
-
-UPDATE medicines
-SET isDelete = 0
-WHERE isDelete IS NULL;
-
-INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date)
-VALUES 
-('Paracetamol', 1, 5000, 100, '2023-01-01', '2025-01-01'),
-('Ibuprofen', 1, 10000, 200, '2023-02-01', '2025-02-01'),
-('Amoxicillin', 2, 15000, 150, '2023-03-01', '2025-03-01'),
-('Ciprofloxacin', 2, 20000, 120, '2023-04-01', '2025-04-01'),
-('Vitamin C', 3, 5000, 300, '2023-01-15', '2025-01-15'),
-('Multivitamins', 3, 7000, 400, '2023-02-20', '2025-02-20'),
-('Antacid Tablets', 4, 8000, 250, '2023-03-10', '2025-03-10'),
-('Loratadine', 5, 12000, 180, '2023-04-05', '2025-04-05'),
-('Metformin', 6, 14000, 160, '2023-05-01', '2025-05-01'),
-('Insulin', 6, 30000, 90, '2023-06-01', '2025-06-01'),
-('Aspirin', 1, 4000, 500, '2023-02-10', '2025-02-10'),
-('Omeprazole', 4, 10000, 230, '2023-03-15', '2025-03-15'),
-('Clarithromycin', 2, 22000, 110, '2023-04-20', '2025-04-20'),
-('Zinc Supplements', 3, 6000, 350, '2023-01-25', '2025-01-25'),
-('Calcium Tablets', 3, 9000, 270, '2023-02-15', '2025-02-15'),
-('Cetirizine', 5, 11000, 240, '2023-03-05', '2025-03-05'),
-('Azithromycin', 2, 25000, 80, '2023-04-15', '2025-04-15'),
-('Doxycycline', 2, 18000, 130, '2023-05-10', '2025-05-10'),
-('Folic Acid', 3, 4500, 400, '2023-06-01', '2025-06-01'),
-('Probiotics', 4, 7500, 300, '2023-07-01', '2025-07-01');
-
-INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date)
-VALUES
-('Naproxen', 1, 8000, 150, '2023-07-01', '2025-07-01'),
-('Ranitidine', 4, 12000, 200, '2023-06-15', '2025-06-15'),
-('Simethicone', 4, 6000, 180, '2023-08-01', '2025-08-01'),
-('Prednisolone', 5, 15000, 90, '2023-09-01', '2025-09-01'),
-('Vitamin D3', 3, 7000, 220, '2023-07-20', '2025-07-20'),
-('Vitamin B12', 3, 6500, 250, '2023-08-15', '2025-08-15'),
-('Calamine Lotion', 6, 9500, 100, '2023-05-25', '2025-05-25'),
-('Amoxicillin-Clavulanic Acid', 2, 28000, 120, '2023-06-10', '2025-06-10'),
-('Cefuroxime', 2, 22000, 110, '2023-06-20', '2025-06-20'),
-('Losartan', 6, 18000, 140, '2023-05-01', '2025-05-01'),
-('Amlodipine', 6, 17000, 150, '2023-06-15', '2025-06-15'),
-('Clopidogrel', 6, 25000, 130, '2023-05-20', '2025-05-20'),
-('Lisinopril', 6, 20000, 100, '2023-04-15', '2025-04-15'),
-('Furosemide', 6, 14000, 160, '2023-06-05', '2025-06-05'),
-('Hydrochlorothiazide', 6, 15000, 170, '2023-07-10', '2025-07-10'),
-('Levofloxacin', 2, 27000, 100, '2023-05-25', '2025-05-25'),
-('Metronidazole', 2, 13000, 300, '2023-03-15', '2025-03-15'),
-('Ketoconazole', 4, 20000, 150, '2023-04-01', '2025-04-01'),
-('Salbutamol', 5, 18000, 120, '2023-03-20', '2025-03-20'),
-('Beclomethasone', 5, 24000, 100, '2023-06-01', '2025-06-01');
-
--- Cập nhật tất cả các dòng để đảm bảo isDelete = 0
-UPDATE medicines
-SET isDelete = 0
-WHERE isDelete IS NULL;
-
-
--- Cập nhật tất cả các dòng để đảm bảo isDelete = 0
-UPDATE medicines
-SET isDelete = 0
-WHERE isDelete IS NULL;
-
-
-
--- Chèn dữ liệu mẫu vào bảng medicines
-INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date)
-VALUES
-    ('Paracetamol', 1, 15000, 100, '2023-01-01', '2025-01-01'),
-    ('Aspirin', 2, 12000, 50, '2023-03-15', '2025-03-15'),
-    ('Vitamin C', 3, 8000, 200, '2023-06-10', '2025-06-10');
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Xóa bảng nếu đã tồn tại
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'orders')
-BEGIN
-    DROP TABLE orders;
-END;
-
+CREATE TABLE [dbo].[medicines](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[medicine_name] [varchar](255) NOT NULL,
+	[category_id] [int] NOT NULL,
+	[price] [decimal](10, 2) NOT NULL,
+	[stock] [int] NOT NULL,
+	[manufacturing_date] [datetime] NOT NULL,
+	[expiry_date] [datetime] NOT NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+	[supplier_id] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-CREATE TABLE orders (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL,
-    customer_name VARCHAR(255) NOT NULL,
-    total_price DECIMAL(10, 2) NOT NULL,
-    order_date DATETIME DEFAULT GETDATE(),
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+/****** Object:  Table [dbo].[order_details]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Chèn dữ liệu mẫu vào bảng orders
-INSERT INTO orders (user_id, customer_name, total_price)
-VALUES
-    (2, 'John Doe', 30000),
-    (3, 'Jane Smith', 12000);
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Xóa bảng nếu đã tồn tại
-IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'order_details')
-BEGIN
-    DROP TABLE order_details;
-END;
-
+CREATE TABLE [dbo].[order_details](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[order_id] [int] NOT NULL,
+	[medicine_id] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
+	[unit_price] [decimal](10, 2) NOT NULL,
+	[total_price] [decimal](10, 2) NOT NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-CREATE TABLE order_details (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    order_id INT NOT NULL,
-    medicine_id INT NOT NULL,
-    quantity INT NOT NULL,
-    unit_price DECIMAL(10, 2) NOT NULL,
-    total_price DECIMAL(10, 2) NOT NULL,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+/****** Object:  Table [dbo].[orders]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Chèn dữ liệu mẫu vào bảng order_details
-INSERT INTO order_details (order_id, medicine_id, quantity, unit_price, total_price)
-VALUES
-    (1, 1, 2, 15000, 30000),
-    (2, 2, 1, 12000, 12000);
+SET QUOTED_IDENTIFIER ON
 GO
-
-
-INSERT INTO categories (category_name)
-VALUES 
-    ('Antibiotics'), ('Antihistamines'), ('Supplements'), ('Analgesics'), ('Antacids');
+CREATE TABLE [dbo].[orders](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[user_id] [int] NOT NULL,
+	[customer_name] [varchar](255) NOT NULL,
+	[total_price] [decimal](10, 2) NOT NULL,
+	[order_date] [datetime] NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+	[customer_id] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date)
-VALUES
-    ('Amoxicillin', 4, 50000, 60, '2023-02-01', '2025-02-01'),
-    ('Cetirizine', 5, 20000, 150, '2023-04-10', '2025-04-10'),
-    ('Calcium Tablets', 3, 25000, 80, '2023-01-20', '2025-01-20'),
-    ('Ibuprofen', 1, 18000, 90, '2023-03-25', '2025-03-25'),
-    ('Ranitidine', 5, 22000, 40, '2023-05-15', '2025-05-15');
+/****** Object:  Table [dbo].[price_history]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-INSERT INTO orders (user_id, customer_name, total_price)
-VALUES
-    (2, 'Michael Brown', 70000),
-    (3, 'Emily Davis', 25000),
-    (2, 'Robert Johnson', 40000);
+SET QUOTED_IDENTIFIER ON
 GO
-
-
-INSERT INTO order_details (order_id, medicine_id, quantity, unit_price, total_price)
-VALUES
-    (1, 4, 2, 18000, 36000),
-    (1, 5, 1, 22000, 22000),
-    (2, 3, 1, 25000, 25000),
-    (3, 2, 2, 20000, 40000);
+CREATE TABLE [dbo].[price_history](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[medicine_id] [int] NOT NULL,
+	[old_price] [decimal](10, 2) NOT NULL,
+	[new_price] [decimal](10, 2) NOT NULL,
+	[change_date] [datetime] NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
--- Cập nhật bảng roles để thêm cột isDelete
-ALTER TABLE roles
-ADD isDelete BIT DEFAULT 0;
+/****** Object:  Table [dbo].[promotions]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Cập nhật bảng users để thêm cột isDelete
-ALTER TABLE users
-ADD isDelete BIT DEFAULT 0;
+SET QUOTED_IDENTIFIER ON
 GO
-
-
--- Cập nhật bảng categories để thêm cột isDelete
-ALTER TABLE categories
-ADD isDelete BIT DEFAULT 0;
+CREATE TABLE [dbo].[promotions](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[medicine_id] [int] NOT NULL,
+	[discount_percent] [int] NOT NULL,
+	[start_date] [datetime] NULL,
+	[end_date] [datetime] NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-
-ALTER TABLE orders
-ADD isDelete BIT DEFAULT 0;
+/****** Object:  Table [dbo].[returns]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-ALTER TABLE order_details
-ADD isDelete BIT DEFAULT 0;
+SET QUOTED_IDENTIFIER ON
 GO
--- Cập nhật bảng customers để thêm cột isDelete
-ALTER TABLE customers
-ADD isDelete BIT DEFAULT 0;
+CREATE TABLE [dbo].[returns](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[order_id] [int] NOT NULL,
+	[medicine_id] [int] NOT NULL,
+	[quantity] [int] NOT NULL,
+	[reason] [varchar](500) NULL,
+	[return_date] [datetime] NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
--- Cập nhật bảng invoices để thêm cột isDelete
-ALTER TABLE invoices
-ADD isDelete BIT DEFAULT 0;
+/****** Object:  Table [dbo].[roles]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-
-
--- Cập nhật bảng price_history để thêm cột isDelete
-ALTER TABLE price_history
-ADD isDelete BIT DEFAULT 0;
+SET QUOTED_IDENTIFIER ON
 GO
-
-
--- Cập nhật bảng stock_history để thêm cột isDelete
-ALTER TABLE stock_history
-ADD isDelete BIT DEFAULT 0;
+CREATE TABLE [dbo].[roles](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[role_name] [varchar](50) NOT NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[role_name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
--- Cập nhật bảng promotions để thêm cột isDelete
-ALTER TABLE promotions
-ADD isDelete BIT DEFAULT 0;
+/****** Object:  Table [dbo].[stock_history]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
--- Cập nhật bảng returns để thêm cột isDelete
-ALTER TABLE returns
-ADD isDelete BIT DEFAULT 0;
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Cập nhật bảng audit_logs để thêm cột isDelete
-ALTER TABLE audit_logs
-ADD isDelete BIT DEFAULT 0;
+CREATE TABLE [dbo].[stock_history](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[medicine_id] [int] NOT NULL,
+	[change_type] [varchar](50) NOT NULL,
+	[quantity] [int] NOT NULL,
+	[change_date] [datetime] NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-
--- Cập nhật bảng invoices để thêm cột isDelete
-ALTER TABLE invoices
-ADD isDelete BIT DEFAULT 0;
+/****** Object:  Table [dbo].[suppliers]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-
-CREATE TABLE customers (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    full_name VARCHAR(255) NOT NULL,
-    phone_number VARCHAR(15),
-    email VARCHAR(100),
-    address VARCHAR(500),
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE()
-);
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Cập nhật bảng orders để tham chiếu bảng customers
-ALTER TABLE orders
-ADD customer_id INT;
-
--- Thêm khóa ngoại
-ALTER TABLE orders
-ADD FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE TABLE [dbo].[suppliers](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[supplier_name] [varchar](255) NOT NULL,
+	[contact_phone] [varchar](15) NULL,
+	[contact_email] [varchar](100) NULL,
+	[address] [varchar](500) NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
--- Tạo bảng invoices
-CREATE TABLE invoices (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    order_id INT NOT NULL,
-    invoice_date DATETIME DEFAULT GETDATE(),
-    total_amount DECIMAL(10, 2) NOT NULL,
-    amount_paid DECIMAL(10, 2) NOT NULL DEFAULT 0,
-    payment_status VARCHAR(50) DEFAULT 'Unpaid',
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+/****** Object:  Table [dbo].[users]    Script Date: 12/28/2024 1:47:54 AM ******/
+SET ANSI_NULLS ON
 GO
-
-
-
--- Tạo bảng suppliers
-CREATE TABLE suppliers (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    supplier_name VARCHAR(255) NOT NULL,
-    contact_phone VARCHAR(15),
-    contact_email VARCHAR(100),
-    address VARCHAR(500),
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE()
-);
+SET QUOTED_IDENTIFIER ON
 GO
-
--- Cập nhật bảng medicines để liên kết với bảng suppliers
-ALTER TABLE medicines
-ADD supplier_id INT;
-
--- Thêm khóa ngoại
-ALTER TABLE medicines
-ADD FOREIGN KEY (supplier_id) REFERENCES suppliers(id) ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE TABLE [dbo].[users](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[username] [varchar](50) NOT NULL,
+	[password] [varchar](255) NOT NULL,
+	[role_id] [int] NOT NULL,
+	[full_name] [varchar](255) NOT NULL,
+	[created_at] [datetime] NULL,
+	[updated_at] [datetime] NULL,
+	[isDelete] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[username] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
 GO
-
-
--- Tạo bảng price_history
-CREATE TABLE price_history (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    medicine_id INT NOT NULL,
-    old_price DECIMAL(10, 2) NOT NULL,
-    new_price DECIMAL(10, 2) NOT NULL,
-    change_date DATETIME DEFAULT GETDATE(),
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT (getdate()) FOR [action_time]
 GO
-
-
--- Tạo bảng stock_history
-CREATE TABLE stock_history (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    medicine_id INT NOT NULL,
-    change_type VARCHAR(50) NOT NULL, -- "Import" hoặc "Sale"
-    quantity INT NOT NULL,
-    change_date DATETIME DEFAULT GETDATE(),
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT ((0)) FOR [isDelete]
 GO
-
-
--- Tạo bảng promotions
-CREATE TABLE promotions (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    medicine_id INT NOT NULL,
-    discount_percent INT NOT NULL, -- Giảm giá theo phần trăm
-    start_date DATETIME DEFAULT GETDATE(),
-    end_date DATETIME,
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+ALTER TABLE [dbo].[categories] ADD  DEFAULT (getdate()) FOR [created_at]
 GO
-
-
--- Tạo bảng returns
-CREATE TABLE returns (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    order_id INT NOT NULL,
-    medicine_id INT NOT NULL,
-    quantity INT NOT NULL,
-    reason VARCHAR(500),
-    return_date DATETIME DEFAULT GETDATE(),
-    created_at DATETIME DEFAULT GETDATE(),
-    updated_at DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+ALTER TABLE [dbo].[categories] ADD  DEFAULT (getdate()) FOR [updated_at]
 GO
-
-
--- Tạo bảng audit_logs
-CREATE TABLE audit_logs (
-    id INT IDENTITY(1,1) PRIMARY KEY,
-    user_id INT NOT NULL,
-    action_type VARCHAR(50) NOT NULL,
-    action_details VARCHAR(500) NOT NULL,
-    action_time DATETIME DEFAULT GETDATE(),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+ALTER TABLE [dbo].[categories] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[customers] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[customers] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[customers] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[invoices] ADD  DEFAULT (getdate()) FOR [invoice_date]
+GO
+ALTER TABLE [dbo].[invoices] ADD  DEFAULT ((0)) FOR [amount_paid]
+GO
+ALTER TABLE [dbo].[invoices] ADD  DEFAULT ('Unpaid') FOR [payment_status]
+GO
+ALTER TABLE [dbo].[invoices] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[invoices] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[invoices] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[medicines] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[medicines] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[medicines] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[order_details] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[order_details] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[order_details] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[orders] ADD  DEFAULT (getdate()) FOR [order_date]
+GO
+ALTER TABLE [dbo].[orders] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[orders] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[orders] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[price_history] ADD  DEFAULT (getdate()) FOR [change_date]
+GO
+ALTER TABLE [dbo].[price_history] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[price_history] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[price_history] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[promotions] ADD  DEFAULT (getdate()) FOR [start_date]
+GO
+ALTER TABLE [dbo].[promotions] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[promotions] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[promotions] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[returns] ADD  DEFAULT (getdate()) FOR [return_date]
+GO
+ALTER TABLE [dbo].[returns] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[returns] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[returns] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[roles] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[roles] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[roles] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[stock_history] ADD  DEFAULT (getdate()) FOR [change_date]
+GO
+ALTER TABLE [dbo].[stock_history] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[stock_history] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[stock_history] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[suppliers] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[suppliers] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[suppliers] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [created_at]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [updated_at]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT ((0)) FOR [isDelete]
+GO
+ALTER TABLE [dbo].[audit_logs]  WITH CHECK ADD FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[invoices]  WITH CHECK ADD FOREIGN KEY([order_id])
+REFERENCES [dbo].[orders] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[medicines]  WITH CHECK ADD FOREIGN KEY([category_id])
+REFERENCES [dbo].[categories] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[medicines]  WITH CHECK ADD FOREIGN KEY([supplier_id])
+REFERENCES [dbo].[suppliers] ([id])
+ON UPDATE CASCADE
+ON DELETE SET NULL
+GO
+ALTER TABLE [dbo].[order_details]  WITH CHECK ADD FOREIGN KEY([medicine_id])
+REFERENCES [dbo].[medicines] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[order_details]  WITH CHECK ADD FOREIGN KEY([order_id])
+REFERENCES [dbo].[orders] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[orders]  WITH CHECK ADD FOREIGN KEY([customer_id])
+REFERENCES [dbo].[customers] ([id])
+ON UPDATE CASCADE
+ON DELETE SET NULL
+GO
+ALTER TABLE [dbo].[orders]  WITH CHECK ADD FOREIGN KEY([user_id])
+REFERENCES [dbo].[users] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[price_history]  WITH CHECK ADD FOREIGN KEY([medicine_id])
+REFERENCES [dbo].[medicines] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[promotions]  WITH CHECK ADD FOREIGN KEY([medicine_id])
+REFERENCES [dbo].[medicines] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[returns]  WITH CHECK ADD FOREIGN KEY([medicine_id])
+REFERENCES [dbo].[medicines] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[returns]  WITH CHECK ADD FOREIGN KEY([order_id])
+REFERENCES [dbo].[orders] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[stock_history]  WITH CHECK ADD FOREIGN KEY([medicine_id])
+REFERENCES [dbo].[medicines] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[users]  WITH CHECK ADD FOREIGN KEY([role_id])
+REFERENCES [dbo].[roles] ([id])
+ON UPDATE CASCADE
+ON DELETE CASCADE
 GO

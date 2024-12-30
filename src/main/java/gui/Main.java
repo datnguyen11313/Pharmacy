@@ -29,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import dao.MedicinesDao;
+import utils.UIHelper;
 
 public class Main extends JFrame {
 
@@ -270,37 +271,37 @@ public class Main extends JFrame {
 		btnMedicineManagement = new JButton("Medicine Management");
 		btnMedicineManagement.addActionListener(this::btnMedicineManagementActionPerformed);
 		contentScrollPaneSideBar.add(btnMedicineManagement);
-		btnMedicineManagement.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnMedicineManagement); // Áp dụng style từ UIHelper
 
 		btnProvider = new JButton("Provider");
 		btnProvider.addActionListener(this::btnProviderActionPerformed);
 		contentScrollPaneSideBar.add(btnProvider);
-		btnProvider.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnProvider); // Áp dụng style từ UIHelper
 
 		btnInvoiceManagement = new JButton("Invoice Management");
 		btnInvoiceManagement.addActionListener(this::btnInvoiceManagementActionPerformed);
 		contentScrollPaneSideBar.add(btnInvoiceManagement);
-		btnInvoiceManagement.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnInvoiceManagement); // Áp dụng style từ UIHelper
 
 		btnCustomer = new JButton("Customer Management");
 		btnCustomer.addActionListener(this::btnCustomerActionPerformed);
 		contentScrollPaneSideBar.add(btnCustomer);
-		btnCustomer.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnCustomer); // Áp dụng style từ UIHelper
 
 		btnStatistics = new JButton("Statistics");
 		btnStatistics.addActionListener(this::btnStatisticsActionPerformed);
 		contentScrollPaneSideBar.add(btnStatistics);
-		btnStatistics.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnStatistics); // Áp dụng style từ UIHelper
 
 		btnEmployee = new JButton("Employee Management");
 		btnEmployee.addActionListener(this::btnEmployeeActionPerformed);
 		contentScrollPaneSideBar.add(btnEmployee);
-		btnEmployee.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnEmployee); // Áp dụng style từ UIHelper
 
 		btnRoleControl = new JButton("Role Control");
 		btnRoleControl.addActionListener(this::btnRoleControlActionPerformed);
 		contentScrollPaneSideBar.add(btnRoleControl);
-		btnRoleControl.setPreferredSize(new Dimension(180, 100));
+		UIHelper.styleButton(btnRoleControl); // Áp dụng style từ UIHelper
 
 		// Container chính dùng CardLayout
 		cardLayout = new CardLayout();

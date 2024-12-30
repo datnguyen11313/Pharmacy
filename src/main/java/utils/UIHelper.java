@@ -7,28 +7,25 @@ import javax.swing.JButton;
 
 public class UIHelper {
 
-	public static JButton createStyledButton(String text) {
-		var button = new JButton(text);
+	public static void styleButton(JButton button) {
 		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
-		button.setPreferredSize(new Dimension(150, 40));
-		button.setBackground(new Color(60, 63, 65)); // Màu nút
-		button.setForeground(Color.WHITE); // Màu chữ trắng
+		button.setPreferredSize(new Dimension(150, 100));
+		button.setBackground(Color.WHITE);
+		button.setForeground(Color.BLACK);
 		button.setFocusPainted(false);
-		button.setBorderPainted(false);
+		button.setBorderPainted(true);
 
 		// Hover effect
 		button.addMouseListener(new java.awt.event.MouseAdapter() {
 			@Override
 			public void mouseEntered(java.awt.event.MouseEvent evt) {
-				button.setBackground(new Color(15, 240, 172)); // Màu khi hover
+				button.setBackground(new Color(15, 240, 172));
 			}
 
 			@Override
 			public void mouseExited(java.awt.event.MouseEvent evt) {
-				button.setBackground(new Color(60, 63, 65)); // Màu gốc
+				button.setBackground(Color.WHITE);
 			}
 		});
-
-		return button;
 	}
 }

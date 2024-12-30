@@ -9,9 +9,14 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.time.LocalDate;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -29,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import dao.MedicinesDao;
+import utils.ButtonRenderer;
 import utils.UIHelper;
 
 public class Main extends JFrame {
@@ -126,8 +132,8 @@ public class Main extends JFrame {
 	private JTable table_3;
 	private JLabel lblNewLabel_7;
 	private JPanel panel_24;
-	private JScrollPane scrollPane_5;
-	private JTable table_5;
+	private JScrollPane scrollPane_Counter;
+	private JTable table_Counter;
 	private JLabel lblNewLabel_8;
 	private JPanel panel_25;
 	private JComboBox comboBox_3;
@@ -137,15 +143,15 @@ public class Main extends JFrame {
 	private JTextField txtAmount;
 	private JPanel panel_26;
 	private JPanel panel_27;
-	private JPanel panel_28;
-	private JPanel panel_29;
-	private JPanel panel_30;
+	private JPanel panel_CounterInfo;
+	private JPanel panel_CounterImage;
+	private JPanel panel_CounterInfoDetail;
 	private JButton btnNewButton_6;
 	private JLabel lblNewLabel_9;
 	private JTextField medicineId;
 	private JPanel panel_31;
 	private JLabel lblNewLabel_10;
-	private JTextField medicineName;
+	private JTextField medicineNameInfo;
 	private JPanel panel_32;
 	private JLabel lblNewLabel_11;
 	private JTextField unitMeasure;
@@ -349,21 +355,21 @@ public class Main extends JFrame {
 		medicineDetail.add(lblNewLabel_7, BorderLayout.NORTH);
 		lblNewLabel_7.setBorder(new EmptyBorder(10, 0, 10, 0));
 
-		panel_28 = new JPanel();
-		panel_28.setBorder(new LineBorder(new Color(128, 128, 128), 1, true));
-		medicineDetail.add(panel_28, BorderLayout.CENTER);
-		panel_28.setLayout(new BorderLayout(0, 0));
+		panel_CounterInfo = new JPanel();
+		panel_CounterInfo.setBorder(new LineBorder(new Color(128, 128, 128), 1, true));
+		medicineDetail.add(panel_CounterInfo, BorderLayout.CENTER);
+		panel_CounterInfo.setLayout(new BorderLayout(0, 0));
 
-		panel_29 = new JPanel();
-		panel_28.add(panel_29, BorderLayout.WEST);
-		panel_29.setLayout(new GridLayout(1, 0, 0, 0));
+		panel_CounterImage = new JPanel();
+		panel_CounterInfo.add(panel_CounterImage, BorderLayout.WEST);
+		panel_CounterImage.setLayout(new GridLayout(1, 0, 0, 0));
 
 		btnNewButton_6 = new JButton("Hình ảnh thuốc");
-		panel_29.add(btnNewButton_6);
+		panel_CounterImage.add(btnNewButton_6);
 
-		panel_30 = new JPanel();
-		panel_28.add(panel_30, BorderLayout.CENTER);
-		panel_30.setBorder(new EmptyBorder(5, 5, 5, 5));
+		panel_CounterInfoDetail = new JPanel();
+		panel_CounterInfo.add(panel_CounterInfoDetail, BorderLayout.CENTER);
+		panel_CounterInfoDetail.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		panel_31 = new JPanel();
 		panel_31.setLayout(new GridLayout(0, 2, 0, 0));
@@ -383,9 +389,9 @@ public class Main extends JFrame {
 		lblNewLabel_10.setHorizontalAlignment(SwingConstants.LEFT);
 		panel_32.add(lblNewLabel_10);
 
-		medicineName = new JTextField();
-		panel_32.add(medicineName);
-		medicineName.setColumns(10);
+		medicineNameInfo = new JTextField();
+		panel_32.add(medicineNameInfo);
+		medicineNameInfo.setColumns(10);
 
 		panel_33 = new JPanel();
 		panel_33.setLayout(new GridLayout(0, 2, 0, 0));
@@ -406,11 +412,11 @@ public class Main extends JFrame {
 		price = new JTextField();
 		price.setColumns(10);
 		panel_34.add(price);
-		panel_30.setLayout(new GridLayout(0, 1, 0, 0));
-		panel_30.add(panel_31);
-		panel_30.add(panel_32);
-		panel_30.add(panel_33);
-		panel_30.add(panel_34);
+		panel_CounterInfoDetail.setLayout(new GridLayout(0, 1, 0, 0));
+		panel_CounterInfoDetail.add(panel_31);
+		panel_CounterInfoDetail.add(panel_32);
+		panel_CounterInfoDetail.add(panel_33);
+		panel_CounterInfoDetail.add(panel_34);
 
 		panel_21 = new JPanel();
 		counterHeader.add(panel_21, BorderLayout.CENTER);
@@ -447,12 +453,49 @@ public class Main extends JFrame {
 		btnNewButton_5 = new JButton("Add");
 		panel_27.add(btnNewButton_5);
 
-		scrollPane_5 = new JScrollPane();
-		scrollPane_5.setBorder(new LineBorder(new Color(128, 128, 128), 1, true));
-		panel_21.add(scrollPane_5, BorderLayout.CENTER);
+		scrollPane_Counter = new JScrollPane();
+		scrollPane_Counter.setBorder(new LineBorder(new Color(128, 128, 128), 1, true));
+		panel_21.add(scrollPane_Counter, BorderLayout.CENTER);
 
-		table_5 = new JTable();
-		scrollPane_5.setViewportView(table_5);
+		table_Counter = new JTable();
+
+		scrollPane_Counter.setViewportView(table_Counter);
+
+		table_Counter.setSelectionBackground(new Color(15, 240, 172)); // Màu nền khi highlight
+		table_Counter.setSelectionForeground(Color.BLACK); // Màu chữ khi highlight
+
+		table_Counter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				var row = table_Counter.rowAtPoint(e.getPoint());
+				table_Counter.setRowSelectionInterval(row, row); // Highlight dòng
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				table_Counter.clearSelection(); // Bỏ highlight
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				table_CounterMouseClicked(e);
+			}
+		});
+
+		table_Counter.addMouseMotionListener(new MouseMotionAdapter() {
+
+			private int lastRow = -1; // Biến lưu chỉ số dòng được highlight trước đó
+
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				var row = table_Counter.rowAtPoint(e.getPoint());
+				if (row != -1 && row != lastRow) { // Kiểm tra dòng hiện tại có khác dòng trước đó không
+					table_Counter.setRowSelectionInterval(row, row);
+					lastRow = row;
+				}
+			}
+
+		});
 
 		panel_19 = new JPanel();
 		pharmacyCounterPanel.add(panel_19, BorderLayout.EAST);
@@ -973,6 +1016,10 @@ public class Main extends JFrame {
 		for (String lookAndFeel : lookAndFeels) {
 			try {
 				UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+				// Sửa đường dẫn ở đây
+				var is = Main.class.getResourceAsStream("/utils/style.css"); // Đường dẫn đến file CSS
+
+				UIManager.put("Nimbus.Overrides", is);
 				break; // Chọn Look and Feel đầu tiên hợp lệ
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1022,21 +1069,28 @@ public class Main extends JFrame {
 		cardLayout.show(contentContainer, "roleControlPanel");
 	}
 
-	// Tạo màu dùng chung cho các nút
-	private void resetButtonColors() {
-		btnPharmacyCounter.setBackground(null); // Màu mặc định
-		btnMedicineManagement.setBackground(null);
-		btnProvider.setBackground(null);
-		btnInvoiceManagement.setBackground(null);
-		btnCustomer.setBackground(null);
-		btnStatistics.setBackground(null);
-		btnEmployee.setBackground(null);
-		btnRoleControl.setBackground(null);
-	}
-
 	private void loadDataToTable() {
 		// Tạo model cho bảng
-		var model = new DefaultTableModel();
+		var model = new DefaultTableModel() {
+
+			@Override
+			public Class<?> getColumnClass(int column) {
+
+				return switch (column) {
+				case 0 -> Integer.class; // cột ID
+				case 1 -> String.class; // cột Tên thuốc
+				case 2 -> Integer.class; // cột Loại
+				case 3 -> Integer.class; // cột Giá (hoặc Double.class, BigDecimal.class)
+				case 4 -> Integer.class; // cột Số lượng
+				case 5 -> LocalDate.class; // cột Ngày sản xuất
+				case 6 -> LocalDate.class; // cột Ngày hết hạn
+				default -> Object.class; // Trường hợp mặc định (nếu có)
+
+				};
+			}
+
+		};
+
 		model.addColumn("ID");
 		model.addColumn("Tên thuốc");
 		model.addColumn("Loại");
@@ -1055,5 +1109,42 @@ public class Main extends JFrame {
 
 		// Gắn model vào bảng
 		table_medicines.setModel(model);
+		table_Counter.setModel(model);
+		table_Counter.getColumnModel().getColumn(1).setPreferredWidth(200); // columnIndex = 1 là cột "Tên thuốc"
+		table_Counter.setRowHeight(40); // Ví dụ: tăng rowHeight lên 40 pixel
+		table_Counter.getColumn("Tên thuốc").setCellRenderer(new ButtonRenderer());
+
+	}
+
+	protected void table_CounterMouseClicked(MouseEvent e) {
+		var row = table_Counter.rowAtPoint(e.getPoint());
+		var col = table_Counter.columnAtPoint(e.getPoint());
+
+		if (col == 1 && e.getClickCount() == 1) { // Click vào cột "Tên thuốc"
+			var medicineName = (String) table_Counter.getValueAt(row, col);
+
+			// Lấy thông tin thuốc từ database
+			var medicine = new MedicinesDao().getMedicineByName(medicineName); // Khởi tạo
+																				// MedicinesDao
+
+			if (medicine != null) {
+				// Hiển thị hình ảnh (cần xử lý chuyển đổi từ byte[] sang ImageIcon)
+				try { // Thêm try-catch để bắt lỗi khi chuyển đổi hình ảnh
+					var imageIcon = new ImageIcon(medicine.getPicture());
+					btnNewButton_6.setIcon(imageIcon);
+				} catch (Exception ex) {
+					System.err.println("Lỗi khi hiển thị hình ảnh: " + ex.getMessage());
+					// Xử lý lỗi, ví dụ: hiển thị hình ảnh mặc định
+				}
+
+				// Hiển thị thông tin thuốc lên panel_CounterInfo
+				medicineId.setText(String.valueOf(medicine.getId()));
+				medicineNameInfo.setText(medicine.getMedicine_name());
+				unitMeasure.setText("Đơn vị tính"); // Thay bằng đơn vị tính từ medicine
+				price.setText(String.valueOf(medicine.getPrice()));
+				// ... Hiển thị các thông tin khác ...
+			}
+		}
+
 	}
 }

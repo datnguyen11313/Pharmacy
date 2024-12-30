@@ -1,0 +1,18 @@
+Table {
+  row-height: 30px; /* Tăng chiều cao dòng */
+}
+
+Table.cell {
+  padding: 5px 10px; /* Thêm padding cho cell */
+}
+
+Table Header {
+  background-color: #f0f0f0; /* Thay đổi màu nền header */
+}
+
+Button {
+  margin-bottom: 10px; /* Thêm margin bottom cho button */
+}
+Table.row:hover {
+  background-color: #f0f0f0; /* Thay đổi màu nền khi hover */
+}

@@ -27,6 +27,7 @@ public class MedicinesDao {
 				medic.setManufacturing_date(rs.getDate("manufacturing_date").toLocalDate());
 				medic.setExpiry_date(rs.getDate("expiry_date").toLocalDate());
 				medic.setDelete(rs.getBoolean("isDelete"));
+				medic.setPicture(rs.getString("picture"));
 
 				list.add(medic);
 			}
@@ -54,6 +55,31 @@ public class MedicinesDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public MedicinesEntity getMedicineByName(String medicineName) {
+		MedicinesEntity medic = null;
+		try (var con = ConnectDB.getCon(); var cs = con.prepareCall("{call getMedicineByName(?)}");) {
+			cs.setString(1, medicineName);
+			try (var rs = cs.executeQuery();) {
+				if (rs.next()) {
+					medic = new MedicinesEntity();
+					medic.setId(rs.getInt("id"));
+					medic.setMedicine_name(rs.getString("medicine_name"));
+
+					medic.setCategory_id(rs.getInt("category_id"));
+					medic.setPrice(rs.getInt("price"));
+					medic.setStock(rs.getInt("stock"));
+					medic.setManufacturing_date(rs.getDate("manufacturing_date").toLocalDate());
+					medic.setExpiry_date(rs.getDate("expiry_date").toLocalDate());
+					medic.setDelete(rs.getBoolean("isDelete"));
+					medic.setPicture(rs.getString("picture"));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return medic;
 	}
 
 }

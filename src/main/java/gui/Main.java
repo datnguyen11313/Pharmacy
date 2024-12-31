@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.swing.BoxLayout;
@@ -988,8 +989,6 @@ public class Main extends JFrame {
 		table = new JTable();
 		scrollPane_7.setViewportView(table);
 
-		loadDataToTable();
-
 		// Hiển thị các thành phần tùy vào role
 		if ("1".equals(role) || "2".equals(role)) {
 			// Admin Dashboard
@@ -1001,6 +1000,8 @@ public class Main extends JFrame {
 			// Bạn có thể thêm các công cụ quản lý cho Admin tại đây, ví dụ: quản lý người
 			// dùng, báo cáo, v.v.
 		}
+		loadDataToTable();
+
 	}
 
 	private void btnMedicineActionPerformed(ActionEvent e) {
@@ -1080,7 +1081,7 @@ public class Main extends JFrame {
 				case 0 -> Integer.class; // cột ID
 				case 1 -> String.class; // cột Tên thuốc
 				case 2 -> Integer.class; // cột Loại
-				case 3 -> Integer.class; // cột Giá (hoặc Double.class, BigDecimal.class)
+				case 3 -> BigDecimal.class; // cột Giá (hoặc Double.class, BigDecimal.class)
 				case 4 -> Integer.class; // cột Số lượng
 				case 5 -> LocalDate.class; // cột Ngày sản xuất
 				case 6 -> LocalDate.class; // cột Ngày hết hạn
@@ -1099,6 +1100,8 @@ public class Main extends JFrame {
 		model.addColumn("Ngày sản xuất");
 		model.addColumn("Ngày hết hạn");
 
+		model.setRowCount(0);
+
 		// Khởi tạo DAO và lấy dữ liệu
 		var dao = new MedicinesDao();
 		dao.select().forEach(medicine -> {
@@ -1113,6 +1116,8 @@ public class Main extends JFrame {
 		table_Counter.getColumnModel().getColumn(1).setPreferredWidth(200); // columnIndex = 1 là cột "Tên thuốc"
 		table_Counter.setRowHeight(40); // Ví dụ: tăng rowHeight lên 40 pixel
 		table_Counter.getColumn("Tên thuốc").setCellRenderer(new ButtonRenderer());
+
+		model.fireTableDataChanged();
 
 	}
 
@@ -1145,6 +1150,6 @@ public class Main extends JFrame {
 				// ... Hiển thị các thông tin khác ...
 			}
 		}
-
 	}
+
 }

@@ -3,8 +3,6 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import database.ConnectDB;
 import entity.MedicinesEntity;
 
@@ -20,14 +18,21 @@ public class MedicinesDao {
 				var medic = new MedicinesEntity();
 				medic.setId(rs.getInt("id"));
 				medic.setMedicine_name(rs.getString("medicine_name"));
-
 				medic.setCategory_id(rs.getInt("category_id"));
-				medic.setPrice(rs.getInt("price"));
+				medic.setPrice(rs.getBigDecimal("price"));
 				medic.setStock(rs.getInt("stock"));
 				medic.setManufacturing_date(rs.getDate("manufacturing_date").toLocalDate());
 				medic.setExpiry_date(rs.getDate("expiry_date").toLocalDate());
-				medic.setDelete(rs.getBoolean("isDelete"));
 				medic.setPicture(rs.getString("picture"));
+				medic.setDelete(rs.getBoolean("isDelete"));
+				medic.setSupplier_id(rs.getInt("supplier_id"));
+				medic.setUnit(rs.getString("unit"));
+				medic.setConcentration(rs.getString("concentration"));
+				medic.setUsage(rs.getString("usage"));
+				medic.setContraindications(rs.getString("contraindications"));
+				medic.setSide_effects(rs.getString("side_effects"));
+				medic.setStorage(rs.getString("storage"));
+				medic.setIngredients(rs.getString("ingredients"));
 
 				list.add(medic);
 			}
@@ -35,26 +40,6 @@ public class MedicinesDao {
 			e.printStackTrace();
 		}
 		return list;
-	}
-
-	// insert dữ liệu
-	public void insert(MedicinesEntity medic) {
-		try (var con = ConnectDB.getCon();
-				// var ps = con.prepareStatement("insert into product values(?,?,?)");
-				var cs = con.prepareCall("{call insertPro(?,?,?,?,?,?,?)}");) {
-			cs.setString(1, medic.getMedicine_name());
-			cs.setInt(2, medic.getCategory_id());
-			cs.setInt(3, medic.getPrice());
-			cs.setInt(4, medic.getStock());
-			cs.setDate(5, java.sql.Date.valueOf(medic.getManufacturing_date()));
-			cs.setDate(6, java.sql.Date.valueOf(medic.getExpiry_date()));
-			cs.setBoolean(7, medic.isDelete());
-
-			cs.executeUpdate();
-			JOptionPane.showMessageDialog(null, "insert success");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public MedicinesEntity getMedicineByName(String medicineName) {
@@ -66,14 +51,22 @@ public class MedicinesDao {
 					medic = new MedicinesEntity();
 					medic.setId(rs.getInt("id"));
 					medic.setMedicine_name(rs.getString("medicine_name"));
-
 					medic.setCategory_id(rs.getInt("category_id"));
-					medic.setPrice(rs.getInt("price"));
+					medic.setPrice(rs.getBigDecimal("price"));
 					medic.setStock(rs.getInt("stock"));
 					medic.setManufacturing_date(rs.getDate("manufacturing_date").toLocalDate());
 					medic.setExpiry_date(rs.getDate("expiry_date").toLocalDate());
-					medic.setDelete(rs.getBoolean("isDelete"));
 					medic.setPicture(rs.getString("picture"));
+
+					medic.setDelete(rs.getBoolean("isDelete"));
+					medic.setSupplier_id(rs.getInt("supplier_id"));
+					medic.setUnit(rs.getString("unit"));
+					medic.setConcentration(rs.getString("concentration"));
+					medic.setUsage(rs.getString("usage"));
+					medic.setContraindications(rs.getString("contraindications"));
+					medic.setSide_effects(rs.getString("side_effects"));
+					medic.setStorage(rs.getString("storage"));
+					medic.setIngredients(rs.getString("ingredients"));
 				}
 			}
 		} catch (Exception e) {

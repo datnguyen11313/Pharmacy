@@ -1,681 +1,38 @@
-﻿USE [PharmaCity]
-GO
-/****** Object:  Table [dbo].[audit_logs]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[audit_logs](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[user_id] [int] NOT NULL,
-	[action_type] [varchar](50) NOT NULL,
-	[action_details] [varchar](500) NOT NULL,
-	[action_time] [datetime] NULL,
-	[isDelete] [bit] NULL,
-	[employee_id] [int] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[categories]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[categories](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[category_name] [varchar](100) NOT NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[customers]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[customers](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[full_name] [varchar](255) NOT NULL,
-	[phone_number] [varchar](15) NULL,
-	[email] [varchar](100) NULL,
-	[address] [varchar](500) NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[employee]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[employee](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[full_name] [varchar](255) NOT NULL,
-	[phone_number] [varchar](15) NULL,
-	[email] [varchar](100) NULL,
-	[address] [varchar](500) NULL,
-	[identity_card] [varchar](12) NULL,
-	[picture] [varbinary](max) NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[invoices]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[invoices](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[order_id] [int] NOT NULL,
-	[invoice_date] [datetime] NULL,
-	[total_amount] [decimal](10, 2) NOT NULL,
-	[amount_paid] [decimal](10, 2) NOT NULL,
-	[payment_status] [varchar](50) NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[medicines]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[medicines](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[medicine_name] [varchar](255) NOT NULL,
-	[category_id] [int] NOT NULL,
-	[price] [decimal](10, 2) NOT NULL,
-	[stock] [int] NOT NULL,
-	[manufacturing_date] [datetime] NOT NULL,
-	[expiry_date] [datetime] NOT NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-	[supplier_id] [int] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[order_details]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[order_details](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[order_id] [int] NOT NULL,
-	[medicine_id] [int] NOT NULL,
-	[quantity] [int] NOT NULL,
-	[unit_price] [decimal](10, 2) NOT NULL,
-	[total_price] [decimal](10, 2) NOT NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[orders]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[orders](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[user_id] [int] NOT NULL,
-	[customer_name] [varchar](255) NOT NULL,
-	[total_price] [decimal](10, 2) NOT NULL,
-	[order_date] [datetime] NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-	[customer_id] [int] NULL,
-	[employee_id] [int] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[price_history]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[price_history](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[medicine_id] [int] NOT NULL,
-	[old_price] [decimal](10, 2) NOT NULL,
-	[new_price] [decimal](10, 2) NOT NULL,
-	[change_date] [datetime] NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[promotions]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[promotions](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[medicine_id] [int] NOT NULL,
-	[discount_percent] [int] NOT NULL,
-	[start_date] [datetime] NULL,
-	[end_date] [datetime] NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[returns]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[returns](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[order_id] [int] NOT NULL,
-	[medicine_id] [int] NOT NULL,
-	[quantity] [int] NOT NULL,
-	[reason] [varchar](500) NULL,
-	[return_date] [datetime] NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[roles]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[roles](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[role_name] [varchar](50) NOT NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[stock_history]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[stock_history](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[medicine_id] [int] NOT NULL,
-	[change_type] [varchar](50) NOT NULL,
-	[quantity] [int] NOT NULL,
-	[change_date] [datetime] NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[suppliers]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[suppliers](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[supplier_name] [varchar](255) NOT NULL,
-	[contact_phone] [varchar](15) NULL,
-	[contact_email] [varchar](100) NULL,
-	[address] [varchar](500) NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-/****** Object:  Table [dbo].[users]    Script Date: 12/28/2024 7:29:37 PM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE TABLE [dbo].[users](
-	[id] [int] IDENTITY(1,1) NOT NULL,
-	[username] [varchar](50) NOT NULL,
-	[password] [varchar](255) NOT NULL,
-	[role_id] [int] NOT NULL,
-	[full_name] [varchar](255) NOT NULL,
-	[created_at] [datetime] NULL,
-	[updated_at] [datetime] NULL,
-	[isDelete] [bit] NULL,
-	[employee_id] [int] NULL,
-PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-) ON [PRIMARY]
-GO
-SET IDENTITY_INSERT [dbo].[categories] ON 
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (1, N'Pain relief', CAST(N'2024-12-24T14:17:56.137' AS DateTime), CAST(N'2024-12-24T14:17:56.137' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (2, N'Antipyretic', CAST(N'2024-12-24T14:17:56.137' AS DateTime), CAST(N'2024-12-24T14:17:56.137' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (3, N'Vitamins', CAST(N'2024-12-24T14:17:56.137' AS DateTime), CAST(N'2024-12-24T14:17:56.137' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (4, N'Antibiotics', CAST(N'2024-12-25T14:18:09.593' AS DateTime), CAST(N'2024-12-25T14:18:09.593' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (5, N'Antihistamines', CAST(N'2024-12-25T14:18:09.593' AS DateTime), CAST(N'2024-12-25T14:18:09.593' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (6, N'Supplements', CAST(N'2024-12-25T14:18:09.593' AS DateTime), CAST(N'2024-12-25T14:18:09.593' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (7, N'Analgesics', CAST(N'2024-12-25T14:18:09.593' AS DateTime), CAST(N'2024-12-25T14:18:09.593' AS DateTime), NULL)
-GO
-INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete]) VALUES (8, N'Antacids', CAST(N'2024-12-25T14:18:09.593' AS DateTime), CAST(N'2024-12-25T14:18:09.593' AS DateTime), NULL)
-GO
-SET IDENTITY_INSERT [dbo].[categories] OFF
-GO
-SET IDENTITY_INSERT [dbo].[medicines] ON 
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (1, N'Paracetamol', 1, CAST(15000.00 AS Decimal(10, 2)), 100, CAST(N'2023-01-01T00:00:00.000' AS DateTime), CAST(N'2025-01-01T00:00:00.000' AS DateTime), CAST(N'2024-12-24T14:17:56.150' AS DateTime), CAST(N'2024-12-24T14:17:56.150' AS DateTime), 1, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (2, N'Aspirin', 2, CAST(12000.00 AS Decimal(10, 2)), 50, CAST(N'2023-03-15T00:00:00.000' AS DateTime), CAST(N'2025-03-15T00:00:00.000' AS DateTime), CAST(N'2024-12-24T14:17:56.150' AS DateTime), CAST(N'2024-12-24T14:17:56.150' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (3, N'Vitamin C', 3, CAST(8000.00 AS Decimal(10, 2)), 200, CAST(N'2023-06-10T00:00:00.000' AS DateTime), CAST(N'2025-06-10T00:00:00.000' AS DateTime), CAST(N'2024-12-24T14:17:56.150' AS DateTime), CAST(N'2024-12-24T14:17:56.150' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (4, N'Amoxicillin', 4, CAST(50000.00 AS Decimal(10, 2)), 60, CAST(N'2023-02-01T00:00:00.000' AS DateTime), CAST(N'2025-02-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (5, N'Cetirizine', 5, CAST(20000.00 AS Decimal(10, 2)), 150, CAST(N'2023-04-10T00:00:00.000' AS DateTime), CAST(N'2025-04-10T00:00:00.000' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (6, N'Calcium Tablets', 3, CAST(25000.00 AS Decimal(10, 2)), 80, CAST(N'2023-01-20T00:00:00.000' AS DateTime), CAST(N'2025-01-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (7, N'Ibuprofen', 1, CAST(18000.00 AS Decimal(10, 2)), 90, CAST(N'2023-03-25T00:00:00.000' AS DateTime), CAST(N'2025-03-25T00:00:00.000' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (8, N'Ranitidine', 5, CAST(22000.00 AS Decimal(10, 2)), 40, CAST(N'2023-05-15T00:00:00.000' AS DateTime), CAST(N'2025-05-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), CAST(N'2024-12-25T14:18:32.550' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (9, N'Paracetamol', 1, CAST(5000.00 AS Decimal(10, 2)), 100, CAST(N'2023-01-01T00:00:00.000' AS DateTime), CAST(N'2025-01-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (10, N'Ibuprofen', 1, CAST(10000.00 AS Decimal(10, 2)), 200, CAST(N'2023-02-01T00:00:00.000' AS DateTime), CAST(N'2025-02-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (11, N'Amoxicillin', 2, CAST(15000.00 AS Decimal(10, 2)), 150, CAST(N'2023-03-01T00:00:00.000' AS DateTime), CAST(N'2025-03-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (12, N'Ciprofloxacin', 2, CAST(20000.00 AS Decimal(10, 2)), 120, CAST(N'2023-04-01T00:00:00.000' AS DateTime), CAST(N'2025-04-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (13, N'Vitamin C', 3, CAST(5000.00 AS Decimal(10, 2)), 300, CAST(N'2023-01-15T00:00:00.000' AS DateTime), CAST(N'2025-01-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (14, N'Multivitamins', 3, CAST(7000.00 AS Decimal(10, 2)), 400, CAST(N'2023-02-20T00:00:00.000' AS DateTime), CAST(N'2025-02-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (15, N'Antacid Tablets', 4, CAST(8000.00 AS Decimal(10, 2)), 250, CAST(N'2023-03-10T00:00:00.000' AS DateTime), CAST(N'2025-03-10T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (16, N'Loratadine', 5, CAST(12000.00 AS Decimal(10, 2)), 180, CAST(N'2023-04-05T00:00:00.000' AS DateTime), CAST(N'2025-04-05T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (17, N'Metformin', 6, CAST(14000.00 AS Decimal(10, 2)), 160, CAST(N'2023-05-01T00:00:00.000' AS DateTime), CAST(N'2025-05-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (18, N'Insulin', 6, CAST(30000.00 AS Decimal(10, 2)), 90, CAST(N'2023-06-01T00:00:00.000' AS DateTime), CAST(N'2025-06-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (19, N'Aspirin', 1, CAST(4000.00 AS Decimal(10, 2)), 500, CAST(N'2023-02-10T00:00:00.000' AS DateTime), CAST(N'2025-02-10T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (20, N'Omeprazole', 4, CAST(10000.00 AS Decimal(10, 2)), 230, CAST(N'2023-03-15T00:00:00.000' AS DateTime), CAST(N'2025-03-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (21, N'Clarithromycin', 2, CAST(22000.00 AS Decimal(10, 2)), 110, CAST(N'2023-04-20T00:00:00.000' AS DateTime), CAST(N'2025-04-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (22, N'Zinc Supplements', 3, CAST(6000.00 AS Decimal(10, 2)), 350, CAST(N'2023-01-25T00:00:00.000' AS DateTime), CAST(N'2025-01-25T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (23, N'Calcium Tablets', 3, CAST(9000.00 AS Decimal(10, 2)), 270, CAST(N'2023-02-15T00:00:00.000' AS DateTime), CAST(N'2025-02-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (24, N'Cetirizine', 5, CAST(11000.00 AS Decimal(10, 2)), 240, CAST(N'2023-03-05T00:00:00.000' AS DateTime), CAST(N'2025-03-05T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (25, N'Azithromycin', 2, CAST(25000.00 AS Decimal(10, 2)), 80, CAST(N'2023-04-15T00:00:00.000' AS DateTime), CAST(N'2025-04-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (26, N'Doxycycline', 2, CAST(18000.00 AS Decimal(10, 2)), 130, CAST(N'2023-05-10T00:00:00.000' AS DateTime), CAST(N'2025-05-10T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (27, N'Folic Acid', 3, CAST(4500.00 AS Decimal(10, 2)), 400, CAST(N'2023-06-01T00:00:00.000' AS DateTime), CAST(N'2025-06-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (28, N'Probiotics', 4, CAST(7500.00 AS Decimal(10, 2)), 300, CAST(N'2023-07-01T00:00:00.000' AS DateTime), CAST(N'2025-07-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), CAST(N'2024-12-25T15:58:35.660' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (29, N'Naproxen', 1, CAST(8000.00 AS Decimal(10, 2)), 150, CAST(N'2023-07-01T00:00:00.000' AS DateTime), CAST(N'2025-07-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (30, N'Ranitidine', 4, CAST(12000.00 AS Decimal(10, 2)), 200, CAST(N'2023-06-15T00:00:00.000' AS DateTime), CAST(N'2025-06-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (31, N'Simethicone', 4, CAST(6000.00 AS Decimal(10, 2)), 180, CAST(N'2023-08-01T00:00:00.000' AS DateTime), CAST(N'2025-08-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (32, N'Prednisolone', 5, CAST(15000.00 AS Decimal(10, 2)), 90, CAST(N'2023-09-01T00:00:00.000' AS DateTime), CAST(N'2025-09-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (33, N'Vitamin D3', 3, CAST(7000.00 AS Decimal(10, 2)), 220, CAST(N'2023-07-20T00:00:00.000' AS DateTime), CAST(N'2025-07-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (34, N'Vitamin B12', 3, CAST(6500.00 AS Decimal(10, 2)), 250, CAST(N'2023-08-15T00:00:00.000' AS DateTime), CAST(N'2025-08-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (35, N'Calamine Lotion', 6, CAST(9500.00 AS Decimal(10, 2)), 100, CAST(N'2023-05-25T00:00:00.000' AS DateTime), CAST(N'2025-05-25T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (36, N'Amoxicillin-Clavulanic Acid', 2, CAST(28000.00 AS Decimal(10, 2)), 120, CAST(N'2023-06-10T00:00:00.000' AS DateTime), CAST(N'2025-06-10T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (37, N'Cefuroxime', 2, CAST(22000.00 AS Decimal(10, 2)), 110, CAST(N'2023-06-20T00:00:00.000' AS DateTime), CAST(N'2025-06-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (38, N'Losartan', 6, CAST(18000.00 AS Decimal(10, 2)), 140, CAST(N'2023-05-01T00:00:00.000' AS DateTime), CAST(N'2025-05-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (39, N'Amlodipine', 6, CAST(17000.00 AS Decimal(10, 2)), 150, CAST(N'2023-06-15T00:00:00.000' AS DateTime), CAST(N'2025-06-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (40, N'Clopidogrel', 6, CAST(25000.00 AS Decimal(10, 2)), 130, CAST(N'2023-05-20T00:00:00.000' AS DateTime), CAST(N'2025-05-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (41, N'Lisinopril', 6, CAST(20000.00 AS Decimal(10, 2)), 100, CAST(N'2023-04-15T00:00:00.000' AS DateTime), CAST(N'2025-04-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (42, N'Furosemide', 6, CAST(14000.00 AS Decimal(10, 2)), 160, CAST(N'2023-06-05T00:00:00.000' AS DateTime), CAST(N'2025-06-05T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (43, N'Hydrochlorothiazide', 6, CAST(15000.00 AS Decimal(10, 2)), 170, CAST(N'2023-07-10T00:00:00.000' AS DateTime), CAST(N'2025-07-10T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (44, N'Levofloxacin', 2, CAST(27000.00 AS Decimal(10, 2)), 100, CAST(N'2023-05-25T00:00:00.000' AS DateTime), CAST(N'2025-05-25T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (45, N'Metronidazole', 2, CAST(13000.00 AS Decimal(10, 2)), 300, CAST(N'2023-03-15T00:00:00.000' AS DateTime), CAST(N'2025-03-15T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (46, N'Ketoconazole', 4, CAST(20000.00 AS Decimal(10, 2)), 150, CAST(N'2023-04-01T00:00:00.000' AS DateTime), CAST(N'2025-04-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (47, N'Salbutamol', 5, CAST(18000.00 AS Decimal(10, 2)), 120, CAST(N'2023-03-20T00:00:00.000' AS DateTime), CAST(N'2025-03-20T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [created_at], [updated_at], [isDelete], [supplier_id]) VALUES (48, N'Beclomethasone', 5, CAST(24000.00 AS Decimal(10, 2)), 100, CAST(N'2023-06-01T00:00:00.000' AS DateTime), CAST(N'2025-06-01T00:00:00.000' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), CAST(N'2024-12-25T15:59:54.327' AS DateTime), 0, NULL)
-GO
-SET IDENTITY_INSERT [dbo].[medicines] OFF
-GO
-SET IDENTITY_INSERT [dbo].[order_details] ON 
-GO
-INSERT [dbo].[order_details] ([id], [order_id], [medicine_id], [quantity], [unit_price], [total_price], [created_at], [updated_at], [isDelete]) VALUES (1, 1, 1, 2, CAST(15000.00 AS Decimal(10, 2)), CAST(30000.00 AS Decimal(10, 2)), CAST(N'2024-12-24T14:17:56.180' AS DateTime), CAST(N'2024-12-24T14:17:56.180' AS DateTime), NULL)
-GO
-INSERT [dbo].[order_details] ([id], [order_id], [medicine_id], [quantity], [unit_price], [total_price], [created_at], [updated_at], [isDelete]) VALUES (2, 2, 2, 1, CAST(12000.00 AS Decimal(10, 2)), CAST(12000.00 AS Decimal(10, 2)), CAST(N'2024-12-24T14:17:56.180' AS DateTime), CAST(N'2024-12-24T14:17:56.180' AS DateTime), NULL)
-GO
-INSERT [dbo].[order_details] ([id], [order_id], [medicine_id], [quantity], [unit_price], [total_price], [created_at], [updated_at], [isDelete]) VALUES (3, 1, 4, 2, CAST(18000.00 AS Decimal(10, 2)), CAST(36000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:59.350' AS DateTime), CAST(N'2024-12-25T14:18:59.350' AS DateTime), NULL)
-GO
-INSERT [dbo].[order_details] ([id], [order_id], [medicine_id], [quantity], [unit_price], [total_price], [created_at], [updated_at], [isDelete]) VALUES (4, 1, 5, 1, CAST(22000.00 AS Decimal(10, 2)), CAST(22000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:59.350' AS DateTime), CAST(N'2024-12-25T14:18:59.350' AS DateTime), NULL)
-GO
-INSERT [dbo].[order_details] ([id], [order_id], [medicine_id], [quantity], [unit_price], [total_price], [created_at], [updated_at], [isDelete]) VALUES (5, 2, 3, 1, CAST(25000.00 AS Decimal(10, 2)), CAST(25000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:59.350' AS DateTime), CAST(N'2024-12-25T14:18:59.350' AS DateTime), NULL)
-GO
-INSERT [dbo].[order_details] ([id], [order_id], [medicine_id], [quantity], [unit_price], [total_price], [created_at], [updated_at], [isDelete]) VALUES (6, 3, 2, 2, CAST(20000.00 AS Decimal(10, 2)), CAST(40000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:59.350' AS DateTime), CAST(N'2024-12-25T14:18:59.350' AS DateTime), NULL)
-GO
-SET IDENTITY_INSERT [dbo].[order_details] OFF
-GO
-SET IDENTITY_INSERT [dbo].[orders] ON 
-GO
-INSERT [dbo].[orders] ([id], [user_id], [customer_name], [total_price], [order_date], [created_at], [updated_at], [isDelete], [customer_id], [employee_id]) VALUES (1, 2, N'John Doe', CAST(30000.00 AS Decimal(10, 2)), CAST(N'2024-12-24T14:17:56.167' AS DateTime), CAST(N'2024-12-24T14:17:56.167' AS DateTime), CAST(N'2024-12-24T14:17:56.167' AS DateTime), NULL, NULL, NULL)
-GO
-INSERT [dbo].[orders] ([id], [user_id], [customer_name], [total_price], [order_date], [created_at], [updated_at], [isDelete], [customer_id], [employee_id]) VALUES (2, 3, N'Jane Smith', CAST(12000.00 AS Decimal(10, 2)), CAST(N'2024-12-24T14:17:56.167' AS DateTime), CAST(N'2024-12-24T14:17:56.167' AS DateTime), CAST(N'2024-12-24T14:17:56.167' AS DateTime), NULL, NULL, NULL)
-GO
-INSERT [dbo].[orders] ([id], [user_id], [customer_name], [total_price], [order_date], [created_at], [updated_at], [isDelete], [customer_id], [employee_id]) VALUES (3, 2, N'Michael Brown', CAST(70000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:49.910' AS DateTime), CAST(N'2024-12-25T14:18:49.910' AS DateTime), CAST(N'2024-12-25T14:18:49.910' AS DateTime), NULL, NULL, NULL)
-GO
-INSERT [dbo].[orders] ([id], [user_id], [customer_name], [total_price], [order_date], [created_at], [updated_at], [isDelete], [customer_id], [employee_id]) VALUES (4, 3, N'Emily Davis', CAST(25000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:49.910' AS DateTime), CAST(N'2024-12-25T14:18:49.910' AS DateTime), CAST(N'2024-12-25T14:18:49.910' AS DateTime), NULL, NULL, NULL)
-GO
-INSERT [dbo].[orders] ([id], [user_id], [customer_name], [total_price], [order_date], [created_at], [updated_at], [isDelete], [customer_id], [employee_id]) VALUES (5, 2, N'Robert Johnson', CAST(40000.00 AS Decimal(10, 2)), CAST(N'2024-12-25T14:18:49.910' AS DateTime), CAST(N'2024-12-25T14:18:49.910' AS DateTime), CAST(N'2024-12-25T14:18:49.910' AS DateTime), NULL, NULL, NULL)
-GO
-SET IDENTITY_INSERT [dbo].[orders] OFF
-GO
-SET IDENTITY_INSERT [dbo].[roles] ON 
-GO
-INSERT [dbo].[roles] ([id], [role_name], [created_at], [updated_at], [isDelete]) VALUES (1, N'admin', CAST(N'2024-12-24T14:17:56.107' AS DateTime), CAST(N'2024-12-24T14:17:56.107' AS DateTime), NULL)
-GO
-INSERT [dbo].[roles] ([id], [role_name], [created_at], [updated_at], [isDelete]) VALUES (2, N'employee', CAST(N'2024-12-24T14:17:56.107' AS DateTime), CAST(N'2024-12-24T14:17:56.107' AS DateTime), NULL)
-GO
-SET IDENTITY_INSERT [dbo].[roles] OFF
-GO
-SET IDENTITY_INSERT [dbo].[users] ON 
-GO
-INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id]) VALUES (1, N'admin', N'123456', 1, N'System Administrator', CAST(N'2024-12-24T14:17:56.127' AS DateTime), CAST(N'2024-12-24T14:17:56.127' AS DateTime), NULL, NULL)
-GO
-INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id]) VALUES (2, N'employee1', N'123456', 2, N'Pharmacist 1', CAST(N'2024-12-24T14:17:56.127' AS DateTime), CAST(N'2024-12-24T14:17:56.127' AS DateTime), NULL, NULL)
-GO
-INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id]) VALUES (3, N'employee2', N'123456', 2, N'Pharmacist 2', CAST(N'2024-12-24T14:17:56.127' AS DateTime), CAST(N'2024-12-24T14:17:56.127' AS DateTime), NULL, NULL)
-GO
-SET IDENTITY_INSERT [dbo].[users] OFF
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__categori__5189E255D3E30B29]    Script Date: 12/28/2024 7:29:37 PM ******/
-ALTER TABLE [dbo].[categories] ADD UNIQUE NONCLUSTERED 
-(
-	[category_name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__roles__783254B1D9B0DD4E]    Script Date: 12/28/2024 7:29:37 PM ******/
-ALTER TABLE [dbo].[roles] ADD UNIQUE NONCLUSTERED 
-(
-	[role_name] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-SET ANSI_PADDING ON
-GO
-/****** Object:  Index [UQ__users__F3DBC5724FF71450]    Script Date: 12/28/2024 7:29:37 PM ******/
-ALTER TABLE [dbo].[users] ADD UNIQUE NONCLUSTERED 
-(
-	[username] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
-GO
-ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT (getdate()) FOR [action_time]
-GO
-ALTER TABLE [dbo].[audit_logs] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[categories] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[categories] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[categories] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[customers] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[customers] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[customers] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[invoices] ADD  DEFAULT (getdate()) FOR [invoice_date]
-GO
-ALTER TABLE [dbo].[invoices] ADD  DEFAULT ((0)) FOR [amount_paid]
-GO
-ALTER TABLE [dbo].[invoices] ADD  DEFAULT ('Unpaid') FOR [payment_status]
-GO
-ALTER TABLE [dbo].[invoices] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[invoices] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[invoices] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[medicines] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[medicines] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[medicines] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[order_details] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[order_details] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[order_details] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[orders] ADD  DEFAULT (getdate()) FOR [order_date]
-GO
-ALTER TABLE [dbo].[orders] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[orders] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[orders] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[price_history] ADD  DEFAULT (getdate()) FOR [change_date]
-GO
-ALTER TABLE [dbo].[price_history] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[price_history] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[price_history] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[promotions] ADD  DEFAULT (getdate()) FOR [start_date]
-GO
-ALTER TABLE [dbo].[promotions] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[promotions] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[promotions] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[returns] ADD  DEFAULT (getdate()) FOR [return_date]
-GO
-ALTER TABLE [dbo].[returns] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[returns] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[returns] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[roles] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[roles] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[roles] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[stock_history] ADD  DEFAULT (getdate()) FOR [change_date]
-GO
-ALTER TABLE [dbo].[stock_history] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[stock_history] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[stock_history] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[suppliers] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[suppliers] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[suppliers] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [created_at]
-GO
-ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [updated_at]
-GO
-ALTER TABLE [dbo].[users] ADD  DEFAULT ((0)) FOR [isDelete]
-GO
-ALTER TABLE [dbo].[audit_logs]  WITH NOCHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[audit_logs]  WITH CHECK ADD  CONSTRAINT [FK_audit_logs_employee] FOREIGN KEY([employee_id])
-REFERENCES [dbo].[employee] ([id])
-GO
-ALTER TABLE [dbo].[audit_logs] CHECK CONSTRAINT [FK_audit_logs_employee]
-GO
-ALTER TABLE [dbo].[invoices]  WITH CHECK ADD FOREIGN KEY([order_id])
-REFERENCES [dbo].[orders] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[medicines]  WITH CHECK ADD FOREIGN KEY([category_id])
-REFERENCES [dbo].[categories] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[medicines]  WITH CHECK ADD FOREIGN KEY([supplier_id])
-REFERENCES [dbo].[suppliers] ([id])
-ON UPDATE CASCADE
-ON DELETE SET NULL
-GO
-ALTER TABLE [dbo].[order_details]  WITH CHECK ADD FOREIGN KEY([medicine_id])
-REFERENCES [dbo].[medicines] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[order_details]  WITH CHECK ADD FOREIGN KEY([order_id])
-REFERENCES [dbo].[orders] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[orders]  WITH NOCHECK ADD FOREIGN KEY([customer_id])
-REFERENCES [dbo].[customers] ([id])
-ON UPDATE CASCADE
-ON DELETE SET NULL
-GO
-ALTER TABLE [dbo].[orders]  WITH NOCHECK ADD FOREIGN KEY([user_id])
-REFERENCES [dbo].[users] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[orders]  WITH CHECK ADD  CONSTRAINT [FK_orders_employee] FOREIGN KEY([employee_id])
-REFERENCES [dbo].[employee] ([id])
-GO
-ALTER TABLE [dbo].[orders] CHECK CONSTRAINT [FK_orders_employee]
-GO
-ALTER TABLE [dbo].[price_history]  WITH CHECK ADD FOREIGN KEY([medicine_id])
-REFERENCES [dbo].[medicines] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[promotions]  WITH CHECK ADD FOREIGN KEY([medicine_id])
-REFERENCES [dbo].[medicines] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[returns]  WITH CHECK ADD FOREIGN KEY([medicine_id])
-REFERENCES [dbo].[medicines] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[returns]  WITH CHECK ADD FOREIGN KEY([order_id])
-REFERENCES [dbo].[orders] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[stock_history]  WITH CHECK ADD FOREIGN KEY([medicine_id])
-REFERENCES [dbo].[medicines] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[users]  WITH NOCHECK ADD FOREIGN KEY([role_id])
-REFERENCES [dbo].[roles] ([id])
-ON UPDATE CASCADE
-ON DELETE CASCADE
-GO
-ALTER TABLE [dbo].[users]  WITH CHECK ADD  CONSTRAINT [FK_users_employee] FOREIGN KEY([employee_id])
-REFERENCES [dbo].[employee] ([id])
-GO
-ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK_users_employee]
+ CREATE TABLE [dbo].[categories]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[category_name] [varchar](100) NOT NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[customers]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[customers]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[full_name] [varchar](255) NOT NULL, 	[phone_number] [varchar](15) NULL, 	[email] [varchar](100) NULL, 	[address] [varchar](500) NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, 	[date_of_birth] [date] NULL, 	[customer_type] [varchar](50) NULL, 	[points] [int] NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[employee]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[employee]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[full_name] [varchar](255) NOT NULL, 	[phone_number] [varchar](15) NULL, 	[email] [varchar](100) NULL, 	[address] [varchar](500) NULL, 	[identity_card] [varchar](12) NULL, 	[picture] [varbinary](max) NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[role] [int] NULL, 	[salary] [decimal](10, 2) NULL, 	[start_date] [date] NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY] GO /****** Object:  Table [dbo].[invoices]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[invoices]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[order_id] [int] NOT NULL, 	[invoice_date] [datetime] NULL, 	[total_amount] [decimal](10, 2) NOT NULL, 	[amount_paid] [decimal](10, 2) NOT NULL, 	[payment_status] [varchar](50) NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, 	[customer_name] [varchar](255) NULL, 	[customer_address] [varchar](255) NULL, 	[customer_phone] [varchar](15) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[medicines]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[medicines]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[medicine_name] [varchar](255) NOT NULL, 	[category_id] [int] NOT NULL, 	[price] [decimal](10, 2) NOT NULL, 	[stock] [int] NOT NULL, 	[manufacturing_date] [datetime] NOT NULL, 	[expiry_date] [datetime] NOT NULL, 	[picture] [varchar](255) NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[supplier_id] [int] NULL, 	[unit] [varchar](50) NULL, 	[concentration] [varchar](50) NULL, 	[usage] [varchar](max) NULL, 	[contraindications] [varchar](max) NULL, 	[side_effects] [varchar](max) NULL, 	[storage] [varchar](max) NULL, 	[ingredients] [varchar](max) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY] GO /****** Object:  Table [dbo].[order_details]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[order_details]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[order_id] [int] NOT NULL, 	[medicine_id] [int] NOT NULL, 	[quantity] [int] NOT NULL, 	[unit_price] [decimal](10, 2) NOT NULL, 	[total_price] [decimal](10, 2) NOT NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[orders]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[orders]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[user_id] [int] NOT NULL, 	[customer_name] [varchar](255) NOT NULL, 	[total_price] [decimal](10, 2) NOT NULL, 	[order_date] [datetime] NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[customer_id] [int] NULL, 	[employee_id] [int] NULL, 	[picture] [varchar](255) NULL, 	[payment_method] [varchar](50) NULL, 	[status] [varchar](50) NULL, 	[notes] [varchar](max) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY] GO /****** Object:  Table [dbo].[price_history]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[price_history]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[medicine_id] [int] NOT NULL, 	[old_price] [decimal](10, 2) NOT NULL, 	[new_price] [decimal](10, 2) NOT NULL, 	[change_date] [datetime] NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, 	[employee_id] [int] NULL, 	[reason] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[promotions]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[promotions]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[medicine_id] [int] NOT NULL, 	[discount_percent] [int] NOT NULL, 	[start_date] [datetime] NULL, 	[end_date] [datetime] NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, 	[description] [varchar](max) NULL, 	[conditions] [varchar](max) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY] GO /****** Object:  Table [dbo].[returns]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[returns]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[order_id] [int] NOT NULL, 	[medicine_id] [int] NOT NULL, 	[quantity] [int] NOT NULL, 	[reason] [varchar](500) NULL, 	[return_date] [datetime] NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, 	[employee_id] [int] NULL, 	[status] [varchar](50) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[roles]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[roles]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[role_name] [varchar](50) NOT NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[stock_history]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[stock_history]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[medicine_id] [int] NOT NULL, 	[change_type] [varchar](50) NOT NULL, 	[quantity] [int] NOT NULL, 	[change_date] [datetime] NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, 	[employee_id] [int] NULL, 	[reason] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[suppliers]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[suppliers]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[supplier_name] [varchar](255) NOT NULL, 	[contact_phone] [varchar](15) NULL, 	[contact_email] [varchar](100) NULL, 	[address] [varchar](500) NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[picture] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO /****** Object:  Table [dbo].[users]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE TABLE [dbo].[users]( 	[id] [int] IDENTITY(1,1) NOT NULL, 	[username] [varchar](50) NOT NULL, 	[password] [varchar](255) NOT NULL, 	[role_id] [int] NOT NULL, 	[full_name] [varchar](255) NOT NULL, 	[created_at] [datetime] NULL, 	[updated_at] [datetime] NULL, 	[isDelete] [bit] NULL, 	[employee_id] [int] NULL, 	[picture] [varchar](255) NULL, PRIMARY KEY CLUSTERED  ( 	[id] ASC )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY] ) ON [PRIMARY] GO SET IDENTITY_INSERT [dbo].[categories] ON  GO INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (1, N'Thu?c gi?m dau', NULL, NULL, NULL, NULL) GO INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (2, N'Thu?c kháng sinh', NULL, NULL, NULL, NULL) GO INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (3, N'Thu?c ho', NULL, NULL, NULL, NULL) GO INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (4, N'Vitamin và khoáng ch?t', NULL, NULL, NULL, NULL) GO INSERT [dbo].[categories] ([id], [category_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (5, N'Th?c ph?m ch?c nang', NULL, NULL, NULL, NULL) GO SET IDENTITY_INSERT [dbo].[categories] OFF GO SET IDENTITY_INSERT [dbo].[customers] ON  GO INSERT [dbo].[customers] ([id], [full_name], [phone_number], [email], [address], [created_at], [updated_at], [isDelete], [picture], [date_of_birth], [customer_type], [points]) VALUES (1, N'Ph?m Th? D', N'0909876543', N'ptd@email.com', N'100 Ðu?ng D, Qu?n 4, TP.HCM', NULL, NULL, NULL, NULL, CAST(N'1990-05-20' AS Date), N'Thu?ng xuyên', 100) GO INSERT [dbo].[customers] ([id], [full_name], [phone_number], [email], [address], [created_at], [updated_at], [isDelete], [picture], [date_of_birth], [customer_type], [points]) VALUES (2, N'H? Van E', N'0987654321', N'hve@email.com', N'200 Ðu?ng E, Qu?n 5, TP.HCM', NULL, NULL, NULL, NULL, CAST(N'1985-08-12' AS Date), N'VIP', 500) GO INSERT [dbo].[customers] ([id], [full_name], [phone_number], [email], [address], [created_at], [updated_at], [isDelete], [picture], [date_of_birth], [customer_type], [points]) VALUES (3, N'Võ Th? F', N'0913579246', N'vtf@email.com', N'300 Ðu?ng F, Qu?n 6, TP.HCM', NULL, NULL, NULL, NULL, CAST(N'1995-11-05' AS Date), N'Thu?ng xuyên', 50) GO SET IDENTITY_INSERT [dbo].[customers] OFF GO SET IDENTITY_INSERT [dbo].[employee] ON  GO INSERT [dbo].[employee] ([id], [full_name], [phone_number], [email], [address], [identity_card], [picture], [created_at], [updated_at], [isDelete], [role], [salary], [start_date]) VALUES (1, N'Nhân viên 1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL) GO INSERT [dbo].[employee] ([id], [full_name], [phone_number], [email], [address], [identity_card], [picture], [created_at], [updated_at], [isDelete], [role], [salary], [start_date]) VALUES (2, N'Nhân viên 2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL) GO INSERT [dbo].[employee] ([id], [full_name], [phone_number], [email], [address], [identity_card], [picture], [created_at], [updated_at], [isDelete], [role], [salary], [start_date]) VALUES (3, N'Nhân viên 3', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 2, NULL, NULL) GO SET IDENTITY_INSERT [dbo].[employee] OFF GO SET IDENTITY_INSERT [dbo].[medicines] ON  GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (10, N'Paracetamol 500mg', 1, CAST(15.00 AS Decimal(10, 2)), 100, CAST(N'2024-01-01T00:00:00.000' AS DateTime), CAST(N'2026-01-01T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'500mg', N'U?ng 1-2 viên m?i 4-6 gi? khi c?n thi?t.', N'Không dùng cho ngu?i m?n c?m v?i paracetamol.', N'Bu?n nôn, nôn, dau b?ng.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Paracetamol 500mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (11, N'Aspirin 81mg', 1, CAST(12.00 AS Decimal(10, 2)), 50, CAST(N'2024-03-15T00:00:00.000' AS DateTime), CAST(N'2026-03-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'81mg', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? loét d? dày.', N'Ch?y máu d? dày, bu?n nôn.', N'B?o qu?n noi khô ráo, thoáng mát, tránh ánh sáng.', N'Aspirin 81mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (12, N'Vitamin C 500mg', 3, CAST(8.00 AS Decimal(10, 2)), 200, CAST(N'2024-06-10T00:00:00.000' AS DateTime), CAST(N'2026-06-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'500mg', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? s?i th?n.', N'Tiêu ch?y, bu?n nôn.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Vitamin C 500mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (13, N'Amoxicillin 500mg', 4, CAST(50.00 AS Decimal(10, 2)), 60, CAST(N'2024-02-01T00:00:00.000' AS DateTime), CAST(N'2026-02-01T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'500mg', N'U?ng 1 viên m?i 8 gi?.', N'Không dùng cho ngu?i m?n c?m v?i penicillin.', N'Tiêu ch?y, bu?n nôn, phát ban.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Amoxicillin 500mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (14, N'Cetirizine 10mg', 5, CAST(20.00 AS Decimal(10, 2)), 150, CAST(N'2024-04-10T00:00:00.000' AS DateTime), CAST(N'2026-04-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'10mg', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i m?n c?m v?i cetirizine.', N'Bu?n ng?, khô mi?ng.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Cetirizine 10mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (15, N'Calcium 600mg + Vitamin D3', 3, CAST(25.00 AS Decimal(10, 2)), 80, CAST(N'2024-01-20T00:00:00.000' AS DateTime), CAST(N'2026-01-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'600mg + D3', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? tang calci máu.', N'Táo bón, d?y hoi.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Calcium 600mg, Vitamin D3') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (16, N'Ibuprofen 400mg', 1, CAST(18.00 AS Decimal(10, 2)), 90, CAST(N'2024-03-25T00:00:00.000' AS DateTime), CAST(N'2026-03-25T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'400mg', N'U?ng 1 viên m?i 4-6 gi? khi c?n thi?t.', N'Không dùng cho ngu?i b? loét d? dày.', N'Ðau d? dày, bu?n nôn.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Ibuprofen 400mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (17, N'Ranitidine 150mg', 5, CAST(22.00 AS Decimal(10, 2)), 40, CAST(N'2024-05-15T00:00:00.000' AS DateTime), CAST(N'2026-05-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'150mg', N'U?ng 1 viên tru?c khi di ng?.', N'Không dùng cho ngu?i m?n c?m v?i ranitidine.', N'Ðau d?u, chóng m?t.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Ranitidine 150mg') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (18, N'Thu?c ho Prospan', 1, CAST(30.00 AS Decimal(10, 2)), 120, CAST(N'2024-02-10T00:00:00.000' AS DateTime), CAST(N'2026-02-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'100ml', N'U?ng 5ml m?i 8 gi?.', N'Không dùng cho tr? em du?i 2 tu?i.', N'Bu?n nôn, nôn.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Chi?t xu?t lá thu?ng xuân') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (19, N'Omega 3 Fish Oil', 3, CAST(45.00 AS Decimal(10, 2)), 80, CAST(N'2024-04-05T00:00:00.000' AS DateTime), CAST(N'2026-04-05T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'1000mg', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? d? ?ng v?i h?i s?n.', N'? hoi, tanh.', N'B?o qu?n noi khô ráo, thoáng mát, tránh ánh sáng.', N'D?u cá') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (20, N'Berocca Performance', 3, CAST(60.00 AS Decimal(10, 2)), 50, CAST(N'2024-01-25T00:00:00.000' AS DateTime), CAST(N'2026-01-25T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên s?i', N' ', N'Hòa tan 1 viên vào 200ml nu?c và u?ng.', N'Không dùng cho ngu?i b? s?i th?n.', N'R?i lo?n tiêu hóa.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Vitamin B, C, khoáng ch?t') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (21, N'Panadol Extra', 1, CAST(20.00 AS Decimal(10, 2)), 100, CAST(N'2024-03-05T00:00:00.000' AS DateTime), CAST(N'2026-03-05T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N' ', N'U?ng 1-2 viên m?i 4-6 gi? khi c?n thi?t.', N'Không dùng cho ngu?i m?n c?m v?i paracetamol ho?c caffeine.', N'Bu?n nôn, m?t ng?.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Paracetamol, Caffeine') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (22, N'Nu?c mu?i sinh lý Natri Clorid 0.9%', 4, CAST(10.00 AS Decimal(10, 2)), 200, CAST(N'2024-05-10T00:00:00.000' AS DateTime), CAST(N'2026-05-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'500ml', N'Dùng d? r?a m?t, mui, v?t thuong.', N'Không dùng cho ngu?i m?n c?m v?i thành ph?n c?a thu?c.', N'Không có.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Natri Clorid 0.9%') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (23, N'Kem bôi da Cortibion', 1, CAST(25.00 AS Decimal(10, 2)), 150, CAST(N'2024-02-15T00:00:00.000' AS DateTime), CAST(N'2026-02-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Tuýp', N'10g', N'Bôi m?t l?p m?ng lên vùng da b? b?nh 2 l?n/ngày.', N'Không dùng cho ngu?i b? nhi?m trùng da do virus, n?m.', N'Ng?a, rát, kích ?ng da.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Dexamethasone, Chloramphenicol') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (24, N'D?u gió xanh Con Ó', 2, CAST(15.00 AS Decimal(10, 2)), 100, CAST(N'2024-04-20T00:00:00.000' AS DateTime), CAST(N'2026-04-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'3ml', N'Xoa bóp lên vùng b? dau nh?c.', N'Không dùng cho tr? em du?i 2 tu?i.', N'Kích ?ng da.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Methyl Salicylate, Menthol, Eucalyptus Oil') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (25, N'Bang cá nhân Urgo', 4, CAST(12.00 AS Decimal(10, 2)), 300, CAST(N'2024-01-05T00:00:00.000' AS DateTime), CAST(N'2026-01-05T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'H?p', N'10 mi?ng', N'Dán lên v?t thuong dã du?c làm s?ch.', N'Không dùng cho v?t thuong h?.', N'Không có.', N'B?o qu?n noi khô ráo, thoáng mát.', N' ') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (26, N'Thu?c nh? m?t Rohto Vitamin', 4, CAST(30.00 AS Decimal(10, 2)), 80, CAST(N'2024-03-20T00:00:00.000' AS DateTime), CAST(N'2026-03-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'15ml', N'Nh? 1-2 gi?t vào m?i m?t, 3-4 l?n/ngày.', N'Không dùng cho ngu?i b? glaucom.', N'C?m giác nóng rát thoáng qua.', N'B?o qu?n noi khô ráo, thoáng mát, tránh ánh sáng.', N'Vitamin B12, Neostigmine Methylsulfate') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (27, N'Viên u?ng b? sung s?t Ferrovit', 3, CAST(40.00 AS Decimal(10, 2)), 120, CAST(N'2024-05-15T00:00:00.000' AS DateTime), CAST(N'2026-05-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'H?p', N'30 viên', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? th?a s?t.', N'Táo bón, bu?n nôn.', N'B?o qu?n noi khô ráo, thoáng mát.', N'S?t fumarat, Acid folic') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (28, N'Men vi sinh Biolac', 4, CAST(55.00 AS Decimal(10, 2)), 100, CAST(N'2024-02-20T00:00:00.000' AS DateTime), CAST(N'2026-02-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Gói', N'1g', N'U?ng 1 gói m?i ngày.', N'Không dùng cho ngu?i d? ?ng v?i thành ph?n c?a thu?c.', N'Không có.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Lactobacillus acidophilus, Bifidobacterium') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (29, N'Thu?c x?t mui Iliadin', 5, CAST(28.00 AS Decimal(10, 2)), 150, CAST(N'2024-04-10T00:00:00.000' AS DateTime), CAST(N'2026-04-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'10ml', N'X?t 1-2 l?n vào m?i bên mui, 2-3 l?n/ngày.', N'Không dùng cho tr? em du?i 6 tu?i.', N'Khô mui, h?t hoi.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Oxymetazoline hydrochloride') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (30, N'Dung d?ch sát khu?n Povidine 10%', 4, CAST(15.00 AS Decimal(10, 2)), 200, CAST(N'2024-01-10T00:00:00.000' AS DateTime), CAST(N'2026-01-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'100ml', N'Dùng d? sát khu?n v?t thuong, da.', N'Không dùng cho ngu?i m?n c?m v?i povidone-iodine.', N'Kích ?ng da.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Povidone-iodine 10%') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (31, N'G?c y t?', 4, CAST(5.00 AS Decimal(10, 2)), 500, CAST(N'2024-03-25T00:00:00.000' AS DateTime), CAST(N'2026-03-25T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Gói', N'10 mi?ng', N'Dùng d? bang bó v?t thuong.', N'Không có.', N'Không có.', N'B?o qu?n noi khô ráo, thoáng mát.', N' ') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (32, N'Kem ch?ng n?ng Anessa', 1, CAST(120.00 AS Decimal(10, 2)), 80, CAST(N'2024-05-20T00:00:00.000' AS DateTime), CAST(N'2026-05-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Tuýp', N'60ml', N'Bôi lên da tru?c khi ra n?ng 20 phút.', N'Không dùng cho tr? em du?i 6 tháng tu?i.', N'Kích ?ng da.', N'B?o qu?n noi khô ráo, thoáng mát, tránh ánh sáng.', N'Titanium dioxide, Zinc oxide') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (33, N'Viên u?ng Vitamin E', 3, CAST(35.00 AS Decimal(10, 2)), 100, CAST(N'2024-02-05T00:00:00.000' AS DateTime), CAST(N'2026-02-05T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N'400IU', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? r?i lo?n dông máu.', N'Bu?n nôn, tiêu ch?y.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Vitamin E') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (34, N'Thu?c h? s?t Efferalgan', 1, CAST(22.00 AS Decimal(10, 2)), 150, CAST(N'2024-04-15T00:00:00.000' AS DateTime), CAST(N'2026-04-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên s?i', N'500mg', N'Hòa tan 1 viên vào 200ml nu?c và u?ng.', N'Không dùng cho ngu?i m?n c?m v?i paracetamol.', N'Bu?n nôn, nôn.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Paracetamol') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (35, N'Kh?u trang y t?', 4, CAST(3.00 AS Decimal(10, 2)), 1000, CAST(N'2024-01-15T00:00:00.000' AS DateTime), CAST(N'2026-01-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'H?p', N'50 cái', N'Dùng d? che mui, mi?ng khi ra ngoài.', N'Không có.', N'Không có.', N'B?o qu?n noi khô ráo, thoáng mát.', N' ') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (36, N'Thu?c b? gan Boganic', 1, CAST(60.00 AS Decimal(10, 2)), 60, CAST(N'2024-03-10T00:00:00.000' AS DateTime), CAST(N'2026-03-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N' ', N'U?ng 2 viên m?i ngày.', N'Không dùng cho ngu?i m?n c?m v?i thành ph?n c?a thu?c.', N'D? ?ng.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Cao Actiso, Cao Rau d?ng d?t') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (37, N'Siro ho Astex', 2, CAST(40.00 AS Decimal(10, 2)), 120, CAST(N'2024-05-05T00:00:00.000' AS DateTime), CAST(N'2026-05-05T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'100ml', N'U?ng 10ml m?i 8 gi?.', N'Không dùng cho tr? em du?i 2 tu?i.', N'Bu?n nôn, d? ?ng.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Dextromethorphan, Guaifenesin') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (38, N'Thu?c nh? mui Otrivin', 5, CAST(25.00 AS Decimal(10, 2)), 100, CAST(N'2024-02-20T00:00:00.000' AS DateTime), CAST(N'2026-02-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Chai', N'10ml', N'X?t 1-2 l?n vào m?i bên mui, 2-3 l?n/ngày.', N'Không dùng cho tr? em du?i 6 tu?i.', N'Khô mui, h?t hoi.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Xylometazoline hydrochloride') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (39, N'Kem tr? m?n Differin', 1, CAST(80.00 AS Decimal(10, 2)), 50, CAST(N'2024-04-25T00:00:00.000' AS DateTime), CAST(N'2026-04-25T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Tuýp', N'15g', N'Bôi m?t l?p m?ng lên vùng da b? m?n 1 l?n/ngày.', N'Không dùng cho ph? n? có thai và cho con bú.', N'Khô da, bong tróc da.', N'B?o qu?n noi khô ráo, thoáng mát, tránh ánh sáng.', N'Adapalene') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (40, N'Thu?c dau d? dày Gastropulgite', 4, CAST(30.00 AS Decimal(10, 2)), 150, CAST(N'2024-01-20T00:00:00.000' AS DateTime), CAST(N'2026-01-20T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Gói', N'3g', N'U?ng 1 gói sau b?a an.', N'Không dùng cho ngu?i b? t?c ru?t.', N'Táo bón.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Smectite') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (41, N'Vitamin t?ng h?p Centrum', 3, CAST(100.00 AS Decimal(10, 2)), 100, CAST(N'2024-03-15T00:00:00.000' AS DateTime), CAST(N'2026-03-15T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'H?p', N'30 viên', N'U?ng 1 viên m?i ngày.', N'Không dùng cho tr? em du?i 12 tu?i.', N'R?i lo?n tiêu hóa.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Vitamin A, B, C, D, E, khoáng ch?t') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (42, N'Thu?c b? não Ginkgo Biloba', 1, CAST(75.00 AS Decimal(10, 2)), 80, CAST(N'2024-05-10T00:00:00.000' AS DateTime), CAST(N'2026-05-10T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Viên', N' ', N'U?ng 1 viên m?i ngày.', N'Không dùng cho ngu?i b? r?i lo?n dông máu.', N'Ðau d?u, chóng m?t.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Chi?t xu?t lá Ginkgo Biloba') GO INSERT [dbo].[medicines] ([id], [medicine_name], [category_id], [price], [stock], [manufacturing_date], [expiry_date], [picture], [created_at], [updated_at], [isDelete], [supplier_id], [unit], [concentration], [usage], [contraindications], [side_effects], [storage], [ingredients]) VALUES (43, N'Thu?c tr? tiêu ch?y Smecta', 4, CAST(25.00 AS Decimal(10, 2)), 200, CAST(N'2024-02-05T00:00:00.000' AS DateTime), CAST(N'2026-02-05T00:00:00.000' AS DateTime), NULL, NULL, NULL, 0, NULL, N'Gói', N'3g', N'U?ng 1 gói m?i 6 gi?.', N'Không dùng cho ngu?i b? t?c ru?t.', N'Táo bón.', N'B?o qu?n noi khô ráo, thoáng mát.', N'Diosmectite') GO SET IDENTITY_INSERT [dbo].[medicines] OFF GO SET IDENTITY_INSERT [dbo].[roles] ON  GO INSERT [dbo].[roles] ([id], [role_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (1, N'admin', NULL, NULL, NULL, NULL) GO INSERT [dbo].[roles] ([id], [role_name], [created_at], [updated_at], [isDelete], [picture]) VALUES (2, N'employee', NULL, NULL, NULL, NULL) GO SET IDENTITY_INSERT [dbo].[roles] OFF GO SET IDENTITY_INSERT [dbo].[suppliers] ON  GO INSERT [dbo].[suppliers] ([id], [supplier_name], [contact_phone], [contact_email], [address], [created_at], [updated_at], [isDelete], [picture]) VALUES (1, N'Công ty Du?c ph?m A', N'0901234567', N'ctyA@email.com', N'123 Ðu?ng A, Qu?n 1, TP.HCM', NULL, NULL, NULL, NULL) GO INSERT [dbo].[suppliers] ([id], [supplier_name], [contact_phone], [contact_email], [address], [created_at], [updated_at], [isDelete], [picture]) VALUES (2, N'Công ty Du?c ph?m B', N'0987654321', N'ctyB@email.com', N'456 Ðu?ng B, Qu?n 2, TP.HCM', NULL, NULL, NULL, NULL) GO INSERT [dbo].[suppliers] ([id], [supplier_name], [contact_phone], [contact_email], [address], [created_at], [updated_at], [isDelete], [picture]) VALUES (3, N'Công ty Du?c ph?m C', N'0912345678', N'ctyC@email.com', N'789 Ðu?ng C, Qu?n 3, TP.HCM', NULL, NULL, NULL, NULL) GO SET IDENTITY_INSERT [dbo].[suppliers] OFF GO SET IDENTITY_INSERT [dbo].[users] ON  GO INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id], [picture]) VALUES (1, N'admin', N'123456', 1, N'Administrator', NULL, NULL, NULL, NULL, NULL) GO INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id], [picture]) VALUES (3, N'employee1', N'123456', 2, N'Nhân viên 1', NULL, NULL, NULL, 1, NULL) GO INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id], [picture]) VALUES (4, N'employee2', N'123456', 2, N'Nhân viên 2', NULL, NULL, NULL, 2, NULL) GO INSERT [dbo].[users] ([id], [username], [password], [role_id], [full_name], [created_at], [updated_at], [isDelete], [employee_id], [picture]) VALUES (5, N'employee3', N'123456', 2, N'Nhân viên 3', NULL, NULL, NULL, 3, NULL) GO SET IDENTITY_INSERT [dbo].[users] OFF GO ALTER TABLE [dbo].[employee]  WITH CHECK ADD  CONSTRAINT [FK_employee_roles] FOREIGN KEY([role]) REFERENCES [dbo].[roles] ([id]) GO ALTER TABLE [dbo].[employee] CHECK CONSTRAINT [FK_employee_roles] GO ALTER TABLE [dbo].[invoices]  WITH CHECK ADD  CONSTRAINT [FK_invoices_orders] FOREIGN KEY([order_id]) REFERENCES [dbo].[orders] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[invoices] CHECK CONSTRAINT [FK_invoices_orders] GO ALTER TABLE [dbo].[medicines]  WITH CHECK ADD  CONSTRAINT [FK_medicines_categories] FOREIGN KEY([category_id]) REFERENCES [dbo].[categories] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[medicines] CHECK CONSTRAINT [FK_medicines_categories] GO ALTER TABLE [dbo].[medicines]  WITH CHECK ADD  CONSTRAINT [FK_medicines_suppliers] FOREIGN KEY([supplier_id]) REFERENCES [dbo].[suppliers] ([id]) ON UPDATE CASCADE ON DELETE SET NULL GO ALTER TABLE [dbo].[medicines] CHECK CONSTRAINT [FK_medicines_suppliers] GO ALTER TABLE [dbo].[order_details]  WITH CHECK ADD  CONSTRAINT [FK_order_details_medicines] FOREIGN KEY([medicine_id]) REFERENCES [dbo].[medicines] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[order_details] CHECK CONSTRAINT [FK_order_details_medicines] GO ALTER TABLE [dbo].[order_details]  WITH CHECK ADD  CONSTRAINT [FK_order_details_orders] FOREIGN KEY([order_id]) REFERENCES [dbo].[orders] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[order_details] CHECK CONSTRAINT [FK_order_details_orders] GO ALTER TABLE [dbo].[orders]  WITH CHECK ADD  CONSTRAINT [FK_orders_customers] FOREIGN KEY([customer_id]) REFERENCES [dbo].[customers] ([id]) ON UPDATE CASCADE ON DELETE SET NULL GO ALTER TABLE [dbo].[orders] CHECK CONSTRAINT [FK_orders_customers] GO ALTER TABLE [dbo].[orders]  WITH CHECK ADD  CONSTRAINT [FK_orders_employee] FOREIGN KEY([employee_id]) REFERENCES [dbo].[employee] ([id]) GO ALTER TABLE [dbo].[orders] CHECK CONSTRAINT [FK_orders_employee] GO ALTER TABLE [dbo].[orders]  WITH CHECK ADD  CONSTRAINT [FK_orders_users] FOREIGN KEY([user_id]) REFERENCES [dbo].[users] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[orders] CHECK CONSTRAINT [FK_orders_users] GO ALTER TABLE [dbo].[price_history]  WITH CHECK ADD  CONSTRAINT [FK_price_history_medicines] FOREIGN KEY([medicine_id]) REFERENCES [dbo].[medicines] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[price_history] CHECK CONSTRAINT [FK_price_history_medicines] GO ALTER TABLE [dbo].[promotions]  WITH CHECK ADD  CONSTRAINT [FK_promotions_medicines] FOREIGN KEY([medicine_id]) REFERENCES [dbo].[medicines] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[promotions] CHECK CONSTRAINT [FK_promotions_medicines] GO ALTER TABLE [dbo].[returns]  WITH CHECK ADD  CONSTRAINT [FK_returns_medicines] FOREIGN KEY([medicine_id]) REFERENCES [dbo].[medicines] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[returns] CHECK CONSTRAINT [FK_returns_medicines] GO ALTER TABLE [dbo].[returns]  WITH CHECK ADD  CONSTRAINT [FK_returns_orders] FOREIGN KEY([order_id]) REFERENCES [dbo].[orders] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[returns] CHECK CONSTRAINT [FK_returns_orders] GO ALTER TABLE [dbo].[stock_history]  WITH CHECK ADD  CONSTRAINT [FK_stock_history_medicines] FOREIGN KEY([medicine_id]) REFERENCES [dbo].[medicines] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[stock_history] CHECK CONSTRAINT [FK_stock_history_medicines] GO ALTER TABLE [dbo].[users]  WITH CHECK ADD  CONSTRAINT [FK_users_employee] FOREIGN KEY([employee_id]) REFERENCES [dbo].[employee] ([id]) GO ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK_users_employee] GO ALTER TABLE [dbo].[users]  WITH CHECK ADD  CONSTRAINT [FK_users_roles] FOREIGN KEY([role_id]) REFERENCES [dbo].[roles] ([id]) ON UPDATE CASCADE ON DELETE CASCADE GO ALTER TABLE [dbo].[users] CHECK CONSTRAINT [FK_users_roles] GO /****** Object:  StoredProcedure [dbo].[getMedicineByName]    Script Date: 12/31/2024 4:43:33 PM ******/ SET ANSI_NULLS ON GO SET QUOTED_IDENTIFIER ON GO CREATE   PROCEDURE [dbo].[getMedicineByName]     @medicineName VARCHAR(255) AS BEGIN     SELECT id, medicine_name, category_id, price, stock, manufacturing_date, expiry_date, picture,            created_at, updated_at, isDelete, supplier_id, unit, concentration,             usage, contraindications, side_effects, storage, ingredients     FROM medicines      WHERE medicine_name = @medicineName; END GO USE [master] GO ALTER DATABASE [PharmaCity] SET  READ_WRITE  GO   -- Thêm dữ liệu cho bảng medicines (30 loại thuốc)
+INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date, unit, concentration, usage, contraindications, side_effects, storage, ingredients, picture) 
+VALUES 
+('Paracetamol 500mg', 1, 15.00, 100, '2024-01-01', '2026-01-01', 'Viên', '500mg', N'Uống 1-2 viên mỗi 4-6 giờ khi cần thiết.', N'Không dùng cho người mẫn cảm với paracetamol.', N'Buồn nôn, nôn, đau bụng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Paracetamol 500mg', NULL),
+('Aspirin 81mg', 1, 12.00, 50, '2024-03-15', '2026-03-15', 'Viên', '81mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người bị loét dạ dày.', N'Chảy máu dạ dày, buồn nôn.', N'Bảo quản nơi khô ráo, thoáng mát, tránh ánh sáng.', N'Aspirin 81mg', NULL),
+('Efferalgan 500mg', 1, 22.00, 150, '2024-04-15', '2026-04-15', 'Viên sủi', '500mg', N'Hòa tan 1 viên vào 200ml nước và uống.', N'Không dùng cho người mẫn cảm với paracetamol.', N'Buồn nôn, nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Paracetamol', NULL),
+('Panadol Extra', 1, 20.00, 100, '2024-03-05', '2026-03-05', 'Viên', ' ', N'Uống 1-2 viên mỗi 4-6 giờ khi cần thiết.', N'Không dùng cho người mẫn cảm với paracetamol hoặc caffeine.', N'Buồn nôn, mất ngủ.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Paracetamol, Caffeine', NULL),
+('Naproxen 500mg', 1, 8.00, 150, '2024-07-01', '2026-07-01', 'Viên', '500mg', N'Uống 1 viên mỗi 12 giờ.', N'Không dùng cho người bị loét dạ dày tá tràng.', N'Đau dạ dày, buồn nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Naproxen 500mg', NULL),
+('Diclofenac 50mg', 1, 10.00, 100, '2024-06-15', '2026-06-15', 'Viên', '50mg', N'Uống 1 viên mỗi 8 giờ.', N'Không dùng cho người bị hen suyễn, loét dạ dày tá tràng.', N'Đau dạ dày, buồn nôn, chóng mặt.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Diclofenac 50mg', NULL),
+
+('Amoxicillin 500mg', 2, 50.00, 60, '2024-02-01', '2026-02-01', 'Viên', '500mg', N'Uống 1 viên mỗi 8 giờ.', N'Không dùng cho người mẫn cảm với penicillin.', N'Tiêu chảy, buồn nôn, phát ban.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Amoxicillin 500mg', NULL),
+('Cephalexin 500mg', 2, 35.00, 80, '2024-04-10', '2026-04-10', 'Viên', '500mg', N'Uống 1 viên mỗi 6 giờ.', N'Không dùng cho người mẫn cảm với cephalosporin.', N'Tiêu chảy, buồn nôn, đau đầu.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Cephalexin 500mg', NULL),
+('Azithromycin 500mg', 2, 70.00, 30, '2024-01-15', '2026-01-15', 'Viên', '500mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người mẫn cảm với macrolide.', N'Buồn nôn, nôn, đau bụng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Azithromycin 500mg', NULL),
+('Ciprofloxacin 500mg', 2, 40.00, 50, '2024-03-20', '2026-03-20', 'Viên', '500mg', N'Uống 1 viên mỗi 12 giờ.', N'Không dùng cho trẻ em dưới 18 tuổi.', N'Buồn nôn, tiêu chảy, đau đầu.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Ciprofloxacin 500mg', NULL),
+('Doxycycline 100mg', 2, 25.00, 100, '2024-05-10', '2026-05-10', 'Viên', '100mg', N'Uống 1 viên mỗi 12 giờ.', N'Không dùng cho phụ nữ có thai và cho con bú.', N'Buồn nôn, nôn, nhạy cảm với ánh sáng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Doxycycline 100mg', NULL),
+('Erythromycin 500mg', 2, 30.00, 70, '2024-02-15', '2026-02-15', 'Viên', '500mg', N'Uống 1 viên mỗi 6 giờ.', N'Không dùng cho người mẫn cảm với macrolide.', N'Buồn nôn, nôn, đau bụng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Erythromycin 500mg', NULL),
+
+('Vitamin C 1000mg', 3, 15.00, 200, '2024-04-01', '2026-04-01', 'Viên', '1000mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người bị sỏi thận.', N'Tiêu chảy, buồn nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Vitamin C 1000mg', NULL),
+('Vitamin D3 2000IU', 3, 20.00, 150, '2024-01-10', '2026-01-10', 'Viên', '2000IU', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người bị tăng calci máu.', N'Táo bón, buồn nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Vitamin D3 2000IU', NULL),
+('Vitamin B12 1000mcg', 3, 30.00, 100, '2024-03-15', '2026-03-15', 'Viên', '1000mcg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người mẫn cảm với vitamin B12.', N'Tiêu chảy, buồn nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Vitamin B12 1000mcg', NULL),
+('Omega 3 1000mg', 3, 45.00, 80, '2024-05-20', '2026-05-20', 'Viên', '1000mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người bị dị ứng với hải sản.', N'Ợ hơi, tanh.', N'Bảo quản nơi khô ráo, thoáng mát, tránh ánh sáng.', N'Dầu cá', NULL),
+('Multivitamin', 3, 50.00, 120, '2024-02-05', '2026-02-05', 'Viên', ' ', N'Uống 1 viên mỗi ngày.', N'Không dùng cho trẻ em dưới 12 tuổi.', N'Rối loạn tiêu hóa.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Vitamin A, B, C, D, E, khoáng chất', NULL),
+('Sắt fumarate 350mg', 3, 25.00, 150, '2024-04-10', '2026-04-10', 'Viên', '350mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người bị thừa sắt.', N'Táo bón, buồn nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Sắt fumarat', NULL),
+
+('Thuốc ho Terpin Codein', 4, 20.00, 100, '2024-01-15', '2026-01-15', 'Chai', '100ml', N'Uống 10ml mỗi 4-6 giờ.', N'Không dùng cho trẻ em dưới 2 tuổi, phụ nữ có thai và cho con bú.', N'Buồn ngủ, táo bón.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Terpin hydrat, Codein', NULL),
+('Thuốc ho Prospan', 4, 30.00, 120, '2024-03-20', '2026-03-20', 'Chai', '100ml', N'Uống 5ml mỗi 8 giờ.', N'Không dùng cho trẻ em dưới 2 tuổi.', N'Buồn nôn, nôn.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Chiết xuất lá thường xuân', NULL),
+('Thuốc kháng viêm Colchicin', 4, 15.00, 50, '2024-05-25', '2026-05-25', 'Viên', '0.5mg', N'Uống 1 viên mỗi 12 giờ.', N'Không dùng cho người bị bệnh thận, bệnh gan nặng.', N'Tiêu chảy, buồn nôn, đau bụng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Colchicin', NULL),
+('Thuốc kháng axit Maalox', 4, 25.00, 80, '2024-02-10', '2026-02-10', 'Gói', '10ml', N'Uống 1 gói sau bữa ăn.', N'Không dùng cho người bị suy thận.', N'Táo bón, tiêu chảy.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Algeldrate, Magnesium hydroxide', NULL),
+('Thuốc trị tiêu chảy Loperamid', 4, 10.00, 100, '2024-04-15', '2026-04-15', 'Viên', '2mg', N'Uống 2 viên sau lần đi ngoài đầu tiên, sau đó 1 viên sau mỗi lần đi ngoài tiếp theo.', N'Không dùng cho trẻ em dưới 6 tuổi.', N'Táo bón, đau bụng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Loperamid hydrochloride', NULL),
+('Thuốc kháng sinh Metronidazol', 4, 30.00, 60, '2024-01-01', '2026-01-01', 'Viên', '250mg', N'Uống 1 viên mỗi 8 giờ.', N'Không dùng cho phụ nữ có thai 3 tháng đầu.', N'Buồn nôn, nôn, chóng mặt.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Metronidazol', NULL),
+
+('Thuốc dị ứng Fexofenadin', 5, 35.00, 120, '2024-03-15', '2026-03-15', 'Viên', '180mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho trẻ em dưới 12 tuổi.', N'Đau đầu, buồn ngủ.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Fexofenadin hydrochloride', NULL),
+('Thuốc dị ứng Loratadin', 5, 20.00, 150, '2024-05-20', '2026-05-20', 'Viên', '10mg', N'Uống 1 viên mỗi ngày.', N'Không dùng cho người mẫn cảm với loratadin.', N'Buồn ngủ, khô miệng.', N'Bảo quản nơi khô ráo, thoáng mát.', N'Loratadin', NULL),
+('Thuốc nhỏ mắt kháng histamin', 5, 25.00, 80, '2024-02-10', '2026-02-10', 'Chai', '10ml', N'Nhỏ 1-2 giọt vào mỗi mắt, 2-3 lần/ngày.', N'Không dùng cho người bị glaucom.', N'Kích ứng mắt.', N'Bảo quản nơi khô ráo, thoáng mát, tránh ánh sáng.', N' ', NULL),
+('Kem bôi dị ứng da', 5, 30.00, 100, '2024-04-15', '2026-04-15', 'Tuýp', '15g', N'Bôi một lớp mỏng lên vùng da bị dị ứng 2 lần/ngày.', N'Không dùng cho người bị nhiễm trùng da.', N'Ngứa, rát, kích ứng da.', N'Bảo quản nơi khô ráo, thoáng mát.', N' ', NULL),
+('Thuốc xịt mũi dị ứng', 5, 40.00, 120, '2024-01-01', '2026-01-01', 'Chai', '10ml', N'Xịt 1-2 lần vào mỗi bên mũi, 2-3 lần/ngày.', N'Không dùng cho trẻ em dưới 6 tuổi.', N'Khô mũi, hắt hơi.', N'Bảo quản nơi khô ráo, thoáng mát.', N' ', NULL),
+('Thuốc uống dị ứng', 5, 50.00, 50, '2024-03-15', '2026-03-15', 'Viên', ' ', N'Uống 1 viên mỗi ngày.', N'Không dùng cho phụ nữ có thai và cho con bú.', N'Buồn ngủ, chóng mặt.', N'Bảo quản nơi khô ráo, thoáng mát.', N' ', NULL);
 GO

@@ -39,56 +39,56 @@ public class UpdateMedicine extends JFrame {
 		this.suppliers = suppliers;
 
 		setTitle("Update Medicine");
-		setLayout(new GridLayout(8, 2, 10, 10));
-		setSize(400, 400);
+		getContentPane().setLayout(new GridLayout(8, 2, 10, 10));
+		setSize(784, 627);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		// Medicine Name
-		add(new JLabel("Medicine Name:"));
+		getContentPane().add(new JLabel("Medicine Name:"));
 		txtName.setText(medicine.getMedicine_name());
-		add(txtName);
+		getContentPane().add(txtName);
 
 		// Price
-		add(new JLabel("Price:"));
+		getContentPane().add(new JLabel("Price:"));
 		txtPrice.setText(String.valueOf(medicine.getPrice()));
-		add(txtPrice);
+		getContentPane().add(txtPrice);
 
 		// Stock
-		add(new JLabel("Stock:"));
+		getContentPane().add(new JLabel("Stock:"));
 		txtStock.setText(String.valueOf(medicine.getStock()));
-		add(txtStock);
+		getContentPane().add(txtStock);
 
 		// Category
-		add(new JLabel("Category:"));
+		getContentPane().add(new JLabel("Category:"));
 		for (Map.Entry<Integer, String> category : categories) {
 			cbCategory.addItem(category.getValue());
 		}
 		String currentCategoryName = getCategoryNameById(medicine.getCategory_id());
 		cbCategory.setSelectedItem(currentCategoryName);
-		add(cbCategory);
+		getContentPane().add(cbCategory);
 
 		// Manufacturing Date
-		add(new JLabel("Manufacturing Date (YYYY-MM-DD):"));
+		getContentPane().add(new JLabel("Manufacturing Date (YYYY-MM-DD):"));
 		txtManufacturingDate.setText(medicine.getManufacturing_date().toString());
-		add(txtManufacturingDate);
+		getContentPane().add(txtManufacturingDate);
 
 		// Expiry Date
-		add(new JLabel("Expiry Date (YYYY-MM-DD):"));
+		getContentPane().add(new JLabel("Expiry Date (YYYY-MM-DD):"));
 		txtExpiryDate.setText(medicine.getExpiry_date().toString());
-		add(txtExpiryDate);
+		getContentPane().add(txtExpiryDate);
 
 		// Supplier
-		add(new JLabel("Supplier:"));
+		getContentPane().add(new JLabel("Supplier:"));
 		for (Map.Entry<Integer, String> supplier : suppliers) {
 			cbSupplier.addItem(supplier.getValue());
 		}
 		String currentSupplierName = getSupplierNameById(medicine.getSupplier_id());
 		cbSupplier.setSelectedItem(currentSupplierName);
-		add(cbSupplier);
+		getContentPane().add(cbSupplier);
 
 		// Update Button
-		add(new JLabel());
-		add(btnUpdate);
+		getContentPane().add(new JLabel());
+		getContentPane().add(btnUpdate);
 
 		// Add action listener for update button
 		btnUpdate.addActionListener(new ActionListener() {

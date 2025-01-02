@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -137,7 +138,7 @@ public class Main extends JFrame {
 	private JTable table_Counter;
 	private JLabel lblNewLabel_8;
 	private JPanel panel_25;
-	private JComboBox comboBox_3;
+	private JComboBox comboBox_Categories;
 	private JTextField txtSearch;
 	private JButton btnNewButton_4;
 	private JButton btnNewButton_5;
@@ -213,6 +214,10 @@ public class Main extends JFrame {
 	private JLabel lblUserId;
 	private JLabel lblNewLabel_19;
 	private JScrollPane scrollPane_7;
+	private JPanel panel;
+	private JLabel lblNewLabel_21;
+	private JTextField textField_1;
+	private JButton btnAddtoCart;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -365,7 +370,9 @@ public class Main extends JFrame {
 		panel_CounterInfo.add(panel_CounterImage, BorderLayout.WEST);
 		panel_CounterImage.setLayout(new GridLayout(1, 0, 0, 0));
 
-		btnNewButton_6 = new JButton("Hình ảnh thuốc");
+		btnNewButton_6 = new JButton();
+		btnNewButton_6.setIcon(new ImageIcon("C:\\Users\\datng\\git\\Pharmacy\\images\\study-icon.png"));
+		btnNewButton_6.setVisible(false);
 		panel_CounterImage.add(btnNewButton_6);
 
 		panel_CounterInfoDetail = new JPanel();
@@ -419,6 +426,24 @@ public class Main extends JFrame {
 		panel_CounterInfoDetail.add(panel_33);
 		panel_CounterInfoDetail.add(panel_34);
 
+		panel = new JPanel();
+		panel_CounterInfoDetail.add(panel);
+		panel.setLayout(new GridLayout(0, 2, 0, 0));
+
+		lblNewLabel_21 = new JLabel("Nhập Số Lượng :");
+		panel.add(lblNewLabel_21);
+
+		textField_1 = new JTextField();
+		textField_1.setColumns(10);
+		panel.add(textField_1);
+
+		btnAddtoCart = new JButton("Add to Cart");
+		btnAddtoCart.setIcon(
+				new ImageIcon("C:\\Users\\datng\\git\\Pharmacy\\images\\arrow-right-direction-green-icon.png"));
+		btnAddtoCart.setHorizontalTextPosition(SwingConstants.LEFT);
+		btnAddtoCart.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel_CounterInfoDetail.add(btnAddtoCart);
+
 		panel_21 = new JPanel();
 		counterHeader.add(panel_21, BorderLayout.CENTER);
 		panel_21.setLayout(new BorderLayout(0, 0));
@@ -430,9 +455,9 @@ public class Main extends JFrame {
 		panel_26 = new JPanel();
 		panel_24.add(panel_26);
 
-		comboBox_3 = new JComboBox();
-		panel_26.add(comboBox_3);
-		comboBox_3.setModel(
+		comboBox_Categories = new JComboBox();
+		panel_26.add(comboBox_Categories);
+		comboBox_Categories.setModel(
 				new DefaultComboBoxModel(new String[] { "All types", "Pain relief", "Antipyretic", "Vitamins" }));
 
 		txtSearch = new JTextField();
@@ -1105,9 +1130,9 @@ public class Main extends JFrame {
 		// Khởi tạo DAO và lấy dữ liệu
 		var dao = new MedicinesDao();
 		dao.select().forEach(medicine -> {
-			model.addRow(new Object[] { medicine.getId(), medicine.getMedicine_name(), medicine.getCategory_id(),
-					medicine.getPrice(), medicine.getStock(), medicine.getManufacturing_date(),
-					medicine.getExpiry_date() });
+			model.addRow(new Object[] { medicine.getId(), medicine.getMedicine_name(),
+					medicine.getCategory().getCaterogy_name(), medicine.getPrice(), medicine.getStock(),
+					medicine.getManufacturing_date(), medicine.getExpiry_date() });
 		});
 
 		// Gắn model vào bảng
@@ -1136,7 +1161,10 @@ public class Main extends JFrame {
 				// Hiển thị hình ảnh (cần xử lý chuyển đổi từ byte[] sang ImageIcon)
 				try { // Thêm try-catch để bắt lỗi khi chuyển đổi hình ảnh
 					var imageIcon = new ImageIcon(medicine.getPicture());
-					btnNewButton_6.setIcon(imageIcon);
+					// Thay đổi kích thước ảnh
+					var image = imageIcon.getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH);
+					var resizedIcon = new ImageIcon(image);
+					btnNewButton_6.setIcon(resizedIcon);
 				} catch (Exception ex) {
 					System.err.println("Lỗi khi hiển thị hình ảnh: " + ex.getMessage());
 					// Xử lý lỗi, ví dụ: hiển thị hình ảnh mặc định
@@ -1145,11 +1173,14 @@ public class Main extends JFrame {
 				// Hiển thị thông tin thuốc lên panel_CounterInfo
 				medicineId.setText(String.valueOf(medicine.getId()));
 				medicineNameInfo.setText(medicine.getMedicine_name());
-				unitMeasure.setText("Đơn vị tính"); // Thay bằng đơn vị tính từ medicine
+				unitMeasure.setText(medicine.getUnit()); // Thay bằng đơn vị tính từ medicine
 				price.setText(String.valueOf(medicine.getPrice()));
-				// ... Hiển thị các thông tin khác ...
+				btnNewButton_6.setVisible(true);
+
 			}
 		}
 	}
 
+	protected void btnAddtoCartActionPerformed(ActionEvent e) {
+	}
 }

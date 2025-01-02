@@ -36,3 +36,7 @@ VALUES
 ('Thuốc xịt mũi dị ứng', 5, 40.00, 120, '2024-01-01', '2026-01-01', 'Chai', '10ml', N'Xịt 1-2 lần vào mỗi bên mũi, 2-3 lần/ngày.', N'Không dùng cho trẻ em dưới 6 tuổi.', N'Khô mũi, hắt hơi.', N'Bảo quản nơi khô ráo, thoáng mát.', N' ', NULL),
 ('Thuốc uống dị ứng', 5, 50.00, 50, '2024-03-15', '2026-03-15', 'Viên', ' ', N'Uống 1 viên mỗi ngày.', N'Không dùng cho phụ nữ có thai và cho con bú.', N'Buồn ngủ, chóng mặt.', N'Bảo quản nơi khô ráo, thoáng mát.', N' ', NULL);
 GO
+
+
+UPDATE medicines
+SET isDelete = 0;

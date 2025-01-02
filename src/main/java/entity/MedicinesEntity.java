@@ -6,7 +6,7 @@ import java.time.LocalDate;
 public class MedicinesEntity {
 	private int id;
 	private String medicine_name;
-	private int category_id;
+	public CategoriesEntity category;
 	private BigDecimal price;
 	private int stock;
 	private LocalDate manufacturing_date;
@@ -14,7 +14,7 @@ public class MedicinesEntity {
 	private String picture;
 
 	private boolean isDelete;
-	private int supplier_id;
+	public SupplierEntity supplier;
 	private String unit;
 	private String concentration;
 	private String usage;
@@ -24,25 +24,24 @@ public class MedicinesEntity {
 	private String ingredients;
 
 	public MedicinesEntity() {
-		super();
-		// TODO Auto-generated constructor stub
+
 	}
 
-	public MedicinesEntity(int id, String medicine_name, int category_id, BigDecimal price, int stock,
-			LocalDate manufacturing_date, LocalDate expiry_date, String picture, boolean isDelete, int supplier_id,
-			String unit, String concentration, String usage, String contraindications, String side_effects,
-			String storage, String ingredients) {
+	public MedicinesEntity(int id, String medicine_name, CategoriesEntity category, BigDecimal price, int stock,
+			LocalDate manufacturing_date, LocalDate expiry_date, String picture, boolean isDelete,
+			SupplierEntity supplier, String unit, String concentration, String usage, String contraindications,
+			String side_effects, String storage, String ingredients) {
 		super();
 		this.id = id;
 		this.medicine_name = medicine_name;
-		this.category_id = category_id;
+		this.category = category;
 		this.price = price;
 		this.stock = stock;
 		this.manufacturing_date = manufacturing_date;
 		this.expiry_date = expiry_date;
 		this.picture = picture;
 		this.isDelete = isDelete;
-		this.supplier_id = supplier_id;
+		this.supplier = supplier;
 		this.unit = unit;
 		this.concentration = concentration;
 		this.usage = usage;
@@ -68,12 +67,12 @@ public class MedicinesEntity {
 		this.medicine_name = medicine_name;
 	}
 
-	public int getCategory_id() {
-		return category_id;
+	public CategoriesEntity getCategory() {
+		return category;
 	}
 
-	public void setCategory_id(int category_id) {
-		this.category_id = category_id;
+	public void setCategory(CategoriesEntity category) {
+		this.category = category;
 	}
 
 	public BigDecimal getPrice() {
@@ -124,12 +123,12 @@ public class MedicinesEntity {
 		this.isDelete = isDelete;
 	}
 
-	public int getSupplier_id() {
-		return supplier_id;
+	public SupplierEntity getSupplier() {
+		return supplier;
 	}
 
-	public void setSupplier_id(int supplier_id) {
-		this.supplier_id = supplier_id;
+	public void setSupplier(SupplierEntity supplier) {
+		this.supplier = supplier;
 	}
 
 	public String getUnit() {
@@ -190,12 +189,12 @@ public class MedicinesEntity {
 
 	@Override
 	public String toString() {
-		return "MedicinesEntity [id=" + id + ", medicine_name=" + medicine_name + ", category_id=" + category_id
-				+ ", price=" + price + ", stock=" + stock + ", manufacturing_date=" + manufacturing_date
-				+ ", expiry_date=" + expiry_date + ", picture=" + picture + ", isDelete=" + isDelete + ", supplier_id="
-				+ supplier_id + ", unit=" + unit + ", concentration=" + concentration + ", usage=" + usage
-				+ ", contraindications=" + contraindications + ", side_effects=" + side_effects + ", storage=" + storage
-				+ ", ingredients=" + ingredients + "]";
+		return "MedicinesEntity [id=" + id + ", medicine_name=" + medicine_name + ", category=" + category + ", price="
+				+ price + ", stock=" + stock + ", manufacturing_date=" + manufacturing_date + ", expiry_date="
+				+ expiry_date + ", picture=" + picture + ", isDelete=" + isDelete + ", supplier=" + supplier + ", unit="
+				+ unit + ", concentration=" + concentration + ", usage=" + usage + ", contraindications="
+				+ contraindications + ", side_effects=" + side_effects + ", storage=" + storage + ", ingredients="
+				+ ingredients + "]";
 	}
 
 }

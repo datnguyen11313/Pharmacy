@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,8 @@ import database.ConnectDB;
 import entity.MedicinesEntity;
 
 public class MedicinesDao {
+
+	private CategoriesDAO categoriesDao = new CategoriesDAO(); // Khởi tạo đối tượng CategoriesDao
 
 	// lấy hết dữ liệu bên dưới database ra cái list
 	public List<MedicinesEntity> select() {
@@ -54,6 +57,64 @@ public class MedicinesDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// Thêm thuốc
+	public void addMedicine(MedicinesEntity medicine) {
+		String query = "INSERT INTO medicines (medicine_name, category_id, price, stock, manufacturing_date, expiry_date, supplier_id) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+		try (var con = ConnectDB.getCon(); PreparedStatement stmt = con.prepareStatement(query)) {
+			stmt.setString(1, medicine.getMedicine_name());
+			stmt.setInt(2, medicine.getCategory_id());
+			stmt.setDouble(3, medicine.getPrice());
+			stmt.setInt(4, medicine.getStock());
+			stmt.setDate(5, java.sql.Date.valueOf(medicine.getManufacturing_date()));
+			stmt.setDate(6, java.sql.Date.valueOf(medicine.getExpiry_date()));
+			stmt.setInt(7, medicine.getSupplier_id()); // Sửa lại tham số thứ 7.
+
+			stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Cập nhật thông tin thuốc
+	public boolean updateMedicine(MedicinesEntity medicine) {
+		String query = "UPDATE medicines SET medicine_name = ?, category_id = ?, price = ?, stock = ?, manufacturing_date = ?, expiry_date = ?, supplier_id = ? WHERE id = ?";
+		try (var con = ConnectDB.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setString(1, medicine.getMedicine_name());
+			ps.setInt(2, medicine.getCategory_id());
+			ps.setDouble(3, medicine.getPrice());
+			ps.setInt(4, medicine.getStock());
+			ps.setDate(5, java.sql.Date.valueOf(medicine.getManufacturing_date()));
+			ps.setDate(6, java.sql.Date.valueOf(medicine.getExpiry_date()));
+			ps.setInt(7, medicine.getSupplier_id());
+			ps.setInt(8, medicine.getId());
+			int rowsUpdated = ps.executeUpdate();
+			return rowsUpdated > 0; // Trả về true nếu cập nhật thành công
+		} catch (Exception e) {
+			e.printStackTrace(); // In lỗi ra console để debug
+			return false; // Trả về false nếu có lỗi
+		}
+	}
+
+	// Xóa thuốc trong cơ sở dữ liệu
+	public boolean deleteMedicine(int medicineId) {
+		String query = "DELETE FROM medicines WHERE id = ?";
+		try (var con = ConnectDB.getCon(); PreparedStatement ps = con.prepareStatement(query)) {
+			ps.setInt(1, medicineId);
+			int rowsDeleted = ps.executeUpdate();
+			return rowsDeleted > 0; // Trả về true nếu xóa thành công
+		} catch (Exception e) {
+			e.printStackTrace(); // In lỗi ra console để debug
+			return false; // Trả về false nếu có lỗi
+		}
+	}
+
+	// Lấy tên loại thuốc từ category_id
+	public String getCategoryNameById(int categoryId) {
+		return categoriesDao.getCategoryNameById(categoryId); // Gọi phương thức từ CategoriesDao
 	}
 
 }

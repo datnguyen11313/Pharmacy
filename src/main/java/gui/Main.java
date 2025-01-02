@@ -9,13 +9,19 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,7 +34,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import dao.CategoriesDAO;
 import dao.MedicinesDao;
+import dao.SuppliersDAO;
+import entity.MedicinesEntity;
+import gui.Medicine.AddMedicine;
+import gui.Medicine.UpdateMedicine;
 
 public class Main extends JFrame {
 
@@ -205,6 +216,7 @@ public class Main extends JFrame {
 	private JLabel lblUserId;
 	private JLabel lblNewLabel_19;
 	private JScrollPane scrollPane_7;
+	private final Action action = new SwingAction();
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -541,14 +553,32 @@ public class Main extends JFrame {
 		headerSearchPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		btnAddMedicine = new JButton("Add medicine");
+		btnAddMedicine.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnAddMedicineActionPerformed(e);
+			}
+		});
 		btnAddMedicine.setBackground(new Color(15, 240, 172));
 		headerSearchPanel.add(btnAddMedicine);
 
 		btnUpdateMedicine = new JButton("Update medicine");
+		btnUpdateMedicine.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnUpdateMedicineActionPerformed(e);
+			}
+		});
 		btnUpdateMedicine.setBackground(new Color(2, 209, 253));
 		headerSearchPanel.add(btnUpdateMedicine);
 
 		btnDeleteMedicine = new JButton("Delete medicine");
+		btnDeleteMedicine.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnDeleteMedicineActionPerformed(e);
+			}
+		});
 		btnDeleteMedicine.setBackground(new Color(255, 0, 0));
 		headerSearchPanel.add(btnDeleteMedicine);
 
@@ -566,6 +596,12 @@ public class Main extends JFrame {
 		panelSearch.add(btnSearchMedicine);
 
 		btnRefresh = new JButton("Refresh");
+		btnRefresh.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				btnRefreshActionPerformed(e);
+			}
+		});
 		headerSearchPanel.add(btnRefresh);
 
 		headerFilterPanel = new JPanel();
@@ -661,6 +697,7 @@ public class Main extends JFrame {
 		panel_6.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		btnHeaderAddProvider = new JButton("Add provider");
+		btnHeaderAddProvider.addActionListener(this::btnHeaderAddProviderActionPerformed);
 		btnHeaderAddProvider.setBackground(new Color(15, 240, 172));
 		panel_6.add(btnHeaderAddProvider);
 
@@ -944,7 +981,7 @@ public class Main extends JFrame {
 		table = new JTable();
 		scrollPane_7.setViewportView(table);
 
-		loadDataToTable();
+		loadMedicineToTable();
 
 		// Hiển thị các thành phần tùy vào role
 		if ("1".equals(role) || "2".equals(role)) {
@@ -1033,7 +1070,7 @@ public class Main extends JFrame {
 		btnRoleControl.setBackground(null);
 	}
 
-	private void loadDataToTable() {
+	private void loadMedicineToTable() {
 		// Tạo model cho bảng
 		var model = new DefaultTableModel();
 		model.addColumn("ID");
@@ -1047,12 +1084,118 @@ public class Main extends JFrame {
 		// Khởi tạo DAO và lấy dữ liệu
 		var dao = new MedicinesDao();
 		dao.select().forEach(medicine -> {
-			model.addRow(new Object[] { medicine.getId(), medicine.getMedicine_name(), medicine.getCategory_id(),
-					medicine.getPrice(), medicine.getStock(), medicine.getManufacturing_date(),
-					medicine.getExpiry_date() });
+
+			// Lấy tên loại thuốc từ category_id
+			String categoryName = dao.getCategoryNameById(medicine.getCategory_id()); // Gọi từ DAO
+
+			// Thêm dữ liệu vào model
+			model.addRow(
+					new Object[] { medicine.getId(), medicine.getMedicine_name(), categoryName, medicine.getPrice(),
+							medicine.getStock(), medicine.getManufacturing_date(), medicine.getExpiry_date() });
 		});
 
 		// Gắn model vào bảng
 		table_medicines.setModel(model);
+	}
+
+	protected void btnHeaderAddProviderActionPerformed(ActionEvent e) {
+	}
+
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+
+	protected void btnAddMedicineActionPerformed(ActionEvent e) {
+		new AddMedicine().setVisible(true);
+	}
+
+	protected void btnRefreshActionPerformed(ActionEvent e) {
+		loadMedicineToTable();
+	}
+
+	protected void btnUpdateMedicineActionPerformed(ActionEvent e) {
+		// Kiểm tra xem người dùng đã chọn dòng nào trong bảng chưa
+		int selectedRow = table_medicines.getSelectedRow();
+		if (selectedRow == -1) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn thuốc để cập nhật!");
+			return;
+		}
+
+		// Lấy ID thuốc từ dòng được chọn
+		int medicineId = (int) table_medicines.getValueAt(selectedRow, 0); // Cột đầu tiên là ID
+
+		// Tìm thuốc trong danh sách từ DAO
+		MedicinesDao medicinesDao = new MedicinesDao();
+		MedicinesEntity selectedMedicine = null;
+
+		for (MedicinesEntity medicine : medicinesDao.select()) {
+			if (medicine.getId() == medicineId) {
+				selectedMedicine = medicine;
+				break;
+			}
+		}
+
+		if (selectedMedicine == null) {
+			JOptionPane.showMessageDialog(this, "Không tìm thấy thuốc trong cơ sở dữ liệu!");
+			return;
+		}
+
+		// Lấy danh sách categories và suppliers từ DAO
+		CategoriesDAO categoriesDao = new CategoriesDAO(); // Giả định bạn đã có DAO cho categories
+		SuppliersDAO suppliersDao = new SuppliersDAO(); // Giả định bạn đã có DAO cho suppliers
+		List<Map.Entry<Integer, String>> categories = categoriesDao.getAllCategories();
+		List<Map.Entry<Integer, String>> suppliers = suppliersDao.getAllSuppliers();
+
+		// Mở form UpdateMedicine và truyền thuốc đã chọn cùng với danh sách categories,
+		// suppliers
+		UpdateMedicine updateMedicineForm = new UpdateMedicine(selectedMedicine, categories, suppliers);
+		updateMedicineForm.setVisible(true);
+
+		// Làm mới bảng sau khi cập nhật
+		updateMedicineForm.addWindowListener(new java.awt.event.WindowAdapter() {
+			@Override
+			public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+				loadMedicineToTable();
+			}
+		});
+	}
+
+	protected void btnDeleteMedicineActionPerformed(ActionEvent e) {
+		// Kiểm tra xem người dùng đã chọn dòng nào trong bảng chưa
+		int selectedRow = table_medicines.getSelectedRow();
+		if (selectedRow == -1) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn thuốc để xóa!");
+			return;
+		}
+
+		// Lấy ID thuốc từ dòng được chọn
+		int medicineId = (int) table_medicines.getValueAt(selectedRow, 0); // Cột đầu tiên là ID
+
+		// Hiển thị hộp thoại xác nhận
+		int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa thuốc này?", "Xác nhận xóa",
+				JOptionPane.YES_NO_OPTION);
+		if (confirm != JOptionPane.YES_OPTION) {
+			return;
+		}
+
+		// Xóa thuốc trong cơ sở dữ liệu
+		MedicinesDao medicinesDao = new MedicinesDao();
+		boolean isDeleted = medicinesDao.deleteMedicine(medicineId);
+
+		// Hiển thị thông báo và làm mới bảng
+		if (isDeleted) {
+			JOptionPane.showMessageDialog(this, "Xóa thuốc thành công!");
+			loadMedicineToTable(); // Làm mới bảng thuốc
+		} else {
+			JOptionPane.showMessageDialog(this, "Xóa thuốc thất bại. Vui lòng thử lại!", "Lỗi",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
 }

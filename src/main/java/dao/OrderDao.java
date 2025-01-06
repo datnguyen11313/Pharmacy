@@ -26,7 +26,7 @@ public class OrderDao {
 	
 	
 	 public int getLastOrderNumberForDate(String datePart) {
-	        String sql = "SELECT MAX(CAST(SUBSTRING(id, 9, 4) AS UNSIGNED)) FROM Orders WHERE id LIKE ?"; // Lấy số thứ tự lớn nhất trong ngày
+	        String sql = "SELECT MAX(ABS(CAST(SUBSTRING(CONVERT(varchar, id), 9, 4) AS int))) FROM Orders WHERE id LIKE ?"; // Lấy số thứ tự lớn nhất trong ngày
 	        try (Connection con = ConnectDB.getCon();
 	             PreparedStatement stmt = con.prepareStatement(sql)) {
 	            stmt.setString(1, "OD" + datePart + "%");

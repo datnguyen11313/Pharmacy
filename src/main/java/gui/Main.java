@@ -11,15 +11,16 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -34,11 +35,18 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -47,14 +55,16 @@ import dao.InvoiceDao;
 import dao.MedicinesDao;
 import dao.OrderDao;
 import dao.OrderDetailDao;
+import dao.StatisticsDao;
+import entity.BestSellingProductsStatistics;
+import entity.InventoryStatistics;
 import entity.InvoiceEntity;
 import entity.MedicinesEntity;
 import entity.OrderDetailEntity;
 import entity.OrderEntity;
+import entity.RevenueStatistics;
 import utils.ButtonRenderer;
 import utils.UIHelper;
-import javax.swing.ListSelectionModel;
-import java.awt.event.ActionListener;
 
 public class Main extends JFrame {
 
@@ -227,6 +237,44 @@ public class Main extends JFrame {
 	private JButton btnCustomer;
 	private JButton btnStatistics;
 	private JButton btnEmployee;
+	private JPanel headerStatisticsPanel;
+	private JPanel panel_17;
+	private JPanel revenueStatisticsPanel;
+	private JPanel inventoryStatisticsPanel;
+	private JPanel bestSellingProductsPanel;
+	private JButton btnRevenueStatistics;
+	private JButton btnInventoryStatistics;
+	private JButton btnBestSellingProductsStatistics;
+	private CardLayout statisticsCardLayout; // Cho panel_17
+	private JScrollPane scrollPane_5;
+	private JTable table_5;
+	private JPanel panel_28;
+	private JPanel panel_29;
+	private JDateChooser dateChooser_2;
+	private JDateChooser dateChooser_3;
+	private JPanel panel_30;
+	private JPanel panel_41;
+	private JLabel lblNewLabel_23;
+	private JPanel panel_42;
+	private JDateChooser dateChooser_4;
+	private JDateChooser dateChooser_5;
+	private JScrollPane scrollPane_8;
+	private JTable table_6;
+	private JPanel panel_43;
+	private JPanel panel_44;
+	private JLabel lblNewLabel_25;
+	private JPanel panel_45;
+	private JDateChooser dateChooser_6;
+	private JDateChooser dateChooser_7;
+	private JScrollPane scrollPane_9;
+	private JTable table_7;
+	private JPanel panel_46;
+	private JButton btnNewButton_15;
+	private JButton btnNewButton_20;
+	private JButton btnNewButton_21;
+	private ChartPanel chartPanel;
+	private ChartPanel chartPanel_1;
+	private ChartPanel chartPanel_2;
 	private JButton btnRoleControl;
 	private JLabel lblRole;
 	private JLabel lblUserId;
@@ -236,12 +284,12 @@ public class Main extends JFrame {
 	private JLabel lblNewLabel_21;
 	private JTextField txt_AmountInfo;
 	private JButton btnAddtoCart;
-	
-	 private List<MedicinesEntity> cartItems = new ArrayList<>(); // Danh sách thuốc trong giỏ hàng
-	    private DefaultTableModel cartTableModel; // Model cho bảng Cart
-	    private OrderDao orderDao;
-	    private InvoiceDao invoiceDao;
-	    private OrderDetailDao orderDetailDao;
+
+	private List<MedicinesEntity> cartItems = new ArrayList<>(); // Danh sách thuốc trong giỏ hàng
+	private DefaultTableModel cartTableModel; // Model cho bảng Cart
+	private OrderDao orderDao;
+	private InvoiceDao invoiceDao;
+	private OrderDetailDao orderDetailDao;
 
 	public Main(String role) {
 		this.role = role; // Lưu role của người dùng
@@ -460,12 +508,9 @@ public class Main extends JFrame {
 		txt_AmountInfo = new JTextField();
 		txt_AmountInfo.setColumns(10);
 		panel.add(txt_AmountInfo);
-		
-		
 
 		btnAddtoCart = new JButton("Add to Cart");
-		btnAddtoCart.setIcon(
-				new ImageIcon("images\\arrow-right-direction-green-icon.png"));
+		btnAddtoCart.setIcon(new ImageIcon("images\\arrow-right-direction-green-icon.png"));
 		btnAddtoCart.setHorizontalTextPosition(SwingConstants.LEFT);
 		btnAddtoCart.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel_CounterInfoDetail.add(btnAddtoCart);
@@ -487,22 +532,18 @@ public class Main extends JFrame {
 				new DefaultComboBoxModel(new String[] { "All types", "Pain relief", "Antipyretic", "Vitamins" }));
 
 		txtSearch = new JTextField();
-		txtSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				 String searchText = txtSearch.getText().trim();
-			        filterMedicinesBySearch(searchText);
-			}
+		txtSearch.addActionListener(e -> {
+			var searchText = txtSearch.getText().trim();
+			filterMedicinesBySearch(searchText);
 		});
 		panel_26.add(txtSearch);
-		
+
 		txtSearch.setColumns(10);
 
 		btnSearch = new JButton("Search");
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String searchText = txtSearch.getText().trim();
-		        filterMedicinesBySearch(searchText);
-			}
+		btnSearch.addActionListener(e -> {
+			var searchText = txtSearch.getText().trim();
+			filterMedicinesBySearch(searchText);
 		});
 		panel_26.add(btnSearch);
 
@@ -510,10 +551,8 @@ public class Main extends JFrame {
 		panel_24.add(panel_27);
 
 		txtAmount = new JTextField();
-		txtAmount.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
+		txtAmount.addActionListener(e -> {
+
 		});
 		panel_27.add(txtAmount);
 		txtAmount.setText("Amount");
@@ -529,7 +568,6 @@ public class Main extends JFrame {
 		table_Counter = new JTable();
 		table_Counter.setBorder(null);
 		table_Counter.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
 
 		scrollPane_Counter.setViewportView(table_Counter);
 
@@ -552,8 +590,7 @@ public class Main extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				table_CounterMouseClicked(e);
 			}
-			
-			
+
 		});
 
 		table_Counter.addMouseMotionListener(new MouseMotionAdapter() {
@@ -589,66 +626,63 @@ public class Main extends JFrame {
 
 		table_Cart = new JTable();
 		scrollPane_Cart.setViewportView(table_Cart);
-		
+
 		// Khởi tạo model cho bảng Cart
-        cartTableModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Không cho phép chỉnh sửa ô
-            }
-        };
-        cartTableModel.addColumn("Tên thuốc");
-        cartTableModel.addColumn("Số lượng");
-        cartTableModel.addColumn("Đơn giá");
-        cartTableModel.addColumn("Thành tiền");
-        table_Cart.setModel(cartTableModel);
-        
-        btnAddtoCart.addActionListener(new ActionListener() {
-        	  @Override
-			public void actionPerformed(ActionEvent e) {
-        		  try {
-                      // 1. Lấy thông tin thuốc
-                      String medicineName = medicineNameInfo.getText();
-                   // Kiểm tra xem txt_AmountInfo có chứa giá trị hợp lệ không
-                      String amountText = txt_AmountInfo.getText().trim();
-                      if (amountText.isEmpty() || !amountText.matches("\\d+")) { 
-                          JOptionPane.showMessageDialog(Main.this, "Vui lòng nhập số lượng hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                          return;
-                      }
-                      int amount = Integer.parseInt(amountText);
-
-                      BigDecimal priceValue = new BigDecimal(price.getText());
-
-                      // 3. Tạo MedicinesEntity
-                      MedicinesEntity cartItem = new MedicinesEntity();
-                      cartItem.setMedicine_name(medicineName);
-                      cartItem.setStock(amount);
-                      cartItem.setPrice(priceValue);
-
-                      // 4. Thêm vào cartItems
-                      cartItems.add(cartItem);
-
-                      // 5. Cập nhật bảng Cart
-                      updateCartTable();
-
-                      // 6. Xóa trường nhập liệu
-                      txt_AmountInfo.setText("");
-                      
-                      
-                      // 7. Tạo mã hóa đơn (OrderEntity)
-                      String orderId = generateOrderId(); // Tạo mã order
-                      textField_10.setText(orderId); // Hiển thị mã hóa đơn (order)
-                      
-                      // 8. Tạo OrderEntity
-                      OrderEntity order = new OrderEntity();
-                      order.setId(Integer.parseInt(orderId));
-                      order.setOrder_date(LocalDate.now());
-                      order.setStatus(false); // Gán trạng thái ban đầu
-                  } catch (NumberFormatException ex) {
-                     
-                  }
-				
+		cartTableModel = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa ô
 			}
+		};
+		cartTableModel.addColumn("Tên thuốc");
+		cartTableModel.addColumn("Số lượng");
+		cartTableModel.addColumn("Đơn giá");
+		cartTableModel.addColumn("Thành tiền");
+		table_Cart.setModel(cartTableModel);
+
+		btnAddtoCart.addActionListener(e -> {
+			try {
+				// 1. Lấy thông tin thuốc
+				var medicineName = medicineNameInfo.getText();
+				// Kiểm tra xem txt_AmountInfo có chứa giá trị hợp lệ không
+				var amountText = txt_AmountInfo.getText().trim();
+				if (amountText.isEmpty() || !amountText.matches("\\d+")) {
+					JOptionPane.showMessageDialog(Main.this, "Vui lòng nhập số lượng hợp lệ", "Lỗi",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+				var amount = Integer.parseInt(amountText);
+
+				var priceValue = new BigDecimal(price.getText());
+
+				// 3. Tạo MedicinesEntity
+				var cartItem = new MedicinesEntity();
+				cartItem.setMedicine_name(medicineName);
+				cartItem.setStock(amount);
+				cartItem.setPrice(priceValue);
+
+				// 4. Thêm vào cartItems
+				cartItems.add(cartItem);
+
+				// 5. Cập nhật bảng Cart
+				updateCartTable();
+
+				// 6. Xóa trường nhập liệu
+				txt_AmountInfo.setText("");
+
+				// 7. Tạo mã hóa đơn (OrderEntity)
+				var orderId = generateOrderId(); // Tạo mã order
+				textField_10.setText(orderId); // Hiển thị mã hóa đơn (order)
+
+				// 8. Tạo OrderEntity
+				var order = new OrderEntity();
+				order.setId(Integer.parseInt(orderId));
+				order.setOrder_date(LocalDate.now());
+				order.setStatus(false); // Gán trạng thái ban đầu
+			} catch (NumberFormatException ex) {
+
+			}
+
 		});
 
 		btnDeleteCart = new JButton("Delete");
@@ -688,14 +722,13 @@ public class Main extends JFrame {
 		textField_12 = new JTextField();
 		panel_25.add(textField_12);
 		textField_12.setColumns(10);
-		
-		
+
 		lblNewLabel_17 = new JLabel("Note");
 		panel_25.add(lblNewLabel_17);
 		textField_13 = new JTextField();
 		panel_25.add(textField_13);
 		textField_13.setColumns(10);
-		
+
 		lblNewLabel_18 = new JLabel("Tiền Khách Đưa");
 		panel_25.add(lblNewLabel_18);
 		txtAmountPaid = new JTextField();
@@ -707,19 +740,13 @@ public class Main extends JFrame {
 		textField_13 = new JTextField();
 		panel_25.add(textField_13);
 		textField_13.setColumns(10);
-		
-		
 
 		btnNewButton_7 = new JButton("HỦY BỎ");
 		btnNewButton_7.setBackground(new Color(255, 0, 0));
 		panel_25.add(btnNewButton_7);
 
 		btnNewButton_8 = new JButton("IN HÓA ĐƠN");
-		btnNewButton_8.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				btnCreateInvoiceActionPerformed();
-			}
-		});
+		btnNewButton_8.addActionListener(e -> btnCreateInvoiceActionPerformed());
 		btnNewButton_8.setBackground(new Color(15, 240, 172));
 		panel_25.add(btnNewButton_8);
 
@@ -1068,10 +1095,116 @@ public class Main extends JFrame {
 		statisticsPanel.setBackground(new Color(0, 128, 255));
 		contentContainer.add(statisticsPanel, "statisticsPanel");
 
-		lblNewLabel_20 = new JLabel(
-				"Thiết kế sau\r\nDoanh thu\r\nThuốc bán chạy\r\nTồn kho\r\nThống kê khách hàng\r\nThống kê theo nhân viên\r\nHiển thị biểu đồ\r\n\r\n");
-		lblNewLabel_20.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		statisticsPanel.add(lblNewLabel_20);
+		statisticsPanel.setLayout(new BorderLayout(0, 0));
+		headerStatisticsPanel = new JPanel();
+		statisticsPanel.add(headerStatisticsPanel, BorderLayout.NORTH);
+		headerStatisticsPanel.setLayout(new BoxLayout(headerStatisticsPanel, BoxLayout.X_AXIS));
+		btnRevenueStatistics = new JButton("Revenue");
+		btnRevenueStatistics.addActionListener(this::btnRevenueStatisticsActionPerformed);
+		headerStatisticsPanel.add(btnRevenueStatistics);
+		btnInventoryStatistics = new JButton("Inventory");
+		btnInventoryStatistics.addActionListener(this::btnInventoryStatisticsActionPerformed);
+		headerStatisticsPanel.add(btnInventoryStatistics);
+		btnBestSellingProductsStatistics = new JButton("Best Selling Products");
+		btnBestSellingProductsStatistics.addActionListener(this::btnBestSellingProductsStatisticsActionPerformed);
+		headerStatisticsPanel.add(btnBestSellingProductsStatistics);
+		panel_17 = new JPanel();
+		statisticsPanel.add(panel_17);
+		statisticsCardLayout = new CardLayout(0, 0);
+		panel_17.setLayout(statisticsCardLayout);
+		revenueStatisticsPanel = new JPanel();
+		revenueStatisticsPanel.setBackground(new Color(255, 255, 128));
+		panel_17.add(revenueStatisticsPanel, "revenueStatisticsPanel");
+		revenueStatisticsPanel.setLayout(new BorderLayout(0, 0));
+		scrollPane_5 = new JScrollPane();
+		revenueStatisticsPanel.add(scrollPane_5, BorderLayout.CENTER);
+		table_5 = new JTable();
+		table_5.setAutoCreateRowSorter(true);
+		scrollPane_5.setViewportView(table_5);
+		panel_28 = new JPanel();
+		revenueStatisticsPanel.add(panel_28, BorderLayout.NORTH);
+		panel_28.setLayout(new BorderLayout(0, 0));
+		lblNewLabel_20 = new JLabel("Filter theo ngày (From - To)");
+		panel_28.add(lblNewLabel_20, BorderLayout.NORTH);
+		panel_29 = new JPanel();
+		panel_28.add(panel_29, BorderLayout.CENTER);
+		panel_29.setLayout(new BoxLayout(panel_29, BoxLayout.X_AXIS));
+		dateChooser_2 = new JDateChooser();
+		dateChooser_2
+				.setDate(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		panel_29.add(dateChooser_2);
+		dateChooser_3 = new JDateChooser();
+		dateChooser_3.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		panel_29.add(dateChooser_3);
+		btnNewButton_15 = new JButton("Thống kê");
+		btnNewButton_15.addActionListener(this::btnNewButton_15ActionPerformed);
+		panel_29.add(btnNewButton_15);
+		panel_30 = new JPanel();
+		revenueStatisticsPanel.add(panel_30, BorderLayout.EAST);
+		chartPanel = new ChartPanel((JFreeChart) null);
+		panel_30.add(chartPanel);
+		inventoryStatisticsPanel = new JPanel();
+		inventoryStatisticsPanel.setBackground(new Color(128, 255, 128));
+		panel_17.add(inventoryStatisticsPanel, "inventoryStatisticsPanel");
+		inventoryStatisticsPanel.setLayout(new BorderLayout(0, 0));
+		panel_41 = new JPanel();
+		inventoryStatisticsPanel.add(panel_41, BorderLayout.NORTH);
+		panel_41.setLayout(new BorderLayout(0, 0));
+		lblNewLabel_23 = new JLabel("Theo hạn sử dụng (From - To)");
+		panel_41.add(lblNewLabel_23, BorderLayout.NORTH);
+		panel_42 = new JPanel();
+		panel_41.add(panel_42, BorderLayout.CENTER);
+		panel_42.setLayout(new BoxLayout(panel_42, BoxLayout.X_AXIS));
+		dateChooser_4 = new JDateChooser();
+		dateChooser_4
+				.setDate(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		panel_42.add(dateChooser_4);
+		dateChooser_5 = new JDateChooser();
+		dateChooser_5.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		panel_42.add(dateChooser_5);
+		btnNewButton_20 = new JButton("Thống kê");
+		btnNewButton_20.addActionListener(this::btnNewButton_20ActionPerformed);
+		panel_42.add(btnNewButton_20);
+		scrollPane_8 = new JScrollPane();
+		inventoryStatisticsPanel.add(scrollPane_8, BorderLayout.CENTER);
+		table_6 = new JTable();
+		table_6.setAutoCreateRowSorter(true);
+		scrollPane_8.setViewportView(table_6);
+		panel_43 = new JPanel();
+		inventoryStatisticsPanel.add(panel_43, BorderLayout.EAST);
+		chartPanel_1 = new ChartPanel((JFreeChart) null);
+		panel_43.add(chartPanel_1);
+		bestSellingProductsPanel = new JPanel();
+		bestSellingProductsPanel.setBackground(new Color(128, 255, 255));
+		panel_17.add(bestSellingProductsPanel, "bestSellingProductsPanel");
+		bestSellingProductsPanel.setLayout(new BorderLayout(0, 0));
+		panel_44 = new JPanel();
+		bestSellingProductsPanel.add(panel_44, BorderLayout.NORTH);
+		panel_44.setLayout(new BorderLayout(0, 0));
+		lblNewLabel_25 = new JLabel("Theo ngày (From - To)");
+		panel_44.add(lblNewLabel_25, BorderLayout.NORTH);
+		panel_45 = new JPanel();
+		panel_44.add(panel_45, BorderLayout.CENTER);
+		panel_45.setLayout(new BoxLayout(panel_45, BoxLayout.X_AXIS));
+		dateChooser_6 = new JDateChooser();
+		dateChooser_6
+				.setDate(Date.from(LocalDate.now().minusMonths(1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		panel_45.add(dateChooser_6);
+		dateChooser_7 = new JDateChooser();
+		dateChooser_7.setDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		panel_45.add(dateChooser_7);
+		btnNewButton_21 = new JButton("Thống kê");
+		btnNewButton_21.addActionListener(this::btnNewButton_21ActionPerformed);
+		panel_45.add(btnNewButton_21);
+		scrollPane_9 = new JScrollPane();
+		bestSellingProductsPanel.add(scrollPane_9, BorderLayout.CENTER);
+		table_7 = new JTable();
+		table_7.setAutoCreateRowSorter(true);
+		scrollPane_9.setViewportView(table_7);
+		panel_46 = new JPanel();
+		bestSellingProductsPanel.add(panel_46, BorderLayout.EAST);
+		chartPanel_2 = new ChartPanel((JFreeChart) null);
+		panel_46.add(chartPanel_2);
 
 		employeeManagementPanel = new JPanel();
 		employeeManagementPanel.setBackground(new Color(255, 128, 192));
@@ -1155,16 +1288,13 @@ public class Main extends JFrame {
 		}
 		loadDataToTable();
 		loadCategoriesToComboBox();
-		
-		  comboBox_Categories.addItemListener(new ItemListener() {
-	            @Override
-	            public void itemStateChanged(ItemEvent e) {
-	                if (e.getStateChange() == ItemEvent.SELECTED) {
-	                    String selectedCategory = (String) comboBox_Categories.getSelectedItem();
-	                    filterMedicinesByCategory(selectedCategory);
-	                }
-	            }
-	        });
+
+		comboBox_Categories.addItemListener(e -> {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				var selectedCategory = (String) comboBox_Categories.getSelectedItem();
+				filterMedicinesByCategory(selectedCategory);
+			}
+		});
 
 	}
 
@@ -1242,29 +1372,30 @@ public class Main extends JFrame {
 			public Class<?> getColumnClass(int column) {
 
 				return switch (column) {
-				 case 0 -> String.class; // cột Tên thuốc
-	                case 1 -> String.class; // cột Tên loại
-	                case 2 -> BigDecimal.class; // cột Giá
-	                case 3 -> Integer.class; // cột Số lượng
-	                case 4 -> String.class; // cột Đơn vị
-	                case 5 -> LocalDate.class; // cột Ngày hết hạn
-	                default -> Object.class; // Trường hợp mặc định
+				case 0 -> String.class; // cột Tên thuốc
+				case 1 -> String.class; // cột Tên loại
+				case 2 -> BigDecimal.class; // cột Giá
+				case 3 -> Integer.class; // cột Số lượng
+				case 4 -> String.class; // cột Đơn vị
+				case 5 -> LocalDate.class; // cột Ngày hết hạn
+				default -> Object.class; // Trường hợp mặc định
 
 				};
 			}
-			 @Override
-			    public boolean isCellEditable(int row, int column) {
-			        return false; // Không cho phép chỉnh sửa bất kỳ ô nào
-			    }
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa bất kỳ ô nào
+			}
 
 		};
 
 		model.addColumn("Tên thuốc");
-	    model.addColumn("Loại");
-	    model.addColumn("Giá");
-	    model.addColumn("Số lượng");
-	    model.addColumn("Đơn vị");
-	    model.addColumn("Ngày hết hạn");
+		model.addColumn("Loại");
+		model.addColumn("Giá");
+		model.addColumn("Số lượng");
+		model.addColumn("Đơn vị");
+		model.addColumn("Ngày hết hạn");
 
 		model.setRowCount(0);
 
@@ -1272,13 +1403,10 @@ public class Main extends JFrame {
 		var dao = new MedicinesDao();
 		dao.select().forEach(medicine -> {
 			model.addRow(new Object[] {
-					
-					medicine.getMedicine_name(),
-					medicine.getCategory().getCaterogy_name(),
-					medicine.getPrice(), 
-					medicine.getStock(),
-					 medicine.getUnit(),
-					
+
+					medicine.getMedicine_name(), medicine.getCategory().getCaterogy_name(), medicine.getPrice(),
+					medicine.getStock(), medicine.getUnit(),
+
 					medicine.getExpiry_date() });
 		});
 
@@ -1320,7 +1448,7 @@ public class Main extends JFrame {
 				// Hiển thị thông tin thuốc lên panel_CounterInfo
 				medicineId.setText(String.valueOf(medicine.getId()));
 				medicineNameInfo.setText(medicine.getMedicine_name());
-				DecimalFormat df = new DecimalFormat("#,###.##");
+				var df = new DecimalFormat("#,###.##");
 				unitMeasure.setText(medicine.getUnit()); // Thay bằng đơn vị tính từ medicine
 				price.setText(medicine.getPrice().toString());
 				btnNewButton_6.setVisible(true);
@@ -1328,172 +1456,301 @@ public class Main extends JFrame {
 			}
 		}
 	}
-	
-	
+
+	protected void btnRevenueStatisticsActionPerformed(ActionEvent e) {
+		statisticsCardLayout.show(panel_17, "revenueStatisticsPanel");
+	}
+
+	protected void btnInventoryStatisticsActionPerformed(ActionEvent e) {
+		statisticsCardLayout.show(panel_17, "inventoryStatisticsPanel");
+	}
+
+	protected void btnBestSellingProductsStatisticsActionPerformed(ActionEvent e) {
+		statisticsCardLayout.show(panel_17, "bestSellingProductsPanel");
+	}
+
+	protected void btnNewButton_15ActionPerformed(ActionEvent e) {
+		if (dateChooser_2.getDate() == null || dateChooser_3.getDate() == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và kết thúc", "Lỗi",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		var fromdate = dateChooser_2.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		var todate = dateChooser_3.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		var doanhThu = new StatisticsDao().revenueStatistics(fromdate, todate);
+		var model = new DefaultTableModel();
+		model.addColumn("Ngày");
+		model.addColumn("Tổng doanh thu");
+		model.addColumn("Số lượng đơn hàng");
+		for (RevenueStatistics dt : doanhThu) {
+			model.addRow(new Object[] { dt.getOrder_date(), dt.getTotalRevenue(), dt.getTotalOrder() });
+		}
+		table_5.setModel(model);
+		// Tạo biểu đồ
+		var revenueChart = createRevenueChart(doanhThu);
+		// Thêm biểu đồ vào panel_30
+		var chartPanel = new ChartPanel(revenueChart);
+		panel_30.removeAll(); // Xóa nội dung cũ (nếu có)
+		panel_30.add(chartPanel, BorderLayout.CENTER);
+		panel_30.validate(); // Cập nhật lại panel
+		panel_30.repaint();
+	}
+
+	protected void btnNewButton_20ActionPerformed(ActionEvent e) {
+		if (dateChooser_4.getDate() == null || dateChooser_5.getDate() == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và kết thúc", "Lỗi",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		var fromDate = dateChooser_4.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		var toDate = dateChooser_5.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		var inventory = new StatisticsDao().inventoryStatistics(fromDate, toDate);
+		// Tạo model cho bảng
+		var model = new DefaultTableModel();
+		model.addColumn("Mã thuốc");
+		model.addColumn("Tên thuốc");
+		model.addColumn("Danh mục");
+		model.addColumn("Số lượng tồn kho");
+		model.addColumn("Ngày hết hạn");
+		// Thêm dữ liệu vào model
+		for (InventoryStatistics item : inventory) {
+			model.addRow(new Object[] { item.getMedicineId(), item.getMedicineName(), item.getMedicineCategory(),
+					item.getInventoryAmount(), item.getExpiredDate() });
+		}
+		// Hiển thị dữ liệu trên table_6
+		table_6.setModel(model);
+		// Tạo biểu đồ
+		var inventoryChart = createInventoryChart(inventory);
+		// Thêm biểu đồ vào panel_43
+		var chartPanel = new ChartPanel(inventoryChart);
+		panel_43.removeAll(); // Xóa nội dung cũ (nếu có)
+		panel_43.add(chartPanel, BorderLayout.CENTER);
+		panel_43.validate(); // Cập nhật lại panel
+		panel_43.repaint();
+	}
+
+	protected void btnNewButton_21ActionPerformed(ActionEvent e) {
+		if (dateChooser_6.getDate() == null || dateChooser_7.getDate() == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày bắt đầu và kết thúc", "Lỗi",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+		var fromDate = dateChooser_6.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		var toDate = dateChooser_7.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		var bestSelling = new StatisticsDao().bestSellingProductsStatistics(fromDate, toDate);
+		// Tạo model cho bảng
+		var model = new DefaultTableModel();
+		model.addColumn("Mã thuốc");
+		model.addColumn("Tên thuốc");
+		model.addColumn("Số lượng đã bán");
+		model.addColumn("Doanh thu");
+		// Thêm dữ liệu vào model
+		for (BestSellingProductsStatistics item : bestSelling) {
+			model.addRow(new Object[] { item.getMedicineId(), item.getMedicineName(), item.getTotalSellingAmount(),
+					item.getTotalRevenue() });
+		}
+		// Hiển thị dữ liệu trên table_7
+		table_7.setModel(model);
+		// Tạo biểu đồ
+		var bestSellingChart = createBestSellingChart(bestSelling);
+		// Thêm biểu đồ vào panel_46
+		var chartPanel = new ChartPanel(bestSellingChart);
+		panel_46.removeAll(); // Xóa nội dung cũ (nếu có)
+		panel_46.add(chartPanel, BorderLayout.CENTER);
+		panel_46.validate(); // Cập nhật lại panel
+		panel_46.repaint();
+	}
+
+	// vẽ biểu đồ cho RevenueStatistics
+	private JFreeChart createRevenueChart(List<RevenueStatistics> doanhThu) {
+		// tạo dataset
+		var dataset = new DefaultCategoryDataset();
+		for (RevenueStatistics dt : doanhThu) {
+			dataset.addValue(dt.getTotalRevenue(), "Doanh thu", dt.getOrder_date().toString());
+		}
+		// tạo biểu đồ cột
+		var barChart = ChartFactory.createBarChart("Biểu đồ doanh thu", "Ngày", "Doanh thu", dataset,
+				PlotOrientation.VERTICAL, true, true, false);
+		// tùy chỉnh biểu đồ
+		var plot = barChart.getCategoryPlot();
+		plot.setBackgroundPaint(Color.white);
+		plot.setRangeGridlinePaint(Color.black);
+		return barChart;
+	}
+
+	// vẽ biểu đồ cho InventoryStatistics
+	private JFreeChart createInventoryChart(List<InventoryStatistics> inventory) {
+		// tạo dataset
+		var dataset = new DefaultCategoryDataset();
+		for (InventoryStatistics item : inventory) {
+			// Chuyển đổi java.sql.Date sang java.time.LocalDate
+			var expiredDate = item.getExpiredDate().toLocalDate();
+			dataset.addValue(item.getInventoryAmount(), "Số lượng", expiredDate.toString());
+		}
+		// tạo biểu đồ cột
+		var barChart = ChartFactory.createBarChart("Biểu đồ tồn kho", "Ngày hết hạn", "Số lượng", dataset,
+				PlotOrientation.VERTICAL, true, true, false);
+		// tùy chỉnh biểu đồ
+		var plot = barChart.getCategoryPlot();
+		plot.setBackgroundPaint(Color.white);
+		plot.setRangeGridlinePaint(Color.black);
+		return barChart;
+	}
+
+	// vẽ biểu đồ cho BestSellingProductsStatistics
+	private JFreeChart createBestSellingChart(List<BestSellingProductsStatistics> bestSelling) {
+		// tạo dataset
+		var dataset = new DefaultCategoryDataset();
+		for (BestSellingProductsStatistics item : bestSelling) {
+			dataset.addValue(item.getTotalSellingAmount(), "Số lượng", item.getMedicineName());
+		}
+		// tạo biểu đồ cột
+		var barChart = ChartFactory.createBarChart("Biểu đồ sản phẩm bán chạy", "Tên thuốc", "Số lượng", dataset,
+				PlotOrientation.VERTICAL, true, true, false);
+		// tùy chỉnh biểu đồ
+		var plot = barChart.getCategoryPlot();
+		plot.setBackgroundPaint(Color.white);
+		plot.setRangeGridlinePaint(Color.black);
+		return barChart;
+	}
+
 	private void loadCategoriesToComboBox() {
-	    var categoriesDao = new CategoriesDao(); // Khởi tạo DAO
-	    List<String> categories = categoriesDao.getAllCategories(); // Lấy danh sách danh mục
+		var categoriesDao = new CategoriesDao(); // Khởi tạo DAO
+		var categories = categoriesDao.getAllCategories(); // Lấy danh sách danh mục
 
-	    comboBox_Categories.removeAllItems(); // Xóa các item cũ
-	    comboBox_Categories.addItem("All"); // Thêm mục "All" để hiển thị tất cả thuốc
+		comboBox_Categories.removeAllItems(); // Xóa các item cũ
+		comboBox_Categories.addItem("All"); // Thêm mục "All" để hiển thị tất cả thuốc
 
-	    for (String category : categories) {
-	        comboBox_Categories.addItem(category); // Thêm danh mục vào ComboBox
-	    }
+		for (String category : categories) {
+			comboBox_Categories.addItem(category); // Thêm danh mục vào ComboBox
+		}
 	}
-	
-	
+
 	private void filterMedicinesByCategory(String category) {
-	    var model = (DefaultTableModel) table_Counter.getModel();
-	    model.setRowCount(0); // Xóa dữ liệu hiện tại
+		var model = (DefaultTableModel) table_Counter.getModel();
+		model.setRowCount(0); // Xóa dữ liệu hiện tại
 
-	    var medicinesDao = new MedicinesDao();
-	    List<MedicinesEntity> filteredMedicines;
+		var medicinesDao = new MedicinesDao();
+		List<MedicinesEntity> filteredMedicines;
 
-	    if (category.equals("All")) {
-	        filteredMedicines = medicinesDao.select(); // Lấy tất cả thuốc
-	    } else {
-	        filteredMedicines = medicinesDao.getMedicinesByCategory(category); // Lọc theo danh mục
-	    }
+		if (category.equals("All")) {
+			filteredMedicines = medicinesDao.select(); // Lấy tất cả thuốc
+		} else {
+			filteredMedicines = medicinesDao.getMedicinesByCategory(category); // Lọc theo danh mục
+		}
 
-	    // Thêm dữ liệu vào model
-	    for (var medicine : filteredMedicines) {
-	        model.addRow(new Object[]{
-	                medicine.getMedicine_name(),
-	                medicine.getCategory().getCaterogy_name(),
-	                medicine.getPrice(),
-	                medicine.getStock(),
-	                medicine.getUnit(),
-	                medicine.getExpiry_date()
-	        });
-	    }
+		// Thêm dữ liệu vào model
+		for (var medicine : filteredMedicines) {
+			model.addRow(new Object[] { medicine.getMedicine_name(), medicine.getCategory().getCaterogy_name(),
+					medicine.getPrice(), medicine.getStock(), medicine.getUnit(), medicine.getExpiry_date() });
+		}
 
-	    model.fireTableDataChanged(); // Cập nhật table
+		model.fireTableDataChanged(); // Cập nhật table
 	}
-	
-	
+
 	private void filterMedicinesBySearch(String searchText) {
-	    var model = (DefaultTableModel) table_Counter.getModel();
-	    model.setRowCount(0); // Xóa dữ liệu hiện tại
+		var model = (DefaultTableModel) table_Counter.getModel();
+		model.setRowCount(0); // Xóa dữ liệu hiện tại
 
-	    var medicinesDao = new MedicinesDao();
-	    List<MedicinesEntity> filteredMedicines = medicinesDao.searchMedicines(searchText); // Tìm kiếm trong CSDL
+		var medicinesDao = new MedicinesDao();
+		var filteredMedicines = medicinesDao.searchMedicines(searchText); // Tìm kiếm trong CSDL
 
-	    // Thêm dữ liệu vào model
-	    for (var medicine : filteredMedicines) {
-	        model.addRow(new Object[]{
-	                medicine.getMedicine_name(),
-	                medicine.getCategory().getCaterogy_name(),
-	                medicine.getPrice(),
-	                medicine.getStock(),
-	                medicine.getUnit(),
-	                medicine.getExpiry_date()
-	        });
-	    }
+		// Thêm dữ liệu vào model
+		for (var medicine : filteredMedicines) {
+			model.addRow(new Object[] { medicine.getMedicine_name(), medicine.getCategory().getCaterogy_name(),
+					medicine.getPrice(), medicine.getStock(), medicine.getUnit(), medicine.getExpiry_date() });
+		}
 
-	    model.fireTableDataChanged(); 
+		model.fireTableDataChanged();
 	}
-
 
 	private void updateCartTable() {
-	    cartTableModel.setRowCount(0);
+		cartTableModel.setRowCount(0);
 
-	    for (MedicinesEntity item : cartItems) {
-	        BigDecimal totalPrice = item.getPrice().multiply(BigDecimal.valueOf(item.getStock()));
-	        cartTableModel.addRow(new Object[]{
-	            item.getMedicine_name(),
-	            item.getStock(),
-	            item.getPrice(),
-	            totalPrice
-	        });
-	    }
+		for (MedicinesEntity item : cartItems) {
+			var totalPrice = item.getPrice().multiply(BigDecimal.valueOf(item.getStock()));
+			cartTableModel
+					.addRow(new Object[] { item.getMedicine_name(), item.getStock(), item.getPrice(), totalPrice });
+		}
 
-	    cartTableModel.fireTableDataChanged();
-	    
-	    // Tính toán tổng tiền
-        BigDecimal totalAmount = BigDecimal.ZERO;
-        for (MedicinesEntity item : cartItems) {
-            totalAmount = totalAmount.add(item.getPrice().multiply(BigDecimal.valueOf(item.getStock())));
-        }
+		cartTableModel.fireTableDataChanged();
 
-        // Cập nhật panel_Invoice
-        textField_13.setText(totalAmount.toString()); // Hiển thị tổng tiền
-        panel_Invoice.setVisible(true);
+		// Tính toán tổng tiền
+		var totalAmount = BigDecimal.ZERO;
+		for (MedicinesEntity item : cartItems) {
+			totalAmount = totalAmount.add(item.getPrice().multiply(BigDecimal.valueOf(item.getStock())));
+		}
+
+		// Cập nhật panel_Invoice
+		textField_13.setText(totalAmount.toString()); // Hiển thị tổng tiền
+		panel_Invoice.setVisible(true);
 	}
-	
+
 	private String generateOrderId() {
 		orderDao = new OrderDao();
-	    LocalDate currentDate = LocalDate.now();
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-	    String datePart = currentDate.format(formatter);
-	    
+		var currentDate = LocalDate.now();
+		var formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		var datePart = currentDate.format(formatter);
 
-	    // Lấy số thứ tự lớn nhất trong ngày từ database
-	    int lastOrderNumber = orderDao.getLastOrderNumberForDate(datePart); // Giả sử bạn có phương thức này
+		// Lấy số thứ tự lớn nhất trong ngày từ database
+		var lastOrderNumber = orderDao.getLastOrderNumberForDate(datePart); // Giả sử bạn có phương thức này
 
-	    // Tăng số thứ tự lên 1
-	    int newOrderNumber = lastOrderNumber + 1;
+		// Tăng số thứ tự lên 1
+		var newOrderNumber = lastOrderNumber + 1;
 
-	    // Định dạng mã order mới
-	    DecimalFormat df = new DecimalFormat("0000"); // Định dạng 4 chữ số
-	    String newOrderId = "OD" + datePart + df.format(newOrderNumber); 
+		// Định dạng mã order mới
+		var df = new DecimalFormat("0000"); // Định dạng 4 chữ số
+		var newOrderId = "OD" + datePart + df.format(newOrderNumber);
 
-	    return newOrderId;
+		return newOrderId;
 	}
-	
+
 	private void btnCreateInvoiceActionPerformed() {
-	    try {
-	        // 1. Lấy thông tin từ panel_Invoice
-	        String customerName = textField_12.getText();
-	        String customerPhone = textField_11.getText();
-	        int totalAmount = Integer.parseInt(textField_13.getText()); 
-	        int amountPaid = Integer.parseInt(txtAmountPaid.getText()); // Giả sử txtAmountPaid là JTextField mới
-	        boolean paymentStatus = true; // Hoặc false tùy thuộc vào trạng thái thanh toán
-	        String notes = textField_14.getText();
+		try {
+			// 1. Lấy thông tin từ panel_Invoice
+			var customerName = textField_12.getText();
+			var customerPhone = textField_11.getText();
+			var totalAmount = Integer.parseInt(textField_13.getText());
+			var amountPaid = Integer.parseInt(txtAmountPaid.getText()); // Giả sử txtAmountPaid là JTextField mới
+			var paymentStatus = true; // Hoặc false tùy thuộc vào trạng thái thanh toán
+			var notes = textField_14.getText();
 
-	        // 2. Tạo InvoiceEntity
-	        InvoiceEntity invoice = new InvoiceEntity();
-	        OrderEntity order = new OrderEntity();
-	        invoice.setOrder_id(Integer.parseInt(textField_10.getText())); // Lấy order_id từ textField_10
-	        invoice.setCustomer_name(customerName);
-	        invoice.setCustomer_phone(customerPhone);
-	        invoice.setTotal_amount(totalAmount);
-	        invoice.setAmount_paid(amountPaid);
-	        invoice.setPayment_status(paymentStatus);
-	        order.setNotes(notes);
-	        invoice.setInvoice_date(LocalDate.now()); // Thêm ngày tạo hóa đơn
+			// 2. Tạo InvoiceEntity
+			var invoice = new InvoiceEntity();
+			var order = new OrderEntity();
+			invoice.setOrder_id(Integer.parseInt(textField_10.getText())); // Lấy order_id từ textField_10
+			invoice.setCustomer_name(customerName);
+			invoice.setCustomer_phone(customerPhone);
+			invoice.setTotal_amount(totalAmount);
+			invoice.setAmount_paid(amountPaid);
+			invoice.setPayment_status(paymentStatus);
+			order.setNotes(notes);
+			invoice.setInvoice_date(LocalDate.now()); // Thêm ngày tạo hóa đơn
 
-	        // 3. Tạo danh sách OrderDetailEntity
-	        List<OrderDetailEntity> orderDetails = new ArrayList<>();
-	        for (MedicinesEntity cartItem : cartItems) {
-	            OrderDetailEntity orderDetail = new OrderDetailEntity();
-	            orderDetail.setOrder_id(invoice.getOrder_id());
-	            orderDetail.setMedicine_id(cartItem.getId());
-	            orderDetail.setQuantity(cartItem.getStock());
-	            orderDetail.setUnit_price(cartItem.getPrice());
-	            orderDetail.setTotal_price(cartItem.getPrice().multiply(BigDecimal.valueOf(cartItem.getStock())));
-	            orderDetails.add(orderDetail);
-	        }
+			// 3. Tạo danh sách OrderDetailEntity
+			List<OrderDetailEntity> orderDetails = new ArrayList<>();
+			for (MedicinesEntity cartItem : cartItems) {
+				var orderDetail = new OrderDetailEntity();
+				orderDetail.setOrder_id(invoice.getOrder_id());
+				orderDetail.setMedicine_id(cartItem.getId());
+				orderDetail.setQuantity(cartItem.getStock());
+				orderDetail.setUnit_price(cartItem.getPrice());
+				orderDetail.setTotal_price(cartItem.getPrice().multiply(BigDecimal.valueOf(cartItem.getStock())));
+				orderDetails.add(orderDetail);
+			}
 
-	        // 4. Lưu vào cơ sở dữ liệu (bước 2)
-	        orderDao.insertOrder(order); // Lưu OrderEntity
-	        invoiceDao.insertInvoice(invoice); // Lưu InvoiceEntity
+			// 4. Lưu vào cơ sở dữ liệu (bước 2)
+			orderDao.insertOrder(order); // Lưu OrderEntity
+			invoiceDao.insertInvoice(invoice); // Lưu InvoiceEntity
 
-	        for (OrderDetailEntity orderDetail : orderDetails) {
-	            orderDetailDao.insertOrderDetail(orderDetail); // Lưu từng OrderDetailEntity
-	        }
+			for (OrderDetailEntity orderDetail : orderDetails) {
+				orderDetailDao.insertOrderDetail(orderDetail); // Lưu từng OrderDetailEntity
+			}
 
-	    } catch (NumberFormatException ex) {
-	        // Xử lý lỗi chuyển đổi số
-	        JOptionPane.showMessageDialog(Main.this, "Lỗi chuyển đổi số", "Lỗi", JOptionPane.ERROR_MESSAGE);
-	    }
+		} catch (NumberFormatException ex) {
+			// Xử lý lỗi chuyển đổi số
+			JOptionPane.showMessageDialog(Main.this, "Lỗi chuyển đổi số", "Lỗi", JOptionPane.ERROR_MESSAGE);
+		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

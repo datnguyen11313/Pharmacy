@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class OrderEntity {
-    private int id;
+	private String id;
 	private int user_id;
 	private String customer_name;
 	private BigDecimal total_price;
@@ -16,13 +16,13 @@ public class OrderEntity {
 	private String payment_method;
 	private boolean status;
 	private String notes;
-	
-	
+
 	public OrderEntity() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public OrderEntity(int id, int user_id, String customer_name, BigDecimal total_price, LocalDate order_date,
+
+	public OrderEntity(String id, int user_id, String customer_name, BigDecimal total_price, LocalDate order_date,
 			boolean isDelete, int customer_id, int employee_id, String picture, String payment_method, boolean status,
 			String notes) {
 		super();
@@ -39,78 +39,103 @@ public class OrderEntity {
 		this.status = status;
 		this.notes = notes;
 	}
-	public int getId() {
+
+	public String getId() {
 		return id;
 	}
-	public void setId(int id) {
-		this.id = id;
+
+	public void setId(String i) {
+		this.id = i;
 	}
+
 	public int getUser_id() {
 		return user_id;
 	}
+
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
+
 	public String getCustomer_name() {
 		return customer_name;
 	}
+
 	public void setCustomer_name(String customer_name) {
 		this.customer_name = customer_name;
 	}
+
 	public BigDecimal getTotal_price() {
 		return total_price;
 	}
+
 	public void setTotal_price(BigDecimal total_price) {
 		this.total_price = total_price;
 	}
+
 	public LocalDate getOrder_date() {
 		return order_date;
 	}
+
 	public void setOrder_date(LocalDate order_date) {
 		this.order_date = order_date;
 	}
+
 	public boolean isDelete() {
 		return isDelete;
 	}
+
 	public void setDelete(boolean isDelete) {
 		this.isDelete = isDelete;
 	}
+
 	public int getCustomer_id() {
 		return customer_id;
 	}
+
 	public void setCustomer_id(int customer_id) {
 		this.customer_id = customer_id;
 	}
+
 	public int getEmployee_id() {
 		return employee_id;
 	}
+
 	public void setEmployee_id(int employee_id) {
 		this.employee_id = employee_id;
 	}
+
 	public String getPicture() {
 		return picture;
 	}
+
 	public void setPicture(String picture) {
 		this.picture = picture;
 	}
+
 	public String getPayment_method() {
 		return payment_method;
 	}
+
 	public void setPayment_method(String payment_method) {
 		this.payment_method = payment_method;
 	}
+
 	public boolean isStatus() {
 		return status;
 	}
+
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
+
 	public String getNotes() {
 		return notes;
 	}
+
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+
 	@Override
 	public String toString() {
 		return "OrderEntity [id=" + id + ", user_id=" + user_id + ", customer_name=" + customer_name + ", total_price="
@@ -124,8 +149,5 @@ public class OrderEntity {
 				+ getNotes() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
 				+ super.toString() + "]";
 	}
-	
-	
-	
-	
+
 }

@@ -51,23 +51,35 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import com.toedter.calendar.JDateChooser;
 
 import dao.CategoriesDao;
+import dao.CustomerDAO;
+import dao.EmployeeDAO;
 import dao.InvoiceDao;
 import dao.MedicinesDao;
 import dao.OrderDao;
 import dao.OrderDetailDao;
 import dao.StatisticsDao;
 import entity.BestSellingProductsStatistics;
+import entity.CustomerEntity;
+import entity.EmployeeEntity;
 import entity.InventoryStatistics;
 import entity.InvoiceEntity;
 import entity.MedicinesEntity;
 import entity.OrderDetailEntity;
 import entity.OrderEntity;
 import entity.RevenueStatistics;
+import gui.CustomerGUI.AddCustomerFrame;
+import gui.CustomerGUI.UpdateCustomerFrame;
+import gui.EmployeeGUI.AddNewEmployeeFrame;
+import gui.EmployeeGUI.UpdateEmployeeFrame;
 import utils.ButtonRenderer;
 import utils.UIHelper;
 
 public class Main extends JFrame {
 
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPanel;
 	private String role;
 	private JPanel navigation;
@@ -287,6 +299,8 @@ public class Main extends JFrame {
 
 	private List<MedicinesEntity> cartItems = new ArrayList<>(); // Danh sách thuốc trong giỏ hàng
 	private DefaultTableModel cartTableModel; // Model cho bảng Cart
+	private DefaultTableModel EmployeeTableModel;
+	private DefaultTableModel CustomerTableModel;
 	private OrderDao orderDao;
 	private InvoiceDao invoiceDao;
 	private OrderDetailDao orderDetailDao;
@@ -626,6 +640,20 @@ public class Main extends JFrame {
 
 		table_Cart = new JTable();
 		scrollPane_Cart.setViewportView(table_Cart);
+
+		EmployeeTableModel = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa ô
+			}
+		};
+
+		CustomerTableModel = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa ô
+			}
+		};
 
 		// Khởi tạo model cho bảng Cart
 		cartTableModel = new DefaultTableModel() {
@@ -1049,15 +1077,18 @@ public class Main extends JFrame {
 		panel_35.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		btnNewButton_9 = new JButton("Add new customer");
+		btnNewButton_9.addActionListener(this::btnNewButton_9ActionPerformed);
 		btnNewButton_9.setBackground(new Color(15, 240, 172));
 		btnNewButton_9.setForeground(new Color(0, 0, 0));
 		panel_35.add(btnNewButton_9);
 
 		btnNewButton_16 = new JButton("Update customer");
+		btnNewButton_16.addActionListener(this::btnNewButton_16ActionPerformed);
 		btnNewButton_16.setBackground(new Color(0, 128, 255));
 		panel_35.add(btnNewButton_16);
 
 		btnNewButton_17 = new JButton("Delete customer");
+		btnNewButton_17.addActionListener(this::btnNewButton_17ActionPerformed);
 		btnNewButton_17.setBackground(new Color(255, 0, 0));
 		panel_35.add(btnNewButton_17);
 
@@ -1071,9 +1102,11 @@ public class Main extends JFrame {
 		textField_14.setColumns(10);
 
 		btnNewButton_11 = new JButton("Search");
+		btnNewButton_11.addActionListener(this::btnNewButton_11ActionPerformed);
 		panel_37.add(btnNewButton_11);
 
 		btnNewButton_10 = new JButton("Refresh");
+		btnNewButton_10.addActionListener(this::btnNewButton_10ActionPerformed);
 		panel_35.add(btnNewButton_10);
 
 		panel_36 = new JPanel();
@@ -1217,14 +1250,17 @@ public class Main extends JFrame {
 		panel_38.setBorder(new EmptyBorder(10, 0, 10, 0));
 
 		btnNewButton_12 = new JButton("Add new employee");
+		btnNewButton_12.addActionListener(this::btnNewButton_12ActionPerformed);
 		btnNewButton_12.setBackground(new Color(15, 240, 172));
 		panel_38.add(btnNewButton_12);
 
 		btnNewButton_18 = new JButton("Update employee");
+		btnNewButton_18.addActionListener(this::btnNewButton_18ActionPerformed);
 		btnNewButton_18.setBackground(new Color(0, 128, 255));
 		panel_38.add(btnNewButton_18);
 
 		btnNewButton_19 = new JButton("Delete employee");
+		btnNewButton_19.addActionListener(this::btnNewButton_19ActionPerformed);
 		btnNewButton_19.setBackground(new Color(255, 0, 0));
 		panel_38.add(btnNewButton_19);
 
@@ -1238,9 +1274,11 @@ public class Main extends JFrame {
 		textField_15.setColumns(10);
 
 		btnNewButton_14 = new JButton("Search");
+		btnNewButton_14.addActionListener(this::btnNewButton_14ActionPerformed);
 		panel_40.add(btnNewButton_14);
 
 		btnNewButton_13 = new JButton("Refresh");
+		btnNewButton_13.addActionListener(this::btnNewButton_13ActionPerformed);
 		panel_38.add(btnNewButton_13);
 
 		panel_39 = new JPanel();
@@ -1286,8 +1324,11 @@ public class Main extends JFrame {
 			// Bạn có thể thêm các công cụ quản lý cho Admin tại đây, ví dụ: quản lý người
 			// dùng, báo cáo, v.v.
 		}
+		// call function
 		loadDataToTable();
 		loadCategoriesToComboBox();
+		loadAllEmployee();
+		loadAllCustomer();
 
 		comboBox_Categories.addItemListener(e -> {
 			if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -1372,13 +1413,13 @@ public class Main extends JFrame {
 			public Class<?> getColumnClass(int column) {
 
 				return switch (column) {
-				case 0 -> String.class; // cột Tên thuốc
-				case 1 -> String.class; // cột Tên loại
-				case 2 -> BigDecimal.class; // cột Giá
-				case 3 -> Integer.class; // cột Số lượng
-				case 4 -> String.class; // cột Đơn vị
-				case 5 -> LocalDate.class; // cột Ngày hết hạn
-				default -> Object.class; // Trường hợp mặc định
+					case 0 -> String.class; // cột Tên thuốc
+					case 1 -> String.class; // cột Tên loại
+					case 2 -> BigDecimal.class; // cột Giá
+					case 3 -> Integer.class; // cột Số lượng
+					case 4 -> String.class; // cột Đơn vị
+					case 5 -> LocalDate.class; // cột Ngày hết hạn
+					default -> Object.class; // Trường hợp mặc định
 
 				};
 			}
@@ -1705,6 +1746,187 @@ public class Main extends JFrame {
 		return newOrderId;
 	}
 
+	private void loadEmployeeData(List<EmployeeEntity> employees) {
+		var model = new DefaultTableModel() {
+			// Không cho phép chỉnh sửa ô
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa ô
+			}
+		};
+
+		// Thêm cột cho bảng
+		model.addColumn("ID");
+		model.addColumn("Full Name");
+		model.addColumn("Phone Number");
+		model.addColumn("Email");
+		model.addColumn("Address");
+		model.addColumn("Identity Card");
+		model.addColumn("Role");
+		model.addColumn("Salary");
+		model.addColumn("Start Date");
+		model.addColumn("Created At");
+		model.addColumn("Updated At");
+		model.addColumn("Picture");
+
+		// Thêm dữ liệu vào bảng
+		for (EmployeeEntity emp : employees) {
+			model.addRow(new Object[] { emp.getId(), emp.getFullName(), emp.getPhoneNumber(), emp.getEmail(),
+					emp.getAddress(), emp.getIdentityCard(), emp.getRoleID(), emp.getSalary(), emp.getStartDate(),
+					emp.getCreatedAt(), emp.getUpdatedAt(), emp.getPicture() // Picture có thể là đường dẫn hoặc biểu
+																				// diễn nào khác
+			});
+		}
+
+		// Gắn model vào table
+		table_4.setModel(model);
+	}
+
+	private void loadAllEmployee() {
+		var employeeDAO = new EmployeeDAO();
+		var employees = employeeDAO.getAllEmployees();
+		loadEmployeeData(employees);
+	}
+
+	private void loadCustomerData(List<CustomerEntity> customers) {
+		var model = new DefaultTableModel() {
+			// Không cho phép chỉnh sửa ô
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Không cho phép chỉnh sửa ô
+			}
+		};
+
+		// Thêm các cột cho bảng dữ liệu
+		model.addColumn("ID");
+		model.addColumn("Full Name");
+		model.addColumn("Phone Number");
+		model.addColumn("Email");
+		model.addColumn("Address");
+		model.addColumn("Date Of Birth");
+		model.addColumn("Customer Type");
+		model.addColumn("Points");
+		model.addColumn("Created At");
+		model.addColumn("Updated At");
+		model.addColumn("Picture");
+
+		// Thêm dữ liệu vào bảng
+		for (CustomerEntity customer : customers) {
+			model.addRow(new Object[] { customer.getId(), customer.getFull_name(), customer.getPhone_number(),
+					customer.getEmail(), customer.getAddress(), customer.getDateOfBirth(), customer.getCustomerType(),
+					customer.getPoints(), customer.getCreatedAt(), customer.getUpdatedAt(), customer.getPicture() });
+		}
+
+		// Gắn model vào table
+		table_1.setModel(model); // customerTable là tên của JTable chứa dữ liệu khách hàng
+	}
+
+	private void loadAllCustomer() {
+		var customerDAO = new CustomerDAO(); // Tạo đối tượng CustomerDAO để lấy dữ liệu khách hàng
+		var customers = customerDAO.getAllCustomers(); // Gọi phương thức lấy tất cả khách hàng
+		loadCustomerData(customers); // Hiển thị dữ liệu
+	}
+
+	private void searchEmployeeData(String fullName) {
+		var employeeDAO = new EmployeeDAO();
+		List<EmployeeEntity> employees;
+
+		// Kiểm tra giá trị tìm kiếm
+		if (fullName == null || fullName.isEmpty()) {
+			employees = employeeDAO.getAllEmployees(); // Lấy tất cả nếu không nhập
+		} else {
+			employees = employeeDAO.searchEmployeesByName(fullName); // Tìm kiếm theo tên
+		}
+
+		loadEmployeeData(employees);
+	}
+
+	private void searchCustomerData(String fullName) {
+		var customerDAO = new CustomerDAO();
+		List<CustomerEntity> customers;
+
+		if (fullName == null || fullName.isEmpty()) {
+			customers = customerDAO.getAllCustomers(); // Nếu không nhập, lấy toàn bộ
+		} else {
+			customers = customerDAO.searchCustomersByName(fullName); // Tìm kiếm theo tên
+		}
+
+		loadCustomerData(customers); // Hiển thị dữ liệu
+	}
+
+	private void deleteSelectedEmployee() {
+		// Lấy dòng được chọn
+		var selectedRow = table_4.getSelectedRow();
+
+		if (selectedRow == -1) {
+			JOptionPane.showMessageDialog(null, "Please select an employee to delete.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		// Xác nhận hành động xóa
+		var confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this employee?",
+				"Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+		if (confirm != JOptionPane.YES_OPTION) {
+			return; // Người dùng không muốn xóa
+		}
+
+		// Lấy ID nhân viên từ bảng
+		var employeeId = Integer.parseInt(table_4.getValueAt(selectedRow, 0).toString());
+
+		// Cập nhật isDelete = 0 trong cơ sở dữ liệu
+		var employeeDAO = new EmployeeDAO();
+		var isDeleted = employeeDAO.deleteEmployeeById(employeeId);
+
+		if (isDeleted) {
+			JOptionPane.showMessageDialog(null, "Employee deleted successfully!", "Success",
+					JOptionPane.INFORMATION_MESSAGE);
+
+			// Cập nhật lại bảng
+			loadAllEmployee(); // Refresh dữ liệu bảng
+		} else {
+			JOptionPane.showMessageDialog(null, "Failed to delete employee.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	private void deleteSelectedCustomer() {
+		// Lấy dòng được chọn
+		var selectedRow = table_1.getSelectedRow();
+
+		if (selectedRow == -1) {
+			JOptionPane.showMessageDialog(null, "Please select a customer to delete.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
+
+		// Xác nhận hành động xóa
+		var confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this customer?",
+				"Confirm Delete", JOptionPane.YES_NO_OPTION);
+
+		if (confirm != JOptionPane.YES_OPTION) {
+			return; // Người dùng không muốn xóa
+		}
+
+		// Lấy ID khách hàng từ bảng
+		var customerId = Integer.parseInt(table_1.getValueAt(selectedRow, 0).toString());
+
+		// Cập nhật isDelete = 0 trong cơ sở dữ liệu (có thể thay isDelete bằng trường
+		// xóa trong cơ sở dữ liệu của bạn)
+		var customerDAO = new CustomerDAO();
+		var isDeleted = customerDAO.deleteCustomerById(customerId);
+
+		if (isDeleted) {
+			JOptionPane.showMessageDialog(null, "Customer deleted successfully!", "Success",
+					JOptionPane.INFORMATION_MESSAGE);
+
+			// Cập nhật lại bảng
+			loadAllCustomer(); // Refresh dữ liệu bảng
+		} else {
+			JOptionPane.showMessageDialog(null, "Failed to delete customer.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
 	private void btnCreateInvoiceActionPerformed() {
 		try {
 			// 1. Lấy thông tin từ panel_Invoice
@@ -1753,4 +1975,69 @@ public class Main extends JFrame {
 		}
 	}
 
+	// Update Emp
+	protected void btnNewButton_18ActionPerformed(ActionEvent e) {
+		var selectedRow = table_4.getSelectedRow();
+		if (selectedRow != -1) {
+			var employeeId = Integer.parseInt(table_4.getValueAt(selectedRow, 0).toString());
+			new UpdateEmployeeFrame(employeeId, table_4, selectedRow);
+		} else {
+			JOptionPane.showMessageDialog(null, "Please select an employee to update.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+
+	}
+
+	// Refresh Emp
+	protected void btnNewButton_13ActionPerformed(ActionEvent e) {
+		loadAllEmployee();
+	}
+
+	// Add Emp
+	protected void btnNewButton_12ActionPerformed(ActionEvent e) {
+		new AddNewEmployeeFrame().setVisible(true);
+	}
+
+	// Delete Emp
+	protected void btnNewButton_19ActionPerformed(ActionEvent e) {
+		deleteSelectedEmployee();
+	}
+
+	// Add Cus
+	protected void btnNewButton_9ActionPerformed(ActionEvent e) {
+		new AddCustomerFrame().setVisible(true);
+	}
+
+	// Refresh Cus
+	protected void btnNewButton_10ActionPerformed(ActionEvent e) {
+		loadAllCustomer();
+	}
+
+	// Delete Cus
+	protected void btnNewButton_17ActionPerformed(ActionEvent e) {
+		deleteSelectedCustomer();
+	}
+
+	// Update Cus
+	// Update Customer
+	protected void btnNewButton_16ActionPerformed(ActionEvent e) {
+		var selectedRow = table_1.getSelectedRow();
+		if (selectedRow != -1) {
+			var customerId = Integer.parseInt(table_1.getValueAt(selectedRow, 0).toString());
+			new UpdateCustomerFrame(customerId, table_1, selectedRow);
+		} else {
+			JOptionPane.showMessageDialog(null, "Please select a customer to update.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	protected void btnNewButton_14ActionPerformed(ActionEvent e) {
+		var searchText = textField_15.getText().trim(); // Lấy giá trị từ textField
+		searchEmployeeData(searchText);
+	}
+
+	protected void btnNewButton_11ActionPerformed(ActionEvent e) {
+		var searchText = textField_14.getText().trim(); // Lấy giá trị từ textField
+		searchCustomerData(searchText);
+	}
 }
